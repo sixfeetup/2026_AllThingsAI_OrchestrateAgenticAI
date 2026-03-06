@@ -2,7 +2,7 @@
 
 [this is all non-ai spitball]
 
-## Metaphor:
+## Metaphor
 
 Business as usual can feel more like an epic quest into Mordor than a
 stock photo of smiling generic people gather around the warm light of
@@ -16,7 +16,7 @@ and we might be eaten by a grue.
 Whether it be good news or bad, adapting quickly to our situation
 requires tools and experience.
 
-## How do want to do this? pt 1 (critical role tag phrase)
+## How do you want to do this? pt 1 (critical role tag phrase)
 
 We could use some help.
 
@@ -30,13 +30,13 @@ Before we unleash our agentic workforce (anybody remember fantasia), we might st
 
 {Intro Cynefin and OODA as ways to think about assessing agentic tools and their use, output, etc.}
 
-## Agency has many flavors
+## From my bag of holding! _Agency has many shapes and flavors_
 
 {Cover the different way individual and teams might ramp their processes into different style of agents}
 
 {sets up demo}
 
-## You've got maelstrom
+## Roll for initiative! You've got maelstrom
 
 Let's imagine you are the party leader, a wise if harried cleric,
 constantly keeping your party healthy and safe and moving forward.
@@ -50,13 +50,13 @@ You summon your trusty assistant {pick a warforged graphic} to help you assess w
 { Demonstrate decomposition of document while preserving context and objects, find several objective to move into next item }
 { teaches context engineering tactics }
 
-## More me or rather more model
+## More me (or rather more model)
 
 {Demo batch processing, possibly how once can shell out to other agents or more of themself}
 
 ## Monster Manual Transmission
 
-### Is it safe? finding traps, threats girding loins
+### Is it safe? finding traps, threats and girding loins
 
 Give you agent a paladin hat or pair them with your paladin.  Security as an enabler... we know we are safe, we can do more!
 
