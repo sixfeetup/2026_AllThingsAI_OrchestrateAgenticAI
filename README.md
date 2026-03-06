@@ -4,6 +4,11 @@
 - Presenter: Calvin
 - Event: https://2026.allthingsai.org
 
+## Resources
+
+- [WIP outline](./plan.md)
+- [Expectations](./expectations.md)
+
 ## Abstract
 
 # Orchestrate Agentic AI: Context, Checklists, and No-Miss Reviews
