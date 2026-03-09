@@ -1,7 +1,8 @@
 # Loot Table: Repository Structure
 *File: loot-table-repo-structure.md*
 
-To deliver on the "Actionable Playbook" promise, this repository structure should be shared with the audience as a "Starter Kit."
+To deliver on the "Actionable Playbook" promise, this repository structure
+should be shared with the audience as a "Starter Kit."
 
 ```text
 agentic-quest-starter/
@@ -24,6 +25,9 @@ agentic-quest-starter/
 ```
 
 ## Key Playbook Sections:
-1.  **The "Trust Graduation" Checklist:** 5 criteria for moving a task from Level 1 to Level 2.
-2.  **The "Adversarial" Prompt Template:** How to use one LLM to red-team another.
-3.  **The "Human-in-the-Loop" Hand-off:** Defining the JSON schema for when a human must intervene.
+1.  **The "Trust Graduation" Checklist:** 5 criteria for moving a task from
+   Level 1 to Level 2.
+2.  **The "Adversarial" Prompt Template:** How to use one LLM to red-team
+   another.
+3.  **The "Human-in-the-Loop" Hand-off:** Defining the JSON schema for when a
+   human must intervene.

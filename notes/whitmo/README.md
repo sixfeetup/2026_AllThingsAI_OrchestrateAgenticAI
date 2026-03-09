@@ -2,17 +2,26 @@
 
 ## Second blush
 
+"No learning till deployment"
+https://x.com/mipsytipsy/status/2030012650177057006
+
+"agents hand testing the vibes"
+https://simonwillison.net/guides/agentic-engineering-patterns/agentic-manual-testing/
+
+"Your code is not the system, and learning does not begin until after you have
+deployed to production."
 
 ### On wizarding
 
 ![Fantasia: sorcerors apprentice](https://www.youtube.com/watch?v=B4M-54cEduo)
 
 - first mistake was putting on the wizard hat: plan, then execute, rinse, repeat
-- upstream: spec it! define boundaries. problem definition clarity is
-  important (in the chair and in the agent context), as is expressing
-  to the agents effectively how important or well understodd the
-  requirements are to attenuate effort.
-- downstream: leverage trap -- if an an individual is given great power, they need equal power to correct a system operating out of alignment
+- upstream: spec it! define boundaries. problem definition clarity is important
+  (in the chair and in the agent context), as is expressing to the agents
+  effectively how important or well understodd the requirements are to attenuate
+  effort.
+- downstream: leverage trap -- if an an individual is given great power, they
+  need equal power to correct a system operating out of alignment
 - so many agents
 
 Create hegelian dialectics between agents
@@ -46,7 +55,8 @@ Maybe a rogue gallery w/ some quick descriptions
 - multiclaude: too many dippers (same episode)
 - ralph: picture of ralph wiggun
 - ralph-orchestrator: ralph wiggum in crab armor w/ rust logos
-- gastown/wasteland: what if we took this to it's logical conclusions => mad max, thunderdome, fury road imagery.
+- gastown/wasteland: what if we took this to it's logical conclusions => mad
+  max, thunderdome, fury road imagery.
 
 "What could possibly go wrong"
 
@@ -68,7 +78,8 @@ Provide an vision of corporate gastown, imagery truman show / westworld
 - workable playbook: scaf template and docs?
 
 - what process, what tech?
-- tech problem should be something relatable: linux commands, common language problems, etc.
+- tech problem should be something relatable: linux commands, common language
+  problems, etc.
 - styles of approach
   - iterative conversation
   - spec and drive
@@ -82,7 +93,8 @@ Provide an vision of corporate gastown, imagery truman show / westworld
 
 Eventual consistency
 - agents making writing tons of code easy
-- Knowing what to write, how to write it so it can be thrown away when requirements change, and verifying it does what is needed is the struggle
+- Knowing what to write, how to write it so it can be thrown away when
+  requirements change, and verifying it does what is needed is the struggle
 - testing validity and impact initial correctness
 
 Orchestration approaches
@@ -97,7 +109,8 @@ Orchestration approaches
 - swarm: many tentacles pumping on the keys
   - good:
     - concerns farmed out to focussed agents
-    - utilize mechanism for isolating and merging streams of work (enforce breaking work up)
+    - utilize mechanism for isolating and merging streams of work (enforce
+      breaking work up)
   - bad:
     - require higher level orchestration either by a conductor or a loop
 - spec driven
@@ -108,20 +121,17 @@ Orchestration approaches
     - require upfront specification
 
 
-The dependencies for good outcomes are not so different than human
-actors: good parts, clean work area, clear and constrained problem
-space, freedom to iterate, a good system for testing and
-validation.
+The dependencies for good outcomes are not so different than human actors: good
+parts, clean work area, clear and constrained problem space, freedom to iterate,
+a good system for testing and validation.
 
-The concerns around safety are similar, but due to speed
-things can wrong and the distance that a mistake might travel,
-practices around containment, isolation, modularity, and transparency
-become much more important.  Readability and reasonability become
-primary structures of trust.
+The concerns around safety are similar, but due to speed things can wrong and
+the distance that a mistake might travel, practices around containment,
+isolation, modularity, and transparency become much more important.  Readability
+and reasonability become primary structures of trust.
 
-Every line of code is an operational liability, so so our aim is
-getting the LLM to write a goldilocks amount of code that does what
-our business needs.  If writing code is cheap, a well factored system
-will allow us to iterate quickly over suboptimal code since throwing
-away code should be cheap as well.  We just need to make progress and
-eventually succeed at delivering our goal.
+Every line of code is an operational liability, so so our aim is getting the LLM
+to write a goldilocks amount of code that does what our business needs.  If
+writing code is cheap, a well factored system will allow us to iterate quickly
+over suboptimal code since throwing away code should be cheap as well.  We just
+need to make progress and eventually succeed at delivering our goal.
