@@ -18,14 +18,18 @@ The talk description/pitch:
 > Have you ever run a 20-page contract through an AI and watched it miss the
 > clause that actually mattered? You point it out and the model replies, “Oh,
 > you’re right.” You are not alone, which raises a hard question: how can AI be
-> trusted in high-stakes environments?  AI practitioners are under pressure to
+> trusted in high-stakes environments?
+>
+> AI practitioners are under pressure to
 > deploy AI on contracts, policies, and code reviews without increasing risk.
 > Yet most teams still rely on chat-style prompts and generic tools that miss
 > key clauses, skip steps, and make it hard to prove what was actually reviewed.
 > New tool frameworks and MCP-style integrations are multiplying calls and
 > windows, but not reliability. The result is stalled negotiations, audit
 > anxiety, governance gaps, and persistent doubts about whether AI is safe to
-> trust.  Join Calvin Hendryx-Parker (AWS Hero and CTO of Six Feet Up, the
+> trust.
+>
+> Join Calvin Hendryx-Parker (AWS Hero and CTO of Six Feet Up, the
 > premier AI and Python agency in the U.S.) for a practical look at
 > orchestrating agentic AI systems. Learn how to turn generative AI into a
 > dependable reviewer for contracts, policies, audits, and software development
