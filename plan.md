@@ -92,9 +92,9 @@ communication
 
 ## our newest party member
 
-[totally metal warforge bard/warlock w/ flying V and about 25% of his body cover with modular synths and power tools]
+[@@img:totally metal warforge bard/warlock w/ flying V and about 25% of his body cover with modular synths and power tools]
 
-Call them clod, gem, dex, cecily or any combo thereof.
+Call them clod, gem, dex, cecily, the cursor, and many more or any combo thereof.
 
 They enter the open office / tavern w/ great swagger,
 the hyped and famed Agentic AI who is rumored to have such
@@ -103,7 +103,9 @@ laundry, walking the dog and filing the taxes.
 
 Except sometimes the taxes end up in the washing machine w/ their lute
 and dog ends up in the dryer. And the front door was left wide open
-all night long.  But maybe we can make this work
+all night long.
+
+But maybe we can make this work
 
 ## What do we know about our quest?
 
@@ -126,7 +128,7 @@ The team accepts the agent as part of the party.
 
 ## Hark! there is work to be done! To our spelljammer!
 
-<img "@@ image of spelljammer with our team on board">
+![spelljammer with our team on board](images/spelljammer_web.jpg)
 
 > Roll for initiative!
 > Casting Clarity of Thought Lvl {good enough}
@@ -137,9 +139,9 @@ The team accepts the agent as part of the party.
 The bizops and product team members understand L&LL is face a dual existential threat... they could large parts of the content they depend on, or worse, they could end up liable for misuse of conduct and face legal action.  The licensing changes mainly apply to use of names.
 
 
-The command line does not scare our cleric {@@name} and bard (@@name), and luckily a trust ranger named {@@name} is there to help get a database set up to do this work.  They import L&ls content db. They also load and transform the content from the pdfs.
+The command line does not scare our cleric Sera and bard Finn, and luckily a trusted ranger named Kael is there to help get a database set up to do this work.  They import L&LL's content db. They also load and transform the content from the pdfs.
 
-They fire the agent and {@@coo name} drives. She know she has to do the following:
+They fire the agent and COO Mira Stonebridge drives. She knows she has to do the following:
 - search the pdf for all names of places, magic items, characters, and monsters. Load those and the raw text into the DB.
 - search all the content in the db dump for instance of names
 - report the damage
@@ -173,12 +175,12 @@ The job is not done, we need to migrate and update their websites.
 
 ## It's a TRAP!
 
-![Admiral Akbar, Tal'Dorei style in a dungeon w/ traps](@@create image)
+![Admiral Ackbar, Tal'Dorei style in a dungeon with traps](images/its-a-trap_web.jpg)
 
 <demo>
 
 steps:
-- start claude et al in a "fresh"
+- start claude et al in a "fresh" repo (sort of a lie/)
 - ingest the contract pdf
   - use skills to generate visual explains, a central checklist, etc
 - Security is a requirement: use security skills to give you a report w/ a checklist
@@ -207,4 +209,10 @@ Working together
 
 ## Closing thoughts
 
-Outline: @@outline by claude
+- Start with frameworks you already know (OODA, Cynefin) to assess what's po
+ssible, plausible, sensible
+- Skills codify problem solving — build them as you go, they compound
+- Security and trust are enablers, not blockers — bake them in
+- Orchestrate the humans AND the agents — the party works together
+- The agent is part of the party, not a replacement for it
+- Underpromise, deliver — then iterate. The brownian ratchet is your friend.

@@ -1,17 +1,32 @@
 ---
 type: dark-slide
 image: ../images/ralph.jpg
-image_alt: Ralph Wiggum — the overpromising new recruit
+image_alt: Ralph the warforged bard-warlock — our newest party member
 image_layout: split
-footer: "05"
+footer: "5"
 ---
 
-# Our Newest Party Member
+# The Newest Party Member
 
-The hyped and famed Agentic AI enters the tavern with great swagger. Rumored to be both ninja and rockstar — can do the laundry, walk the dog, and file the taxes.
+![@@metalbard description](@@img:agent-at-home-0)
 
-- Except sometimes the taxes end up in the washing machine
-- And the dog ends up in the dryer
-- And the front door was left wide open all night
+_the team has some concerns_
+
+> "I always like to emphasize how little we understand these systems —
+> we don't actually know what is happening inside."
+> — Ellie Pavick
+
+???
+
+Call them Clawd, Gem, Dex, Cecily, or any combo thereof.
+
+
+Proceeded w/ hype  — Agentic AI, ready to
+chew gum and take jobs, rumored to be both ninja and rockstar who can
+do the laundry, walk the dog, and file the taxes.
+
+Except sometimes the taxes end up in the washing machine with their
+lute, the dog ends up in the dryer, and the front door was left wide
+open all night.
 
 _But maybe we can make this work._
