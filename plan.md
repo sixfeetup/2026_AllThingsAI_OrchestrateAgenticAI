@@ -1,12 +1,22 @@
-# Outline
+# Agents of Legend: the Orchestrator Dilemna
 
-[this is all non-ai spitball]
+_Context, Checklists, and No-Miss Reviews_
+_Just another everyday epic journey_
 
-## Metaphor
+
+_outline_
+
+## The backstory magic
 
 Business as usual can feel more like an epic quest into Mordor than a stock
 photo of smiling generic people gather around the warm light of a laptop on a
 board room table.
+
+<buildout>
+![basic old business stock image](generate)
+<transition basic />
+![party in peril in the dungeon](generate)
+</buildout>
 
 It is not uncommon to find ourselve operating in the worlds of best practice and
 then suddenly plunged into a novel world of... chaos. One second we are planning
@@ -15,14 +25,94 @@ a cheery offsite, the next it is very dark and we might be eaten by a grue.
 Whether it be good news or bad, adapting quickly to our situation requires tools
 and experience.
 
-## How do you want to do this? pt 1 (critical role tag phrase)
+## Trouble comes knocking
 
-We could use some help.
+Let's start with a plausible if confabulated situation for our quest to illustrate some of the practical elements of orchestrating agents.
+
+Let's set the scene <improvise>
+
+You are the COO of a crack consulting company.
+
+You just won a contract for discovery
+with L&LL LLC (Lord and Lady LARPsalot), a rapidly growing events
+company that specialize in live action role playing events and
+accessories.
+
+They have an online marketplace for other artisans selling LARPing
+accessories (larpsy.gold) and a bitrotting site for coordinating
+events at larpsalot.party: registration, payments, game runner tools,
+community management and lots of classic rpg content modified for live
+action, licensed under the OGL.
+
+They need to migrate off a cloud PaaS provider called Hurokee which is
+sunsetting and do some improvements to their web property.  Once
+relaunch their sites, they would like to launch a mobile app on IOS to
+support their events and games.
+
+You are just about to head home when your phone starts to blow up from
+L&LL's CEO Tasha Tiamata.  Hasbro has just announced that they are
+changing the OGL and Tash needs to know ASAP how much of the content
+her event runners depend on may have to be taken down.
+
+Can your team help her?  Time to get the party together.
+
+## the mighty fine (team)
+
+Meet the other nondeterministic agents to orchestrate
+
+This quest was already agentic, staffed with important team members
+who will need to coordinate with your digital agents for
+success. Let's quickly our team, as our agent will both be augmenting
+what they do and occasionally representing them or facilitating
+communication
+
+<@@ a slide with a picture for each >
+
+- Business Operations and Product Management{ The Cleric and the Bard: keep the business healthy and singing the song of the business.
+- Product Engineering: The Magic users of CAPEX, wizards, sorcerors, artificers, and druids
+- Technical Operations (SRE, Devops, DX, Platform Engineering,
+  Sysadmin & Ops): the OPEX bruisers who keep the roads and fortress
+  safe and jump into action when called or paged. Rangers, barbarians
+  and ... fighters
+- Security
+  - Red team: Rogues of all shades
+  - Blue team: Paladin, Warlock
+
+## FNG -- our newest party member
+
+[totally metal warforge bard/warlock w/ flying V and about 25% of his body cover with modular synths and power tools]
+
+Call them clod, gem, dex, cecily.
+
+Enter the open office / tavern w/ great swagger,
+the hyped and famed Agentic AI who is rumored to have such
+promise, both a ninja and rockstar while doing the
+laundry, walking the dog and filing the taxes.
+
+Except sometimes the taxes end up in the washing machine w/ their lute and dog ends up in the dryer.
+
+## What do we know?
+
+Tasha has given us the following artifacts in a tarball
+- the hurokee buildpack. basically a dockerfile
+- the code for the 2 sites
+- a database dump
+- a file dump of the OGL content.
+
+## How do you want to do this? pt 1
+
+_critical role tag phrase_
+
+We could use some agent help.
 
 Winter is coming? things are changing? What are these agentic wonders? These
 agents, be they zombies, skeletons, familiars, djinnies or demons?  Can we work
 with them? can they work together? Are they soulless NPC or funhouse mirror
 reflections of ourselvf.  Consider.
+
+
+<demo starts here>
+
 
 ## Casting Clarity of Thought Lvl {good enough}
 
