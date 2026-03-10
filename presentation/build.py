@@ -26,10 +26,13 @@ import yaml
 # Paths
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
 CONTENT_DIR = SCRIPT_DIR / "content"
 OUTPUT_DIR = SCRIPT_DIR / "output"
+DIST_DIR = REPO_ROOT / "dist"
 TEMPLATE_FILE = SCRIPT_DIR / "template.html"
 OUTPUT_FILE = OUTPUT_DIR / "deck.html"
+DIST_FILE = DIST_DIR / "deck.html"
 
 
 # ---------------------------------------------------------------------------
@@ -139,21 +142,22 @@ def render_body(body: str, meta: dict) -> str:
             chunks.append(render_grid(cards))
             continue
 
-        # --- Heading ---
-        h_match = re.match(r"^#\s+(.+)$", line)
+        # --- Heading (any level) ---
+        h_match = re.match(r"^(#{1,6})\s+(.+)$", line)
         if h_match:
-            title_text = h_match.group(1)
-            if is_title:
+            level = len(h_match.group(1))
+            title_text = h_match.group(2)
+            if is_title and level == 1:
                 chunks.append(
                     f'<h1 class="reveal">{escape(title_text)}</h1>'
                 )
-            elif is_divider:
+            elif level <= 2:
                 chunks.append(
                     f'<h2 class="reveal">{escape(title_text)}</h2>'
                 )
             else:
                 chunks.append(
-                    f'<h2 class="reveal">{escape(title_text)}</h2>'
+                    f'<h3 class="reveal">{escape(title_text)}</h3>'
                 )
             i += 1
             continue
@@ -235,7 +239,7 @@ def render_body(body: str, meta: dict) -> str:
         if line.strip():
             para_lines = []
             while i < len(lines) and lines[i].strip() and not any([
-                lines[i].startswith("#"),
+                re.match(r"^#{1,6}\s", lines[i]),
                 lines[i].startswith(">"),
                 lines[i].startswith("- "),
                 lines[i].startswith("```"),
@@ -441,21 +445,27 @@ def build():
 
     head, tail = load_template_shell()
     OUTPUT_DIR.mkdir(exist_ok=True)
-    full_html = head + "\n\n".join(slides_html) + tail
+    raw_html = head + "\n\n".join(slides_html) + tail
 
-    # Adjust image paths: content/*.md uses paths relative to
-    # presentation/ (e.g. ../images/) but output/deck.html is one
-    # level deeper, so we need ../../images/
-    full_html = full_html.replace('src="../images/', 'src="../../images/')
-
-    OUTPUT_FILE.write_text(full_html)
+    # --- Write to presentation/output/ (paths relative to output/) ---
+    output_html = raw_html.replace(
+        'src="../images/', 'src="../../images/'
+    )
+    OUTPUT_FILE.write_text(output_html)
     print(f"\n  Built {len(slides_html)} slides -> {OUTPUT_FILE}")
+
+    # --- Write to dist/ for gh-pages (images/ is a sibling) ---
+    if DIST_DIR.exists():
+        dist_html = raw_html.replace(
+            'src="../images/', 'src="images/'
+        )
+        DIST_FILE.write_text(dist_html)
+        print(f"  Also wrote -> {DIST_FILE}")
 
 
 if __name__ == "__main__":
-    if "--open" in sys.argv:
-        build()
+    open_flag = "--open" in sys.argv
+    build()
+    if open_flag:
         import subprocess
         subprocess.run(["open", str(OUTPUT_FILE)])
-    else:
-        build()

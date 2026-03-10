@@ -6,4 +6,4 @@ footer: "09"
 
 # The Dungeon
 
-_How to actually do this_
+_How do you want to do this?_
