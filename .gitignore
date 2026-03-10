@@ -2,3 +2,4 @@
 presentation/output/
 presentation/.watch-state
 demo-assets/DnD_Archive/
+*__pycache__*
