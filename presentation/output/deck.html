@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agentic Quest — Six Feet Up / AllThings AI 2026</title>
+
+    <!-- Fonts: Montserrat (brand) + Oswald (accent) from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           SIX FEET UP BRAND THEME
+           Extracted from sixfeetup.com branding:
+           - Logo mark: organic diamond with crossing
+             lines in multiple teal/blue shades
+           - Typography: Montserrat + Oswald
+           - Palette: teals, dark grays, white
+           =========================================== */
+        :root {
+            /* Brand colors — derived from logo mark */
+            --sfu-teal-deep:    #1a6b7a;
+            --sfu-teal:         #2a8a9a;
+            --sfu-teal-mid:     #3d9eae;
+            --sfu-teal-light:   #6dbdcc;
+            --sfu-ice:          #b4d4dd;
+            --sfu-ice-pale:     #dceef2;
+
+            /* Neutrals */
+            --sfu-black:        #1a1a1a;
+            --sfu-charcoal:     #2d2d2d;
+            --sfu-gray:         #6b7280;
+            --sfu-gray-light:   #e5e7eb;
+            --sfu-white:        #fafbfc;
+
+            /* Semantic */
+            --bg-primary:       var(--sfu-black);
+            --bg-secondary:     var(--sfu-charcoal);
+            --bg-slide:         var(--sfu-white);
+            --text-primary:     var(--sfu-black);
+            --text-light:       var(--sfu-white);
+            --text-secondary:   var(--sfu-gray);
+            --accent:           var(--sfu-teal);
+            --accent-deep:      var(--sfu-teal-deep);
+            --accent-light:     var(--sfu-ice);
+
+            /* Typography — MUST use clamp() */
+            --font-display: 'Oswald', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
+            --title-size: clamp(2rem, 6vw, 4.5rem);
+            --h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+            --h3-size: clamp(1rem, 2.5vw, 1.75rem);
+            --subtitle-size: clamp(0.9rem, 2vw, 1.3rem);
+            --body-size: clamp(0.75rem, 1.4vw, 1.1rem);
+            --small-size: clamp(0.65rem, 1vw, 0.875rem);
+
+            /* Spacing — MUST use clamp() */
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(1rem, 2vw, 2rem);
+            --element-gap: clamp(0.25rem, 1vw, 1rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+        }
+
+        /* ===========================================
+           VIEWPORT BASE STYLES (mandatory)
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body { height: 100%; overflow-x: hidden; }
+        html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        img, .image-container {
+            max-width: 100%;
+            max-height: min(50vh, 400px);
+            object-fit: contain;
+        }
+
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+                --h2-size: clamp(1rem, 3vw, 1.75rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --title-size: clamp(1.1rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+            .nav-dots, .decorative { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           GLOBAL TYPOGRAPHY
+           =========================================== */
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+        }
+
+        h1 { font-size: var(--title-size); }
+        h2 { font-size: var(--h2-size); }
+        h3 { font-size: var(--h3-size); }
+
+        p, li {
+            font-size: var(--body-size);
+            line-height: 1.6;
+        }
+
+        /* ===========================================
+           BRAND MARK — CSS recreation of logo shape
+           Organic diamond with crossing lines
+           =========================================== */
+        .brand-mark {
+            position: absolute;
+            width: clamp(80px, 12vw, 160px);
+            height: clamp(80px, 12vw, 160px);
+            transform: rotate(15deg);
+        }
+
+        .brand-mark::before,
+        .brand-mark::after {
+            content: '';
+            position: absolute;
+            border-radius: 4px;
+        }
+
+        .brand-mark::before {
+            inset: 0;
+            background:
+                linear-gradient(135deg,
+                    var(--sfu-ice) 0%,
+                    var(--sfu-teal-light) 30%,
+                    var(--sfu-teal) 60%,
+                    var(--sfu-teal-deep) 100%);
+            clip-path: polygon(50% 0%, 100% 35%, 85% 100%, 15% 100%, 0% 35%);
+        }
+
+        .brand-mark::after {
+            inset: 10%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 8px,
+                rgba(255,255,255,0.15) 8px,
+                rgba(255,255,255,0.15) 9px
+            ),
+            repeating-linear-gradient(
+                -30deg,
+                transparent,
+                transparent 12px,
+                rgba(255,255,255,0.1) 12px,
+                rgba(255,255,255,0.1) 13px
+            );
+            clip-path: polygon(50% 0%, 100% 35%, 85% 100%, 15% 100%, 0% 35%);
+        }
+
+        /* ===========================================
+           SLIDE VARIANTS
+           =========================================== */
+
+        /* -- Title slide: dark bg, teal accent -- */
+        .slide.title-slide {
+            background: linear-gradient(160deg, var(--sfu-black) 0%, #162a30 60%, var(--sfu-teal-deep) 100%);
+            color: var(--text-light);
+        }
+
+        .slide.title-slide .slide-content {
+            gap: clamp(0.8rem, 2vw, 1.5rem);
+        }
+
+        .slide.title-slide h1 {
+            color: var(--text-light);
+        }
+
+        .slide.title-slide .subtitle {
+            font-family: var(--font-body);
+            font-size: var(--subtitle-size);
+            font-weight: 300;
+            color: var(--sfu-ice);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .slide.title-slide .brand-mark {
+            top: clamp(1rem, 3vw, 2rem);
+            right: clamp(1.5rem, 4vw, 4rem);
+            opacity: 0.7;
+        }
+
+        .slide.title-slide .tagline {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            color: var(--sfu-teal-light);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        /* Teal accent bar on left edge */
+        .slide.title-slide::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: clamp(4px, 0.5vw, 6px);
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                var(--sfu-teal-light),
+                var(--sfu-teal),
+                var(--sfu-teal-deep)
+            );
+        }
+
+        /* -- Content slide: white bg, dark text -- */
+        .slide.content-slide {
+            background: var(--sfu-white);
+            color: var(--text-primary);
+        }
+
+        .slide.content-slide .slide-content {
+            gap: var(--content-gap);
+        }
+
+        .slide.content-slide h2 {
+            color: var(--sfu-teal-deep);
+        }
+
+        .slide.content-slide::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: clamp(4px, 0.5vw, 6px);
+            height: 100%;
+            background: var(--sfu-teal);
+        }
+
+        /* -- Section divider: full teal bg -- */
+        .slide.divider-slide {
+            background: linear-gradient(135deg, var(--sfu-teal-deep) 0%, var(--sfu-teal) 50%, var(--sfu-teal-mid) 100%);
+            color: var(--text-light);
+        }
+
+        .slide.divider-slide .slide-content {
+            align-items: center;
+            text-align: center;
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+        }
+
+        .slide.divider-slide h2 {
+            color: var(--text-light);
+            font-size: var(--title-size);
+        }
+
+        .slide.divider-slide .section-number {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.15);
+            position: absolute;
+            top: clamp(0.5rem, 2vw, 2rem);
+            right: clamp(1rem, 4vw, 4rem);
+            line-height: 1;
+        }
+
+        /* -- Dark content slide -- */
+        .slide.dark-slide {
+            background: var(--sfu-charcoal);
+            color: var(--text-light);
+        }
+
+        .slide.dark-slide .slide-content {
+            gap: var(--content-gap);
+        }
+
+        .slide.dark-slide h2 {
+            color: var(--sfu-teal-light);
+        }
+
+        .slide.dark-slide::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: clamp(4px, 0.5vw, 6px);
+            height: 100%;
+            background: var(--sfu-teal-light);
+        }
+
+        /* ===========================================
+           SLIDE IMAGES
+           =========================================== */
+        .slide-image {
+            max-width: 100%;
+            max-height: min(40vh, 340px);
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .slide-image.hero {
+            max-height: min(50vh, 420px);
+        }
+
+        .slide-image.screenshot {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .content-slide .slide-image.screenshot {
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-image.inline {
+            max-height: min(28vh, 220px);
+        }
+
+        .slide-image.small {
+            max-height: min(22vh, 180px);
+        }
+
+        /* Two-column layout: image + text side by side */
+        .split-layout {
+            display: flex;
+            gap: clamp(1rem, 3vw, 3rem);
+            align-items: center;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .split-layout .split-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .split-layout .split-image {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .split-layout .split-image img {
+            max-height: min(55vh, 400px);
+            max-width: min(40vw, 450px);
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 800px) {
+            .split-layout {
+                flex-direction: column;
+            }
+            .split-layout .split-image img {
+                max-height: min(30vh, 200px);
+                max-width: 80vw;
+            }
+        }
+
+        /* Image on divider slides */
+        .divider-slide .slide-image {
+            max-height: min(35vh, 280px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===========================================
+           COMPONENTS
+           =========================================== */
+
+        /* Bullet list */
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 1vh, 0.8rem);
+        }
+
+        .bullet-list li {
+            padding-left: clamp(1rem, 2vw, 1.5rem);
+            position: relative;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6em;
+            width: clamp(6px, 0.6vw, 8px);
+            height: clamp(6px, 0.6vw, 8px);
+            background: var(--sfu-teal);
+            border-radius: 1px;
+            transform: rotate(45deg);
+        }
+
+        .dark-slide .bullet-list li::before {
+            background: var(--sfu-teal-light);
+        }
+
+        /* Feature grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, clamp(180px, 20vw, 280px)), 1fr));
+            gap: clamp(0.8rem, 1.5vw, 1.5rem);
+        }
+
+        .feature-card {
+            background: rgba(26, 107, 122, 0.06);
+            border: 1px solid var(--sfu-ice);
+            border-radius: 6px;
+            padding: clamp(0.8rem, 1.5vw, 1.5rem);
+        }
+
+        .dark-slide .feature-card {
+            background: rgba(180, 212, 221, 0.08);
+            border-color: rgba(180, 212, 221, 0.2);
+        }
+
+        .feature-card h3 {
+            color: var(--sfu-teal-deep);
+            margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);
+            font-size: var(--body-size);
+        }
+
+        .dark-slide .feature-card h3 {
+            color: var(--sfu-teal-light);
+        }
+
+        .feature-card p {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        .dark-slide .feature-card p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Code block */
+        .code-block {
+            background: var(--sfu-black);
+            border-radius: 6px;
+            padding: clamp(0.8rem, 1.5vw, 1.5rem);
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: var(--small-size);
+            color: var(--sfu-ice);
+            line-height: 1.6;
+            overflow: hidden;
+            max-height: min(50vh, 350px);
+        }
+
+        .code-block .keyword { color: var(--sfu-teal-light); }
+        .code-block .string { color: #a8d8a8; }
+        .code-block .comment { color: var(--sfu-gray); font-style: italic; }
+
+        /* Quote */
+        .quote {
+            border-left: clamp(3px, 0.4vw, 4px) solid var(--sfu-teal);
+            padding-left: clamp(1rem, 2vw, 2rem);
+            font-size: var(--h3-size);
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.4;
+            color: var(--sfu-teal-deep);
+        }
+
+        .dark-slide .quote {
+            border-left-color: var(--sfu-teal-light);
+            color: var(--sfu-ice);
+        }
+
+        .quote-attribution {
+            font-size: var(--small-size);
+            font-style: normal;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        /* Slide footer / page number */
+        .slide-footer {
+            position: absolute;
+            bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+            right: clamp(1rem, 2vw, 2rem);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .dark-slide .slide-footer,
+        .divider-slide .slide-footer {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .reveal:nth-child(3) { transition-delay: 0.25s; }
+        .reveal:nth-child(4) { transition-delay: 0.3s; }
+        .reveal:nth-child(5) { transition-delay: 0.35s; }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--sfu-teal), var(--sfu-teal-light));
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.8rem, 1.5vw, 1.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 0.8vh, 10px);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: clamp(6px, 0.6vw, 8px);
+            height: clamp(6px, 0.6vw, 8px);
+            border-radius: 50%;
+            background: rgba(26, 107, 122, 0.3);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--sfu-teal);
+            transform: scale(1.4);
+        }
+
+        .nav-dot:hover {
+            background: var(--sfu-teal-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- ═══════════════════════════════════════════
+         SLIDE 1: Title
+         ═══════════════════════════════════════════ -->
+
+    <!-- 01-title.md -->
+    <section class="slide title-slide" aria-label="The Agentic Quest: Orchestrating AI You Can Actually Trust">
+<div class="brand-mark decorative"></div>
+<div class="slide-content">
+<p class="tagline reveal">Six Feet Up</p>
+<h1 class="reveal">The Agentic Quest: Orchestrating AI You Can Actually Trust</h1>
+<p class="subtitle reveal">Whit — AllThings AI, 2026</p>
+</div>
+</section>
+
+    <!-- 02-broken-promise.md -->
+    <section class="slide dark-slide" aria-label="The Broken Promise">
+<div class="slide-content">
+<h2 class="reveal">The Broken Promise</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<blockquote class="quote reveal">&quot;You hand a 20-page contract to the AI oracle. It misses the clause that matters. You correct it. It says &#x27;Oh, you&#x27;re right.&#x27;&quot;</blockquote>
+<ul class="bullet-list">
+<li class="reveal">That&#x27;s not a reviewer — that&#x27;s a yes-man NPC</li>
+<li class="reveal">Same failure in code review, policy compliance, test planning</li>
+<li class="reveal">The party has been burned. Trust is low.</li>
+</ul>
+</div>
+<div class="split-image">
+<img src="../../images/ralph.jpg" alt="Ralph Wiggum — the yes-man NPC" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+</div>
+</div>
+</div>
+<span class="slide-footer">01</span>
+</section>
+
+    <!-- 03-the-party.md -->
+    <section class="slide content-slide" aria-label="The Party">
+<div class="slide-content">
+<h2 class="reveal">The Party</h2>
+<img src="../../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg" alt="D&amp;D adventuring party planning around a table" class="slide-image" style="width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);" class="slide-image inline reveal">
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>The Cleric</h3><p>Compliance / BizOps / Procurement. Overtasked healer keeping everyone alive. Cares about risk, correctness, and not getting sued.</p></div>
+<div class="feature-card"><h3>The Wizard</h3><p>Developer. Reshapes reality with code but occasionally blows up the lab. Cares about shipping, quality, and not being on-call forever.</p></div>
+<div class="feature-card"><h3>The Ranger</h3><p>Ops / Security. Watches the perimeter, makes sure the ground doesn&#x27;t collapse. Cares about reliability and audit trails.</p></div>
+<div class="feature-card"><h3>The Warforged Artificer</h3><p>Claude Code. Tireless construct. Loyal but literal. Only as good as its instructions and context.</p></div>
+</div>
+</div>
+<span class="slide-footer">02</span>
+</section>
+
+    <!-- 04-decision-frameworks.md -->
+    <section class="slide content-slide" aria-label="Decision Frameworks">
+<div class="slide-content">
+<h2 class="reveal">Decision Frameworks</h2>
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>OODA Loop</h3><p>Observe, Orient, Decide, Act. Every agentic interaction is an OODA cycle. The question: who does which step at each autonomy level?</p></div>
+<div class="feature-card"><h3>Cynefin</h3><p>Match autonomy level to problem complexity. Simple: automate. Complicated: multi-agent. Complex: human-in-the-loop. Chaotic: human takes the wheel.</p></div>
+</div>
+<ul class="bullet-list">
+<li class="reveal">At Level 1, the human does all four OODA steps</li>
+<li class="reveal">At Level 3, the agent runs its own loops — the human audits</li>
+<li class="reveal">The gap isn&#x27;t intelligence — it&#x27;s orchestration, context, and trust</li>
+</ul>
+</div>
+<span class="slide-footer">03</span>
+</section>
+
+    <!-- 05-act-ii-the-levels.md -->
+    <section class="slide divider-slide" aria-label="The Levels">
+<span class="section-number">II</span>
+<div class="slide-content">
+<h2 class="reveal">The Levels</h2>
+<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">What does agentic AI actually look like?</p>
+<img src="../../images/sorcerors-apprentice-grok.jpg" alt="Sorcerer&#x27;s Apprentice with AI tools" class="slide-image" class="slide-image reveal" style="margin-top: clamp(0.5rem, 1vw, 1rem);">
+</div>
+<span class="slide-footer">04</span>
+</section>
+
+    <!-- 06-level-1-apprentice.md -->
+    <section class="slide content-slide" aria-label="Level 1 — The Apprentice">
+<div class="slide-content">
+<h2 class="reveal">Level 1 — The Apprentice</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<blockquote class="quote reveal">&quot;You swing the sword. The AI sharpens it.&quot;</blockquote>
+<ul class="bullet-list">
+<li class="reveal">Human-orchestrated, step by step</li>
+<li class="reveal">Context engineering: chunking, targeted prompts, checklists</li>
+<li class="reveal">OODA: human does all four steps</li>
+<li class="reveal">Limitation: scales with your attention. You are the bottleneck.</li>
+</ul>
+</div>
+<div class="split-image">
+<img src="../../images/kent-v-genie-1_web.jpg" alt="Wrestling the coding genie for the steering wheel" class="slide-image">
+</div>
+</div>
+</div>
+<span class="slide-footer">05</span>
+</section>
+
+    <!-- 07-level-2-party.md -->
+    <section class="slide content-slide" aria-label="Level 2 — The Party">
+<div class="slide-content">
+<h2 class="reveal">Level 2 — The Party</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<blockquote class="quote reveal">&quot;You plan the raid. The agents execute roles.&quot;</blockquote>
+<ul class="bullet-list">
+<li class="reveal">Multi-agent workflows: multiclaude, ralph, spec-kit</li>
+<li class="reveal">Decompose &quot;review this&quot; into a task graph of sub-jobs</li>
+<li class="reveal">Sandboxing: contained environments — mistakes don&#x27;t cascade</li>
+<li class="reveal">Adversarial agents: pit one against another to find gaps</li>
+<li class="reveal">OODA shift: agents Observe/Orient/Decide. Human retains Act.</li>
+</ul>
+</div>
+<div class="split-image">
+<img src="../../images/the-team-in-the-office_web.jpg" alt="Team collaborating around dashboards" class="slide-image">
+</div>
+</div>
+</div>
+<span class="slide-footer">06</span>
+</section>
+
+    <!-- 08-orchestration-approaches.md -->
+    <section class="slide content-slide" aria-label="Orchestration Approaches">
+<div class="slide-content">
+<h2 class="reveal">Orchestration Approaches</h2>
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>Conductor</h3><p>Run multiple agents, bounce between windows. Good control, but decision fatigue for the human.</p></div>
+<div class="feature-card"><h3>Relentless Loop</h3><p>Set it and forget it. Low effort, but hard to audit. What have we built? What happened along the way?</p></div>
+<div class="feature-card"><h3>Swarm</h3><p>Many focused agents with isolated concerns. Great isolation, but needs higher-level orchestration.</p></div>
+<div class="feature-card"><h3>Spec-Driven</h3><p>Upfront specs force definition and create an audit trail. Best traceability, requires upfront work.</p></div>
+</div>
+</div>
+<span class="slide-footer">07</span>
+</section>
+
+    <!-- 09-level-3-autonomous-guild.md -->
+    <section class="slide dark-slide" aria-label="Level 3 — The Autonomous Guild">
+<div class="slide-content">
+<h2 class="reveal">Level 3 — The Autonomous Guild</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<blockquote class="quote reveal">&quot;You set the objective. The system runs the campaign.&quot;</blockquote>
+<ul class="bullet-list">
+<li class="reveal">Self-orchestrating agent networks</li>
+<li class="reveal">Trust earned through Level 2 reliability + audit trails</li>
+<li class="reveal">Cynefin: works for Simple/Complicated. Complex still needs human-in-the-loop.</li>
+<li class="reveal">The future is here, just unevenly distributed</li>
+</ul>
+</div>
+<div class="split-image">
+<img src="../../images/kent-v-genie-2_web.jpg" alt="From wrestling the wheel to flying the carpet — trust earned" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+</div>
+</div>
+</div>
+<span class="slide-footer">08</span>
+</section>
+
+    <!-- 10-act-iii-the-dungeon.md -->
+    <section class="slide divider-slide" aria-label="The Dungeon">
+<span class="section-number">III</span>
+<div class="slide-content">
+<h2 class="reveal">The Dungeon</h2>
+<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">How to actually do this</p>
+</div>
+<span class="slide-footer">09</span>
+</section>
+
+    <!-- 11-context-engineering.md -->
+    <section class="slide content-slide" aria-label="Context Engineering">
+<div class="slide-content">
+<h2 class="reveal">Context Engineering</h2>
+<ul class="bullet-list">
+<li class="reveal">Chunk documents and tasks into focused units</li>
+<li class="reveal">Frame targeted prompts — tell the agent what to look for and what to ignore</li>
+<li class="reveal">Apply checklists with acceptance criteria per sub-task</li>
+<li class="reveal">Traceability: every sub-task has clear pass/fail criteria</li>
+<li class="reveal">Upstream: problem definition clarity is the leverage point</li>
+</ul>
+</div>
+<span class="slide-footer">10</span>
+</section>
+
+    <!-- 12-trust-graduation.md -->
+    <section class="slide dark-slide" aria-label="Trust as a Graduated System">
+<div class="slide-content">
+<h2 class="reveal">Trust as a Graduated System</h2>
+<ul class="bullet-list">
+<li class="reveal">Observe — watch the agent work, review every output</li>
+<li class="reveal">Verify — spot-check outputs against known-good baselines</li>
+<li class="reveal">Approve — review and sign off on agent-produced artifacts</li>
+<li class="reveal">Delegate — assign tasks, review only escalations</li>
+<li class="reveal">Autonomize — set objectives, audit outcomes</li>
+</ul>
+<blockquote class="quote reveal">&quot;Each level earned, not assumed.&quot;</blockquote>
+</div>
+<span class="slide-footer">11</span>
+</section>
+
+    <!-- 13-safety-containment.md -->
+    <section class="slide content-slide" aria-label="Safety &amp; Containment">
+<div class="slide-content">
+<h2 class="reveal">Safety &amp; Containment</h2>
+<ul class="bullet-list">
+<li class="reveal">Sandboxing: isolated execution, rollback, dry runs</li>
+<li class="reveal">Adversarial patterns: second agent challenges the first</li>
+<li class="reveal">Structured outputs: task graphs, checklists, diff-style reports</li>
+<li class="reveal">Readability and reasonability become primary structures of trust</li>
+</ul>
+<blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot;</blockquote>
+</div>
+<span class="slide-footer">12</span>
+</section>
+
+    <!-- 14-the-no-miss-review.md -->
+    <section class="slide divider-slide" aria-label="The No-Miss Review">
+<span class="section-number">IV</span>
+<div class="slide-content">
+<h2 class="reveal">The No-Miss Review</h2>
+<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">Contract review walkthrough</p>
+</div>
+<span class="slide-footer">13</span>
+</section>
+
+    <!-- 15-demo-contract-review.md -->
+    <section class="slide content-slide" aria-label="Demo: The Contract Review">
+<div class="slide-content">
+<h2 class="reveal">Demo: The Contract Review</h2>
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>Level 1: Single-Skill Checklist</h3><p>Catches the contradiction. Flags the tricky clause. Misses the missing element. You are the bottleneck.</p></div>
+<div class="feature-card"><h3>Level 2: Multi-Agent Decomposition</h3><p>Clause extractor. Risk scorer. Completeness validator. Report generator. Catches what Level 1 missed.</p></div>
+</div>
+<ul class="bullet-list">
+<li class="reveal">The Warforged did its job — but it only knows what we told it to look for</li>
+<li class="reveal">Adding the rest of the party changes the game</li>
+</ul>
+</div>
+<span class="slide-footer">14</span>
+</section>
+
+    <!-- 16-multi-agent-code.md -->
+    <section class="slide dark-slide" aria-label="Multi-Agent Decomposition">
+<div class="slide-content">
+<h2 class="reveal">Multi-Agent Decomposition</h2>
+<div class="code-block reveal"><span <span class="keyword">class</span>=<span <span class="keyword">class</span>="string">"comment"</span>># Level 2: task graph decomposition</span>
+<span class="keyword">async</span> <span class="keyword">def</span> review_contract(doc: Document) -&gt; Report:
+    clauses = <span class="keyword">await</span> clause_extractor(doc)
+    risks   = <span class="keyword">await</span> asyncio.gather(
+        *[risk_scorer(c) <span class="keyword">for</span> c <span class="keyword">in</span> clauses]
+    )
+    gaps    = <span class="keyword">await</span> completeness_validator(clauses, risks)
+    review  = <span class="keyword">await</span> adversarial_check(clauses, risks, gaps)
+    <span class="keyword">return</span>  <span class="keyword">await</span> report_generator(risks, gaps, review)</div>
+<ul class="bullet-list">
+<li class="reveal">Each agent has a focused concern and a contained scope</li>
+<li class="reveal">Adversarial check challenges the primary review output</li>
+</ul>
+</div>
+<span class="slide-footer">15</span>
+</section>
+
+    <!-- 17-engineering-parallels.md -->
+    <section class="slide content-slide" aria-label="Same Pattern, Different Domain">
+<div class="slide-content">
+<h2 class="reveal">Same Pattern, Different Domain</h2>
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>Contract Review</h3><p>Extract clauses. Score risk. Validate completeness. Generate report.</p></div>
+<div class="feature-card"><h3>Code Review</h3><p>Extract functions. Analyze complexity. Generate test plan. Validate coverage.</p></div>
+<div class="feature-card"><h3>Compliance Audit</h3><p>Extract requirements. Map to controls. Gap analysis. Generate report.</p></div>
+</div>
+<ul class="bullet-list">
+<li class="reveal">Decompose. Specialize. Validate. Report.</li>
+<li class="reveal">The Cynefin domain determines autonomy. The OODA loop determines who does what.</li>
+</ul>
+</div>
+<span class="slide-footer">16</span>
+</section>
+
+    <!-- 18-eventual-consistency.md -->
+    <section class="slide dark-slide" aria-label="Eventual Consistency">
+<div class="slide-content">
+<h2 class="reveal">Eventual Consistency</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<blockquote class="quote reveal">&quot;Every line of code is an operational liability. Writing code is cheap. Knowing what to write, verifying it works, and throwing it away when requirements change — that&#x27;s the struggle.&quot;</blockquote>
+<ul class="bullet-list">
+<li class="reveal">Agents make writing code easy — but that&#x27;s not the hard part</li>
+<li class="reveal">Well-factored systems let you iterate quickly over suboptimal code</li>
+<li class="reveal">We just need to make progress and eventually succeed</li>
+</ul>
+</div>
+<div class="split-image">
+<img src="../../images/ralph-w-crabs.jpg" alt="Ralph leveled up — still Ralph, but with equipment" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+</div>
+</div>
+</div>
+<span class="slide-footer">17</span>
+</section>
+
+    <!-- 19-the-loot-table.md -->
+    <section class="slide divider-slide" aria-label="The Loot Table">
+<span class="section-number">V</span>
+<div class="slide-content">
+<h2 class="reveal">The Loot Table</h2>
+<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">What you walk away with</p>
+</div>
+<span class="slide-footer">18</span>
+</section>
+
+    <!-- 20-the-playbook.md -->
+    <section class="slide content-slide" aria-label="The Playbook">
+<div class="slide-content">
+<h2 class="reveal">The Playbook</h2>
+<ul class="bullet-list">
+<li class="reveal">Start at Level 1. Get context engineering right first.</li>
+<li class="reveal">Build trust incrementally. Level 2 before Level 3.</li>
+<li class="reveal">Use adversarial agents. Don&#x27;t trust a single pass.</li>
+<li class="reveal">Write tools for vigilance, not just automation.</li>
+<li class="reveal">Security enables speed when baked into the workflow.</li>
+<li class="reveal">Specs are your audit trail.</li>
+</ul>
+</div>
+<span class="slide-footer">19</span>
+</section>
+
+    <!-- 21-key-insight.md -->
+    <section class="slide dark-slide" aria-label="Key Insight">
+<div class="slide-content">
+<h2 class="reveal">Key Insight</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<blockquote class="quote reveal">&quot;Today I feel like I&#x27;m wrestling with my coding genie for control of the steering wheel.&quot;</blockquote>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The dependencies for good outcomes are not so different than human actors: good parts, clean work area, clear and constrained problem space, freedom to iterate, a good system for testing and validation.</p>
+<p class="quote-attribution reveal">— Kent Beck</p>
+</div>
+<div class="split-image">
+<img src="../../images/kent-beck-genie.png" alt="Kent Beck&#x27;s LinkedIn post about the coding genie" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+</div>
+</div>
+</div>
+<span class="slide-footer">20</span>
+</section>
+
+    <!-- 22-closing.md -->
+    <section class="slide title-slide" aria-label="Questions?">
+<div class="brand-mark decorative"></div>
+<div class="slide-content">
+<p class="tagline reveal">Thank You</p>
+<h1 class="reveal">Questions?</h1>
+<p class="subtitle reveal">Whit — Six Feet Up</p>
+<p class="subtitle reveal">Playbook: github.com/sixfeetup/agentic-quest</p>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+         SLIDE CONTROLLER
+         ═══════════════════════════════════════════ -->
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupProgressBar();
+                this.setupNavDots();
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const idx = [...this.slides].indexOf(entry.target);
+                            this.currentSlide = idx;
+                            this.updateProgressBar();
+                            this.updateNavDots();
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                        e.preventDefault();
+                        this.goToSlide(this.currentSlide + 1);
+                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        this.goToSlide(this.currentSlide - 1);
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        this.goToSlide(0);
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        this.goToSlide(this.slides.length - 1);
+                    }
+                });
+            }
+
+            setupTouchNav() {
+                let startY = 0;
+                document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
+                document.addEventListener('touchend', (e) => {
+                    const diff = startY - e.changedTouches[0].clientY;
+                    if (Math.abs(diff) > 50) {
+                        this.goToSlide(this.currentSlide + (diff > 0 ? 1 : -1));
+                    }
+                });
+            }
+
+            setupProgressBar() {
+                this.progressBar = document.getElementById('progressBar');
+                this.updateProgressBar();
+            }
+
+            updateProgressBar() {
+                const pct = ((this.currentSlide + 1) / this.slides.length) * 100;
+                this.progressBar.style.width = pct + '%';
+            }
+
+            setupNavDots() {
+                const container = document.getElementById('navDots');
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    container.appendChild(dot);
+                });
+                this.dots = container.querySelectorAll('.nav-dot');
+            }
+
+            updateNavDots() {
+                this.dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+
+            goToSlide(idx) {
+                if (idx < 0 || idx >= this.slides.length) return;
+                this.slides[idx].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        new SlidePresentation();
+    </script>
+</body>
+</html>
