@@ -5,12 +5,12 @@ footer: "06"
 
 # What Do We Know About Our Quest?
 
-Tasha has given us the following artifacts in a tarball:
+_Tasha's tarball:_
 
-- The Hurokee buildpack (basically a Dockerfile)
-- The code for 2 sites
-- A database dump
-- A file dump of the OGL content
+- Hurokee buildpack (basically a Dockerfile)
+- Code for 2 sites
+- Database dump
+- OGL content file dump
 
 > "The worthy GM never purposely kills players' PCs. He presents opportunities for the rash and unthinking players to do that all on their own."
 > — Gary Gygax

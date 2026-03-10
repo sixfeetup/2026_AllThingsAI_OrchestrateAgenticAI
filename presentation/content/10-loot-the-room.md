@@ -5,17 +5,21 @@ footer: "09"
 
 # Loot the Room
 
-L&LL is psyched. The team has landed more work — a database migration. But now the tasks are more complex, with greater peril.
+_More work lands. Tasks are more complex, peril is greater._
 
 :::grid
 :::card OODA Loop
-Observe, Orient, Decide, Act. Every agentic interaction is an OODA cycle. Who does which step?
+Observe, Orient, Decide, Act. Every agentic interaction is an OODA cycle.
 :::
 
 :::card Cynefin
-Match autonomy to complexity. Simple: automate. Complicated: multi-agent. Complex: human-in-the-loop. Chaotic: human takes the wheel.
+Simple: automate. Complicated: multi-agent. Complex: human-in-the-loop. Chaotic: human takes the wheel.
 :::
 :::grid
 
-- We need to orchestrate agents AND human players
-- Frameworks we already use for non-deterministic business processes still apply
+- Orchestrate agents AND human players
+- Frameworks for non-deterministic processes still apply
+
+???
+
+L&LL is psyched, they've landed more work -- a database migration. OODA and Cynefin aren't new -- we already use them for messy business processes. The key question: who does which step in the loop?
