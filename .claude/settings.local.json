@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(uv pip:*)",
+      "Bash(uv run:*)",
+      "Bash(gh repo:*)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "Bash(gh api:*)",
+      "Bash(open:*)",
+      "WebFetch(domain:sixfeetup.com)",
+      "WebFetch(domain:cdn.prod.website-files.com)",
+      "Bash(make:*)",
+      "Bash(chmod +x:*)",
+      "Bash(presentation/check-changes.sh:*)",
+      "Bash(say:*)",
+      "Bash(git stash:*)",
+      "Bash(git:*)",
+      "Bash(pushd:*)",
+      "Bash(rm:*)",
+      "Bash(uv:*)",
+      "Bash(pkill:*)",
+      "Bash(mkdir:*)",
+      "Bash(rsync:*)"
+    ]
+  }
+}
