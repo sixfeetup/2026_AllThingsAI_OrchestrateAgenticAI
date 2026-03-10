@@ -78,7 +78,7 @@ success. Let's quickly our team, as our agent will both be augmenting
 what they do and occasionally representing them or facilitating
 communication
 
-<@@ a slide with a picture for each >
+<!-- deck-watch: processed — created 05-the-mighty-fine-team.md with team role cards -->
 
 - Business Operations and Product Management{ The Cleric and the Bard: keep the business healthy and singing the song of the business.
 - Product Engineering: The Magic users of CAPEX, wizards, sorcerors, artificers, and druids
@@ -204,3 +204,7 @@ Working together
 - implement something with ralph-orchestrator and Pdd. Talk about
   modeling process with the hats prompt and loop driven development.
 - if want, gas town, talk about kim & yegge's book, and the future
+
+## Closing thoughts
+
+Outline: @@outline by claude

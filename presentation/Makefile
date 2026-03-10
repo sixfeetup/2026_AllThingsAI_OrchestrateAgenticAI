@@ -5,13 +5,16 @@ DIST    := ../dist/deck.html
 BUILD   := build.py
 IMAGES  := ../images
 
-.PHONY: build open clean watch list deploy serve
+# Pass --root to build.py when ROOT is set (e.g. make build ROOT=/some/path)
+BUILD_FLAGS := $(if $(ROOT),--root $(ROOT))
+
+.PHONY: build open clean reset-content watch list deploy serve
 
 ## build — render content/*.md into output/deck.html + dist/deck.html
 build: $(OUTPUT)
 
 $(OUTPUT): $(CONTENT) $(BUILD)
-	uv run $(BUILD)
+	uv run $(BUILD) $(BUILD_FLAGS)
 
 ## open — build and open in browser
 open: $(OUTPUT)
@@ -20,6 +23,13 @@ open: $(OUTPUT)
 ## clean — remove built output
 clean:
 	rm -f $(OUTPUT) $(DIST)
+
+## reset-content — remove only committed content/*.md files (safe for uncommitted work)
+reset-content:
+	@echo "Removing committed content files..."
+	cd .. && git ls-files --error-unmatch presentation/content/*.md 2>/dev/null | \
+		xargs -I{} sh -c 'git diff --quiet -- "$$1" && git diff --cached --quiet -- "$$1" && rm "$$1" && echo "  rm $$1"' _ {}
+	@echo "Done. Unmodified committed files removed; dirty/untracked files preserved."
 
 ## deploy — build, copy referenced images, commit and push gh-pages
 deploy: $(OUTPUT)

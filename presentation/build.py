@@ -11,9 +11,11 @@ a single self-contained HTML deck to presentation/output/deck.html.
 
 Usage:
     uv run presentation/build.py
+    uv run presentation/build.py --root /path/to/repo
     uv run presentation/build.py --watch    # rebuild on file changes
     uv run presentation/build.py --open     # open in browser after build
 """
+import argparse
 import re
 import sys
 import html as html_mod
@@ -23,16 +25,37 @@ import yaml
 
 
 # ---------------------------------------------------------------------------
-# Paths
+# Paths — defaults based on script location; overridable via --root
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent
-CONTENT_DIR = SCRIPT_DIR / "content"
-OUTPUT_DIR = SCRIPT_DIR / "output"
-DIST_DIR = REPO_ROOT / "dist"
-TEMPLATE_FILE = SCRIPT_DIR / "template.html"
-OUTPUT_FILE = OUTPUT_DIR / "deck.html"
-DIST_FILE = DIST_DIR / "deck.html"
+
+# These module-level variables are set by _init_paths() before any build work.
+REPO_ROOT: Path
+CONTENT_DIR: Path
+OUTPUT_DIR: Path
+DIST_DIR: Path
+TEMPLATE_FILE: Path
+OUTPUT_FILE: Path
+DIST_FILE: Path
+
+
+def _init_paths(root: Path | None = None) -> None:
+    """(Re)compute derived paths from *root* (the repository root)."""
+    global REPO_ROOT, CONTENT_DIR, OUTPUT_DIR, DIST_DIR
+    global TEMPLATE_FILE, OUTPUT_FILE, DIST_FILE
+
+    REPO_ROOT = root.resolve() if root else SCRIPT_DIR.parent
+    pres_dir = REPO_ROOT / "presentation"
+    CONTENT_DIR = pres_dir / "content"
+    OUTPUT_DIR = pres_dir / "output"
+    DIST_DIR = REPO_ROOT / "dist"
+    TEMPLATE_FILE = pres_dir / "template.html"
+    OUTPUT_FILE = OUTPUT_DIR / "deck.html"
+    DIST_FILE = DIST_DIR / "deck.html"
+
+
+# Initialise with defaults so import-time usage (tests, REPL) still works.
+_init_paths()
 
 
 # ---------------------------------------------------------------------------
@@ -92,6 +115,14 @@ def render_grid(cards: list[tuple[str, str]]) -> str:
             f"</div>\n"
         )
     return f'<div class="feature-grid reveal">\n{inner}</div>'
+
+
+def split_notes(body: str) -> tuple[str, str]:
+    """Split slide body from speaker notes on '???' separator."""
+    parts = re.split(r"^\?\?\?\s*$", body, maxsplit=1, flags=re.MULTILINE)
+    if len(parts) == 2:
+        return parts[0].strip(), parts[1].strip()
+    return body, ""
 
 
 def render_body(body: str, meta: dict) -> str:
@@ -335,13 +366,29 @@ def build_slide(meta: dict, body: str) -> str:
     section_number = meta.get("section_number", "")
     label = ""
 
+    # Split speaker notes from visible content
+    visible_body, notes_text = split_notes(body)
+
     # Try to extract label from first heading
-    h_match = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
+    h_match = re.search(r"^#\s+(.+)$", visible_body, re.MULTILINE)
     if h_match:
         label = h_match.group(1)
 
-    inner_html = render_body(body, meta)
+    inner_html = render_body(visible_body, meta)
     inner_html = wrap_with_image(inner_html, meta)
+
+    # Extract quotes from inner_html so they can be positioned
+    # absolutely at the bottom of the slide (outside .slide-content)
+    quote_html = ""
+    quote_pattern = re.compile(
+        r'(<blockquote class="quote[^"]*"[^>]*>.*?</blockquote>'
+        r'(?:\s*<p class="quote-attribution[^"]*"[^>]*>.*?</p>)?)',
+        re.DOTALL,
+    )
+    qm = quote_pattern.search(inner_html)
+    if qm:
+        quote_html = f'\n<div class="slide-quote">{qm.group(0)}</div>'
+        inner_html = inner_html[:qm.start()] + inner_html[qm.end():]
 
     # Section number for divider slides
     section_num_html = ""
@@ -363,6 +410,16 @@ def build_slide(meta: dict, body: str) -> str:
             f'\n<span class="slide-footer">{escape(footer)}</span>'
         )
 
+    # Speaker notes
+    notes_html = ""
+    if notes_text:
+        notes_lines = [escape(l) for l in notes_text.split("\n") if l.strip()]
+        notes_html = (
+            '\n<aside class="speaker-notes">'
+            + "<br>".join(notes_lines)
+            + "</aside>"
+        )
+
     aria = f' aria-label="{escape(label)}"' if label else ""
 
     return (
@@ -372,6 +429,8 @@ def build_slide(meta: dict, body: str) -> str:
         f'<div class="slide-content">\n'
         f"{inner_html}\n"
         f"</div>"
+        f"{quote_html}"
+        f"{notes_html}"
         f"{footer_html}\n"
         f"</section>"
     )
@@ -405,7 +464,7 @@ def load_template_shell() -> tuple[str, str]:
 def _minimal_shell() -> tuple[str, str]:
     """Fallback minimal HTML shell if template isn't usable."""
     # Read from the existing deck.html instead
-    deck = SCRIPT_DIR / "deck.html"
+    deck = REPO_ROOT / "presentation" / "deck.html"
     if deck.exists():
         text = deck.read_text()
         first = text.find("<section")
@@ -463,9 +522,29 @@ def build():
         print(f"  Also wrote -> {DIST_FILE}")
 
 
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Build presentation deck from markdown slide files."
+    )
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=None,
+        help="Repository root directory (default: parent of presentation/)",
+    )
+    parser.add_argument(
+        "--open",
+        action="store_true",
+        dest="open_browser",
+        help="Open the built deck in the default browser",
+    )
+    return parser.parse_args(argv)
+
+
 if __name__ == "__main__":
-    open_flag = "--open" in sys.argv
+    args = _parse_args()
+    _init_paths(args.root)
     build()
-    if open_flag:
+    if args.open_browser:
         import subprocess
         subprocess.run(["open", str(OUTPUT_FILE)])

@@ -515,11 +515,21 @@
         .code-block .string { color: #a8d8a8; }
         .code-block .comment { color: var(--sfu-gray); font-style: italic; }
 
-        /* Quote */
+        /* Quote — pinned bottom of slide, left of page number */
+        .slide-quote {
+            position: absolute;
+            bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+            right: clamp(3rem, 5vw, 5rem);
+            text-align: right;
+            max-width: 60%;
+        }
+
         .quote {
-            border-left: clamp(3px, 0.4vw, 4px) solid var(--sfu-teal);
-            padding-left: clamp(1rem, 2vw, 2rem);
-            font-size: var(--h3-size);
+            border-left: none;
+            border-right: clamp(3px, 0.4vw, 4px) solid var(--sfu-teal);
+            padding-right: clamp(1rem, 2vw, 2rem);
+            padding-left: 0;
+            font-size: clamp(0.75rem, 1.2vw, 1rem);
             font-style: italic;
             font-weight: 300;
             line-height: 1.4;
@@ -527,7 +537,7 @@
         }
 
         .dark-slide .quote {
-            border-left-color: var(--sfu-teal-light);
+            border-right-color: var(--sfu-teal-light);
             color: var(--sfu-ice);
         }
 
@@ -536,7 +546,8 @@
             font-style: normal;
             font-weight: 500;
             color: var(--text-secondary);
-            margin-top: clamp(0.5rem, 1vw, 1rem);
+            margin-top: 0.3rem;
+            text-align: right;
         }
 
         /* Slide footer / page number */
@@ -552,6 +563,31 @@
         .dark-slide .slide-footer,
         .divider-slide .slide-footer {
             color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Speaker notes — hidden by default, shown in presenter mode (N key) */
+        .speaker-notes {
+            display: none;
+        }
+
+        body.show-notes .speaker-notes {
+            display: block;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 40%;
+            max-height: 30vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.88);
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 1rem 1.2rem;
+            border-top-left-radius: 8px;
+            z-index: 9999;
+            font-family: -apple-system, system-ui, sans-serif;
+            font-style: normal;
+            box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4);
         }
 
         /* ===========================================
@@ -632,391 +668,267 @@
          ═══════════════════════════════════════════ -->
 
     <!-- 01-title.md -->
-    <section class="slide title-slide" aria-label="The Agentic Quest: Orchestrating AI You Can Actually Trust">
+    <section class="slide title-slide" aria-label="Agents of Legend: The Orchestrator Dilemma">
 <div class="brand-mark decorative"></div>
 <div class="slide-content">
 <p class="tagline reveal">Six Feet Up</p>
-<h1 class="reveal">The Agentic Quest: Orchestrating AI You Can Actually Trust</h1>
-<p class="subtitle reveal">Whit — AllThings AI, 2026</p>
+<h1 class="reveal">Agents of Legend: The Orchestrator Dilemma</h1>
+<p class="subtitle reveal">Context, Checklists, and No-Miss Reviews</p>
+<p class="subtitle reveal">Calvin Hendryx-Parker — AllThings AI, 2026</p>
 </div>
 </section>
 
-    <!-- 02-broken-promise.md -->
-    <section class="slide dark-slide" aria-label="The Broken Promise">
+    <!-- 02-backstory-magic.md -->
+    <section class="slide dark-slide" aria-label="The Backstory Magic">
 <div class="slide-content">
-<h2 class="reveal">The Broken Promise</h2>
+<h2 class="reveal">The Backstory Magic</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<blockquote class="quote reveal">&quot;You hand a 20-page contract to the AI oracle. It misses the clause that matters. You correct it. It says &#x27;Oh, you&#x27;re right.&#x27;&quot;</blockquote>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Business as usual can feel more like an epic quest into Mordor than a stock photo of smiling generic people gathered around the warm light of a laptop.</p>
 <ul class="bullet-list">
-<li class="reveal">That&#x27;s not a reviewer — that&#x27;s a yes-man NPC</li>
-<li class="reveal">Same failure in code review, policy compliance, test planning</li>
-<li class="reveal">The party has been burned. Trust is low.</li>
+<li class="reveal">One second you&#x27;re planning a cheery offsite</li>
+<li class="reveal">The next it&#x27;s very dark and you might be eaten by a grue</li>
+<li class="reveal">Whether good news or bad, adapting quickly requires tools and experience</li>
 </ul>
+
 </div>
 <div class="split-image">
-<img src="../../images/ralph.jpg" alt="Ralph Wiggum — the yes-man NPC" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+<img src="../../images/the-team-in-the-office_web.jpg" alt="Generic business stock photo — smiling people around a laptop" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;We become what we behold. We shape our tools and then our tools shape us.&quot; — Marshall McLuhan</blockquote></div>
 <span class="slide-footer">01</span>
 </section>
 
-    <!-- 03-the-party.md -->
-    <section class="slide content-slide" aria-label="The Party">
+    <!-- 03-do-i-need-one.md -->
+    <section class="slide content-slide" aria-label="Agents: Do I Need One?">
 <div class="slide-content">
-<h2 class="reveal">The Party</h2>
-<img src="../../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg" alt="D&amp;D adventuring party planning around a table" class="slide-image" style="width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);" class="slide-image inline reveal">
-<div class="feature-grid reveal">
-<div class="feature-card"><h3>The Cleric</h3><p>Compliance / BizOps / Procurement. Overtasked healer keeping everyone alive. Cares about risk, correctness, and not getting sued.</p></div>
-<div class="feature-card"><h3>The Wizard</h3><p>Developer. Reshapes reality with code but occasionally blows up the lab. Cares about shipping, quality, and not being on-call forever.</p></div>
-<div class="feature-card"><h3>The Ranger</h3><p>Ops / Security. Watches the perimeter, makes sure the ground doesn&#x27;t collapse. Cares about reliability and audit trails.</p></div>
-<div class="feature-card"><h3>The Warforged Artificer</h3><p>Claude Code. Tireless construct. Loyal but literal. Only as good as its instructions and context.</p></div>
+<h2 class="reveal">Agents: Do I Need One?</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<ul class="bullet-list">
+<li class="reveal">Everybody says they are great — but what are they, really?</li>
+<li class="reveal">Zombies, skeletons, familiars, djinnies, or demons?</li>
+<li class="reveal">Can we work with them? Can they work together?</li>
+<li class="reveal">When do you start? How do you start?</li>
+</ul>
+
+</div>
+<div class="split-image">
+<img src="../../images/sorcerors-apprentice-grok.jpg" alt="Sorcerer&#x27;s Apprentice surrounded by AI tools" class="slide-image">
 </div>
 </div>
+</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;We&#x27;re in the &#x27;horseless carriage&#x27; stage of coding genies.&quot; — Kent Beck</blockquote></div>
 <span class="slide-footer">02</span>
 </section>
 
-    <!-- 04-decision-frameworks.md -->
-    <section class="slide content-slide" aria-label="Decision Frameworks">
+    <!-- 04-trouble-comes-knocking.md -->
+    <section class="slide dark-slide" aria-label="Trouble Comes Knocking">
 <div class="slide-content">
-<h2 class="reveal">Decision Frameworks</h2>
-<div class="feature-grid reveal">
-<div class="feature-card"><h3>OODA Loop</h3><p>Observe, Orient, Decide, Act. Every agentic interaction is an OODA cycle. The question: who does which step at each autonomy level?</p></div>
-<div class="feature-card"><h3>Cynefin</h3><p>Match autonomy level to problem complexity. Simple: automate. Complicated: multi-agent. Complex: human-in-the-loop. Chaotic: human takes the wheel.</p></div>
-</div>
+<h2 class="reveal">Trouble Comes Knocking</h2>
+
 <ul class="bullet-list">
-<li class="reveal">At Level 1, the human does all four OODA steps</li>
-<li class="reveal">At Level 3, the agent runs its own loops — the human audits</li>
-<li class="reveal">The gap isn&#x27;t intelligence — it&#x27;s orchestration, context, and trust</li>
+<li class="reveal">They have an online marketplace (larpsy.gold) and a bitrotting events site (larpsalot.party)</li>
+<li class="reveal">They need to migrate off Hurokee (sunsetting PaaS) and relaunch</li>
+<li class="reveal">Then your phone blows up: Hasbro just changed the OGL</li>
+<li class="reveal">Tasha Tiamata needs to know ASAP what content may have to come down</li>
 </ul>
+<p class="subtitle reveal">Can your team help her? Time to get the party together.</p>
 </div>
+<div class="slide-quote"><blockquote class="quote reveal">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing events company specializing in live action role playing.</blockquote></div>
 <span class="slide-footer">03</span>
 </section>
 
-    <!-- 05-act-ii-the-levels.md -->
-    <section class="slide divider-slide" aria-label="The Levels">
-<span class="section-number">II</span>
+    <!-- 05-the-mighty-fine-team.md -->
+    <section class="slide content-slide" aria-label="The Mighty Fine (Team)">
 <div class="slide-content">
-<h2 class="reveal">The Levels</h2>
-<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">What does agentic AI actually look like?</p>
-<img src="../../images/sorcerors-apprentice-grok.jpg" alt="Sorcerer&#x27;s Apprentice with AI tools" class="slide-image" class="slide-image reveal" style="margin-top: clamp(0.5rem, 1vw, 1rem);">
+<h2 class="reveal">The Mighty Fine (Team)</h2>
+<img src="../../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg" alt="D&amp;D adventuring party planning around a table" class="slide-image" style="width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);" class="slide-image inline reveal">
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>The Cleric &amp; Bard</h3><p>Business Ops &amp; Product Management. Keep the business healthy and singing.</p></div>
+<div class="feature-card"><h3>The Magic Users</h3><p>Product Engineering. Wizards, sorcerers, artificers, and druids of CAPEX.</p></div>
+<div class="feature-card"><h3>Rangers &amp; Fighters</h3><p>Technical Ops — SRE, DevOps, Platform. The OPEX bruisers who keep the roads safe.</p></div>
+<div class="feature-card"><h3>Rogues &amp; Paladins</h3><p>Security. Red team rogues of all shades. Blue team paladins and warlocks.</p></div>
+</div>
 </div>
 <span class="slide-footer">04</span>
 </section>
 
-    <!-- 06-level-1-apprentice.md -->
-    <section class="slide content-slide" aria-label="Level 1 — The Apprentice">
+    <!-- 06-newest-party-member.md -->
+    <section class="slide dark-slide" aria-label="Our Newest Party Member">
 <div class="slide-content">
-<h2 class="reveal">Level 1 — The Apprentice</h2>
+<h2 class="reveal">Our Newest Party Member</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<blockquote class="quote reveal">&quot;You swing the sword. The AI sharpens it.&quot;</blockquote>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The hyped and famed Agentic AI enters the tavern with great swagger. Rumored to be both ninja and rockstar — can do the laundry, walk the dog, and file the taxes.</p>
 <ul class="bullet-list">
-<li class="reveal">Human-orchestrated, step by step</li>
-<li class="reveal">Context engineering: chunking, targeted prompts, checklists</li>
-<li class="reveal">OODA: human does all four steps</li>
-<li class="reveal">Limitation: scales with your attention. You are the bottleneck.</li>
+<li class="reveal">Except sometimes the taxes end up in the washing machine</li>
+<li class="reveal">And the dog ends up in the dryer</li>
+<li class="reveal">And the front door was left wide open all night</li>
 </ul>
+<p class="subtitle reveal">But maybe we can make this work.</p>
 </div>
 <div class="split-image">
-<img src="../../images/kent-v-genie-1_web.jpg" alt="Wrestling the coding genie for the steering wheel" class="slide-image">
+<img src="../../images/ralph.jpg" alt="Ralph Wiggum — the overpromising new recruit" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
 <span class="slide-footer">05</span>
 </section>
 
-    <!-- 07-level-2-party.md -->
-    <section class="slide content-slide" aria-label="Level 2 — The Party">
+    <!-- 07-what-do-we-know.md -->
+    <section class="slide content-slide" aria-label="What Do We Know About Our Quest?">
 <div class="slide-content">
-<h2 class="reveal">Level 2 — The Party</h2>
-<div class="split-layout reveal">
-<div class="split-text">
-<blockquote class="quote reveal">&quot;You plan the raid. The agents execute roles.&quot;</blockquote>
+<h2 class="reveal">What Do We Know About Our Quest?</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Tasha has given us the following artifacts in a tarball:</p>
 <ul class="bullet-list">
-<li class="reveal">Multi-agent workflows: multiclaude, ralph, spec-kit</li>
-<li class="reveal">Decompose &quot;review this&quot; into a task graph of sub-jobs</li>
-<li class="reveal">Sandboxing: contained environments — mistakes don&#x27;t cascade</li>
-<li class="reveal">Adversarial agents: pit one against another to find gaps</li>
-<li class="reveal">OODA shift: agents Observe/Orient/Decide. Human retains Act.</li>
+<li class="reveal">The Hurokee buildpack (basically a Dockerfile)</li>
+<li class="reveal">The code for 2 sites</li>
+<li class="reveal">A database dump</li>
+<li class="reveal">A file dump of the OGL content</li>
 </ul>
+
 </div>
-<div class="split-image">
-<img src="../../images/the-team-in-the-office_web.jpg" alt="Team collaborating around dashboards" class="slide-image">
-</div>
-</div>
-</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
 <span class="slide-footer">06</span>
 </section>
 
-    <!-- 08-orchestration-approaches.md -->
-    <section class="slide content-slide" aria-label="Orchestration Approaches">
+    <!-- 08-how-do-you-want-to-do-this.md -->
+    <section class="slide divider-slide" aria-label="How Do You Want to Do This?">
+<span class="section-number">I</span>
 <div class="slide-content">
-<h2 class="reveal">Orchestration Approaches</h2>
-<div class="feature-grid reveal">
-<div class="feature-card"><h3>Conductor</h3><p>Run multiple agents, bounce between windows. Good control, but decision fatigue for the human.</p></div>
-<div class="feature-card"><h3>Relentless Loop</h3><p>Set it and forget it. Low effort, but hard to audit. What have we built? What happened along the way?</p></div>
-<div class="feature-card"><h3>Swarm</h3><p>Many focused agents with isolated concerns. Great isolation, but needs higher-level orchestration.</p></div>
-<div class="feature-card"><h3>Spec-Driven</h3><p>Upfront specs force definition and create an audit trail. Best traceability, requires upfront work.</p></div>
-</div>
+<h2 class="reveal">How Do You Want to Do This?</h2>
+<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">The team accepts the agent. Now what?</p>
 </div>
 <span class="slide-footer">07</span>
 </section>
 
-    <!-- 09-level-3-autonomous-guild.md -->
-    <section class="slide dark-slide" aria-label="Level 3 — The Autonomous Guild">
+    <!-- 09-spelljammer.md -->
+    <section class="slide dark-slide" aria-label="To Our Spelljammer!">
 <div class="slide-content">
-<h2 class="reveal">Level 3 — The Autonomous Guild</h2>
+<h2 class="reveal">To Our Spelljammer!</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<blockquote class="quote reveal">&quot;You set the objective. The system runs the campaign.&quot;</blockquote>
+
 <ul class="bullet-list">
-<li class="reveal">Self-orchestrating agent networks</li>
-<li class="reveal">Trust earned through Level 2 reliability + audit trails</li>
-<li class="reveal">Cynefin: works for Simple/Complicated. Complex still needs human-in-the-loop.</li>
-<li class="reveal">The future is here, just unevenly distributed</li>
+<li class="reveal">L&amp;LL faces a dual existential threat: lose content or face legal action</li>
+<li class="reveal">The cleric and bard aren&#x27;t scared of the command line</li>
+<li class="reveal">A trust ranger helps get a database set up</li>
 </ul>
+<p class="subtitle reveal">Demo: search PDFs for names, load into DB, report the damage, generate replacements</p>
 </div>
 <div class="split-image">
-<img src="../../images/kent-v-genie-2_web.jpg" alt="From wrestling the wheel to flying the carpet — trust earned" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+<img src="../../images/kent-v-genie-1_web.jpg" alt="Wrestling the coding genie for the steering wheel" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
+<div class="slide-quote"><blockquote class="quote reveal">Roll for initiative! Casting Clarity of Thought. Casting Locate Object.</blockquote></div>
 <span class="slide-footer">08</span>
 </section>
 
-    <!-- 10-act-iii-the-dungeon.md -->
-    <section class="slide divider-slide" aria-label="The Dungeon">
-<span class="section-number">III</span>
+    <!-- 10-loot-the-room.md -->
+    <section class="slide content-slide" aria-label="Loot the Room">
 <div class="slide-content">
-<h2 class="reveal">The Dungeon</h2>
-<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">How do you want to do this?</p>
+<h2 class="reveal">Loot the Room</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">L&amp;LL is psyched. The team has landed more work — a database migration. But now the tasks are more complex, with greater peril.</p>
+<div class="feature-grid reveal">
+<div class="feature-card"><h3>OODA Loop</h3><p>Observe, Orient, Decide, Act. Every agentic interaction is an OODA cycle. Who does which step?</p></div>
+<div class="feature-card"><h3>Cynefin</h3><p>Match autonomy to complexity. Simple: automate. Complicated: multi-agent. Complex: human-in-the-loop. Chaotic: human takes the wheel.</p></div>
+</div>
+<ul class="bullet-list">
+<li class="reveal">We need to orchestrate agents AND human players</li>
+<li class="reveal">Frameworks we already use for non-deterministic business processes still apply</li>
+</ul>
 </div>
 <span class="slide-footer">09</span>
 </section>
 
-    <!-- 11-level-up-maelstrom.md -->
-    <section class="slide dark-slide" aria-label="Level Up! You&#x27;ve Got Maelstrom">
+    <!-- 11-more-work.md -->
+    <section class="slide divider-slide" aria-label="Great, But I Hired You for This Other Thing">
+<span class="section-number">II</span>
 <div class="slide-content">
-<h2 class="reveal">Level Up! You&#x27;ve Got Maelstrom</h2>
-<blockquote class="quote reveal">You are sipping ginger beer at the tavern when a large sheaf of papyrus drops in your lap — a contract from the emperor, not the most trustworthy of clients, to bring his castle into strict compliance.</blockquote>
-<ul class="bullet-list">
-<li class="reveal">You summon your trusty Warforged to help assess what this all means</li>
-<li class="reveal">But where do you even start with a 20-page imperial decree?</li>
-<li class="reveal">Time to decompose the document while preserving context and objects</li>
-</ul>
-<p class="subtitle reveal">Begin demo: context engineering tactics</p>
+<h2 class="reveal">Great, But I Hired You for This Other Thing</h2>
+<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">The job is not done — time to migrate and update</p>
 </div>
 <span class="slide-footer">10</span>
 </section>
 
-    <!-- 12-context-engineering.md -->
-    <section class="slide content-slide" aria-label="Context Engineering">
+    <!-- 12-its-a-trap.md -->
+    <section class="slide dark-slide" aria-label="It&#x27;s a TRAP!">
 <div class="slide-content">
-<h2 class="reveal">Context Engineering</h2>
+<h2 class="reveal">It&#x27;s a TRAP!</h2>
+<p class="subtitle reveal">Demo: contract analysis, security, adversarial review</p>
 <ul class="bullet-list">
-<li class="reveal">Chunk the emperor&#x27;s contract into focused units — clauses, obligations, deadlines</li>
-<li class="reveal">Frame targeted prompts: tell the agent what to look for and what to ignore</li>
-<li class="reveal">Apply checklists with acceptance criteria per sub-task</li>
-<li class="reveal">Traceability: every sub-task has clear pass/fail — what was checked, what wasn&#x27;t</li>
-<li class="reveal">Find objectives to carry forward into the next phase</li>
+<li class="reveal">Ingest the contract PDF — generate visual explainers, checklists</li>
+<li class="reveal">Security is a requirement: skills for reporting and guardrails</li>
+<li class="reveal">Swarm agents with /c^2 — use Codex and Gemini for adversarial review</li>
+<li class="reveal">Visual explainers: project overlay, risk report, adversarial findings</li>
+<li class="reveal">Fire up speckit: create specs from findings, clarify, plan</li>
 </ul>
-<blockquote class="quote reveal">&quot;Upstream: problem definition clarity is the leverage point&quot;</blockquote>
+
 </div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot;</blockquote></div>
 <span class="slide-footer">11</span>
 </section>
 
-    <!-- 13-more-model.md -->
-    <section class="slide dark-slide" aria-label="More Me (Or Rather More Model)">
+    <!-- 13-jetpacks.md -->
+    <section class="slide content-slide" aria-label="Jetpacks All Around">
 <div class="slide-content">
-<h2 class="reveal">More Me (Or Rather More Model)</h2>
-<blockquote class="quote reveal">&quot;One agent found the clauses. But who scores the risk? Who checks for gaps?&quot;</blockquote>
+<h2 class="reveal">Jetpacks All Around</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<h2 class="reveal">The Future Is Legion</h2>
 <ul class="bullet-list">
-<li class="reveal">Batch processing: run multiple passes over the same artifact</li>
-<li class="reveal">Shell out to other agents — or more of yourself</li>
-<li class="reveal">Task graph decomposition: clause extractor, risk scorer, completeness validator</li>
-<li class="reveal">Each agent has a focused concern and a contained scope</li>
+<li class="reveal">Agents are now a medium with their own message</li>
+<li class="reveal">Like organisms that take evolutionary leaps through symbiogenesis — acting as environments for other organisms</li>
+<li class="reveal">Specify a feature, use multiclaude to implement — built-in TDD, CI/CD</li>
+<li class="reveal">Model process with ralph-orchestrator: hats, loops, planner/builder/reviewer</li>
 </ul>
-<div class="code-block reveal"><span <span class="keyword">class</span>=<span <span class="keyword">class</span>="string">"comment"</span>># Level 2: task graph decomposition</span>
-<span class="keyword">async</span> <span class="keyword">def</span> review_contract(doc: Document) -&gt; Report:
-    clauses = <span class="keyword">await</span> clause_extractor(doc)
-    risks   = <span class="keyword">await</span> asyncio.gather(
-        *[risk_scorer(c) <span class="keyword">for</span> c <span class="keyword">in</span> clauses]
-    )
-    gaps    = <span class="keyword">await</span> completeness_validator(clauses, risks)
-    <span class="keyword">return</span>  <span class="keyword">await</span> report_generator(risks, gaps)</div>
+
 </div>
+<div class="split-image">
+<img src="../../images/kent-v-genie-2_web.jpg" alt="From wrestling the wheel to flying the carpet — trust earned" class="slide-image">
+</div>
+</div>
+</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;The medium is the message.&quot; — Marshall McLuhan</blockquote></div>
 <span class="slide-footer">12</span>
 </section>
 
-    <!-- 14-monster-manual.md -->
-    <section class="slide content-slide" aria-label="Monster Manual Transmission">
+    <!-- 14-closing.md -->
+    <section class="slide dark-slide" aria-label="Closing Thoughts">
 <div class="slide-content">
-<h2 class="reveal">Monster Manual Transmission</h2>
-<h2 class="reveal">Is it safe? Finding traps, threats, and girding loins</h2>
-<ul class="bullet-list">
-<li class="reveal">Give your agent a paladin hat — or pair them with your paladin</li>
-<li class="reveal">Security as an enabler: when we know we are safe, we can do more</li>
-<li class="reveal">Skills for security awareness, guardrails, and sandboxing</li>
-<li class="reveal">Adversarial patterns: second agent challenges the first</li>
-<li class="reveal">Isolated execution, rollback capability, dry runs</li>
-</ul>
-<blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot;</blockquote>
-</div>
-<span class="slide-footer">13</span>
-</section>
-
-    <!-- 15-koboldly-go.md -->
-    <section class="slide dark-slide" aria-label="To Koboldly Go Where...">
-<div class="slide-content">
-<h2 class="reveal">To Koboldly Go Where...</h2>
-<h2 class="reveal">Is it right? Trust and verify and verify and verify</h2>
-<ul class="bullet-list">
-<li class="reveal">Working with wizards and paladins to make the right thing</li>
-<li class="reveal">Verification skills: build constraint flows like TDD</li>
-<li class="reveal">The human role in attenuating trust — graduated, not binary</li>
-<li class="reveal">Spec-driven development as an upstream strategy</li>
-<li class="reveal">Specs are your audit trail: what was built, why, and whether it passed</li>
-</ul>
-<blockquote class="quote reveal">&quot;Each level of trust earned, not assumed.&quot;</blockquote>
-</div>
-<span class="slide-footer">14</span>
-</section>
-
-    <!-- 15b-trust-graduation.md -->
-    <section class="slide dark-slide" aria-label="Trust as a Graduated System">
-<div class="slide-content">
-<h2 class="reveal">Trust as a Graduated System</h2>
-<ul class="bullet-list">
-<li class="reveal">Observe — watch the agent work, review every output</li>
-<li class="reveal">Verify — spot-check outputs against known-good baselines</li>
-<li class="reveal">Approve — review and sign off on agent-produced artifacts</li>
-<li class="reveal">Delegate — assign tasks, review only escalations</li>
-<li class="reveal">Autonomize — set objectives, audit outcomes</li>
-</ul>
-<blockquote class="quote reveal">&quot;Each level earned, not assumed.&quot;</blockquote>
-</div>
-<span class="slide-footer">11</span>
-</section>
-
-    <!-- 16-where-the-gold-at.md -->
-    <section class="slide content-slide" aria-label="Where the Gold At?">
-<div class="slide-content">
-<h2 class="reveal">Where the Gold At?</h2>
-<h2 class="reveal">Does it work? How do I know?</h2>
-<ul class="bullet-list">
-<li class="reveal">Ranger time: combine previous skills into something your business can operate</li>
-<li class="reveal">The contract is analyzed, risks scored, gaps found — now what?</li>
-<li class="reveal">Move from artifact to action: remediation plan, task assignments, timelines</li>
-<li class="reveal">Structured outputs the whole party can read: task graphs, checklists, reports</li>
-</ul>
-<div class="feature-grid reveal">
-<div class="feature-card"><h3>Contract Review</h3><p>Extract clauses. Score risk. Validate completeness. Generate report.</p></div>
-<div class="feature-card"><h3>Code Review</h3><p>Extract functions. Analyze complexity. Generate test plan. Validate coverage.</p></div>
-<div class="feature-card"><h3>Compliance Audit</h3><p>Extract requirements. Map to controls. Gap analysis. Generate report.</p></div>
-</div>
-</div>
-<span class="slide-footer">15</span>
-</section>
-
-    <!-- 17-beholder.md -->
-    <section class="slide dark-slide" aria-label="Beauty Is in the Eye of the Beholder">
-<div class="slide-content">
-<h2 class="reveal">Beauty Is in the Eye of the Beholder</h2>
+<h2 class="reveal">Closing Thoughts</h2>
 <div class="split-layout reveal">
 <div class="split-text">
 <ul class="bullet-list">
-<li class="reveal">A service is people, processes, and evolving technology</li>
-<li class="reveal">Combine specs, audit findings, and contract analysis with data from the running system</li>
-<li class="reveal">Help the djinni find your next win — or avoid the emperor&#x27;s whim</li>
-<li class="reveal">New tools provide ways to do more of this in an automated fashion</li>
+<li class="reveal">Start with frameworks you already know (OODA, Cynefin)</li>
+<li class="reveal">Skills codify problem solving — build them as you go</li>
+<li class="reveal">Security and trust are enablers, not blockers</li>
+<li class="reveal">Orchestrate the humans AND the agents</li>
+<li class="reveal">The agent is part of the party, not a replacement for it</li>
 </ul>
-<blockquote class="quote reveal">&quot;Every line of code is an operational liability. Knowing what to write, verifying it works, and throwing it away when requirements change — that&#x27;s the struggle.&quot;</blockquote>
+
 </div>
 <div class="split-image">
 <img src="../../images/ralph-w-crabs.jpg" alt="Ralph leveled up — still Ralph, but with equipment" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
-<span class="slide-footer">16</span>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Most important advice in software: underpromise, deliver.&quot; — Tom Conrad</blockquote></div>
+<span class="slide-footer">13</span>
 </section>
 
-    <!-- 18-new-day.md -->
-    <section class="slide content-slide" aria-label="New Day, Roll 2d6 for Current Environment">
-<div class="slide-content">
-<h2 class="reveal">New Day, Roll 2d6 for Current Environment</h2>
-<div class="split-layout reveal">
-<div class="split-text">
-<h2 class="reveal">Surprise, now you are in Gas Town!</h2>
-<ul class="bullet-list">
-<li class="reveal">Things change fast — Claude was your friend, but suddenly we&#x27;re in a post-apocalyptic wasteland</li>
-<li class="reveal">Fortunately OODA and Cynefin are still your friends</li>
-<li class="reveal">The frameworks transfer: assess the new domain, match autonomy level</li>
-<li class="reveal">Well-factored systems let you iterate quickly when the ground shifts</li>
-<li class="reveal">We just need to make progress and eventually succeed</li>
-</ul>
-</div>
-<div class="split-image">
-<img src="../../images/kent-v-genie-2_web.jpg" alt="From wrestling the wheel to flying the carpet — adapting together" class="slide-image">
-</div>
-</div>
-</div>
-<span class="slide-footer">17</span>
-</section>
-
-    <!-- 19-the-loot-table.md -->
-    <section class="slide divider-slide" aria-label="The Loot Table">
-<span class="section-number">V</span>
-<div class="slide-content">
-<h2 class="reveal">The Loot Table</h2>
-<p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">What you walk away with</p>
-</div>
-<span class="slide-footer">18</span>
-</section>
-
-    <!-- 20-the-playbook.md -->
-    <section class="slide content-slide" aria-label="The Playbook">
-<div class="slide-content">
-<h2 class="reveal">The Playbook</h2>
-<ul class="bullet-list">
-<li class="reveal">Start at Level 1. Get context engineering right first.</li>
-<li class="reveal">Build trust incrementally. Level 2 before Level 3.</li>
-<li class="reveal">Use adversarial agents. Don&#x27;t trust a single pass.</li>
-<li class="reveal">Write tools for vigilance, not just automation.</li>
-<li class="reveal">Security enables speed when baked into the workflow.</li>
-<li class="reveal">Specs are your audit trail.</li>
-</ul>
-</div>
-<span class="slide-footer">19</span>
-</section>
-
-    <!-- 21-key-insight.md -->
-    <section class="slide dark-slide" aria-label="Key Insight">
-<div class="slide-content">
-<h2 class="reveal">Key Insight</h2>
-<div class="split-layout reveal">
-<div class="split-text">
-<blockquote class="quote reveal">&quot;Today I feel like I&#x27;m wrestling with my coding genie for control of the steering wheel.&quot;</blockquote>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The dependencies for good outcomes are not so different than human actors: good parts, clean work area, clear and constrained problem space, freedom to iterate, a good system for testing and validation.</p>
-<p class="quote-attribution reveal">— Kent Beck</p>
-</div>
-<div class="split-image">
-<img src="../../images/kent-beck-genie.png" alt="Kent Beck&#x27;s LinkedIn post about the coding genie" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
-</div>
-</div>
-</div>
-<span class="slide-footer">20</span>
-</section>
-
-    <!-- 22-closing.md -->
+    <!-- 15-questions.md -->
     <section class="slide title-slide" aria-label="Questions?">
 <div class="brand-mark decorative"></div>
 <div class="slide-content">
 <p class="tagline reveal">Thank You</p>
 <h1 class="reveal">Questions?</h1>
-<p class="subtitle reveal">Whit — Six Feet Up</p>
-<p class="subtitle reveal">Playbook: github.com/sixfeetup/agentic-quest</p>
+<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<p class="subtitle reveal">github.com/sixfeetup/agentic-quest</p>
 </div>
 </section>
 <!-- ═══════════════════════════════════════════
@@ -1064,6 +976,8 @@
                     } else if (e.key === 'End') {
                         e.preventDefault();
                         this.goToSlide(this.slides.length - 1);
+                    } else if (e.key === 'n' || e.key === 'N') {
+                        document.body.classList.toggle('show-notes');
                     }
                 });
             }

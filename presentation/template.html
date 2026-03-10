@@ -515,11 +515,21 @@
         .code-block .string { color: #a8d8a8; }
         .code-block .comment { color: var(--sfu-gray); font-style: italic; }
 
-        /* Quote */
+        /* Quote — pinned bottom of slide, left of page number */
+        .slide-quote {
+            position: absolute;
+            bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+            right: clamp(3rem, 5vw, 5rem);
+            text-align: right;
+            max-width: 60%;
+        }
+
         .quote {
-            border-left: clamp(3px, 0.4vw, 4px) solid var(--sfu-teal);
-            padding-left: clamp(1rem, 2vw, 2rem);
-            font-size: var(--h3-size);
+            border-left: none;
+            border-right: clamp(3px, 0.4vw, 4px) solid var(--sfu-teal);
+            padding-right: clamp(1rem, 2vw, 2rem);
+            padding-left: 0;
+            font-size: clamp(0.75rem, 1.2vw, 1rem);
             font-style: italic;
             font-weight: 300;
             line-height: 1.4;
@@ -527,7 +537,7 @@
         }
 
         .dark-slide .quote {
-            border-left-color: var(--sfu-teal-light);
+            border-right-color: var(--sfu-teal-light);
             color: var(--sfu-ice);
         }
 
@@ -536,7 +546,8 @@
             font-style: normal;
             font-weight: 500;
             color: var(--text-secondary);
-            margin-top: clamp(0.5rem, 1vw, 1rem);
+            margin-top: 0.3rem;
+            text-align: right;
         }
 
         /* Slide footer / page number */
@@ -552,6 +563,31 @@
         .dark-slide .slide-footer,
         .divider-slide .slide-footer {
             color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Speaker notes — hidden by default, shown in presenter mode (N key) */
+        .speaker-notes {
+            display: none;
+        }
+
+        body.show-notes .speaker-notes {
+            display: block;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 40%;
+            max-height: 30vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.88);
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 1rem 1.2rem;
+            border-top-left-radius: 8px;
+            z-index: 9999;
+            font-family: -apple-system, system-ui, sans-serif;
+            font-style: normal;
+            box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4);
         }
 
         /* ===========================================
@@ -784,6 +820,8 @@
                     } else if (e.key === 'End') {
                         e.preventDefault();
                         this.goToSlide(this.slides.length - 1);
+                    } else if (e.key === 'n' || e.key === 'N') {
+                        document.body.classList.toggle('show-notes');
                     }
                 });
             }
