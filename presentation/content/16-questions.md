@@ -6,9 +6,9 @@ type: title-slide
 
 # Questions?
 
-*Calvin Hendryx-Parker — Six Feet Up*
+_Calvin Hendryx-Parker — Six Feet Up_
 
-*github.com/sixfeetup/agentic-quest*
+_github.com/sixfeetup/agentic-quest_
 
 ???
 Presenter resources:
