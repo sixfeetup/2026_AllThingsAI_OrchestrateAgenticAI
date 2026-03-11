@@ -6,9 +6,12 @@ image_layout: split
 footer: "1"
 ---
 
-# The Backstory Magic
+# The Practical Magic
 
-Working together for outcomes and incomes.
+### We have things to get done
+
+Practical applications. People and AI. Working together for outcomes and incomes.
+
 
 
 ???
@@ -19,6 +22,3 @@ One second we are planning a cheery offsite, the next it is very dark
 and we might be eaten by a grue.
 
 Whether good news or bad, adapting quickly requires tools and experience.
-
-> "We become what we behold. We shape our tools and then our tools shape us."
-> — Marshall McLuhan

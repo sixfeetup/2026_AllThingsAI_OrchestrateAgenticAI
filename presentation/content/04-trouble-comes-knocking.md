@@ -1,9 +1,10 @@
 ---
 type: dark-slide
+image: "@@img:a curse amulet"
 footer: "3"
 ---
 
-# Trouble Comes Knocking: the Setup
+# Trouble Comes Knocking: an example
 
 _A plausible if confabulated situation_
 
