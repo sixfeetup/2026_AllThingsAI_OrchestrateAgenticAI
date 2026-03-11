@@ -550,6 +550,37 @@
             text-align: right;
         }
 
+        /* Explainer link — pill button that opens visual explainer pages */
+        .explainer-link {
+            display: inline-block;
+            background: rgba(42, 138, 154, 0.15);
+            color: var(--sfu-teal-deep);
+            border-radius: 20px;
+            padding: 0.4rem 1.2rem;
+            font-size: var(--small-size);
+            font-weight: 500;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .explainer-link:hover {
+            background: rgba(42, 138, 154, 0.25);
+        }
+
+        .dark-slide .explainer-link,
+        .divider-slide .explainer-link,
+        .title-slide .explainer-link {
+            background: rgba(42, 138, 154, 0.35);
+            color: var(--sfu-white);
+        }
+
+        .dark-slide .explainer-link:hover,
+        .divider-slide .explainer-link:hover,
+        .title-slide .explainer-link:hover {
+            background: rgba(42, 138, 154, 0.5);
+        }
+
         /* Slide footer / page number */
         .slide-footer {
             position: absolute;
