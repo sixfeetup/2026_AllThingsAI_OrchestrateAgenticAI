@@ -22,6 +22,7 @@ coordinate with digital agents for success.
 ???
 
 The key is to coordinate our people and agents to avoid creating costs upon the human actor
+
 - increasing complexity burden
 - breaking communication patterns
 - incurring pure tokens and dollar cost

@@ -984,12 +984,13 @@
 <div class="slide-content">
 <p class="tagline reveal">Agents of Legend</p>
 <h1 class="reveal">The Orchestrator Dilemma</h1>
-<p class="subtitle reveal">Context, Checklists, and No-Miss Reviews</p>
-<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
-<p class="subtitle reveal">Built 2026-03-10</p>
+<p class="tagline reveal">Context, Checklists, and No-Miss Reviews</p>
+<p class="tagline reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<p class="tagline reveal">Built 2026-03-10</p>
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">“The secret we should never let the gamerunners know is that they don&#x27;t need any rules.” ― Gary Gygax</blockquote></div>
+<aside class="speaker-notes">Welcome everyone. I&#x27;m Calvin Hendryx-Parker, co-founder of Six Feet Up.<br>Today we&#x27;re going on a quest — a D&amp;D-flavored journey through<br>agentic AI orchestration. If you&#x27;ve ever tried to get an AI agent<br>to do real work and watched it go sideways, this talk is for you.<br>We&#x27;ll use a fictional consulting scenario to explore real patterns:<br>context engineering, checklists, orchestration styles, and how to<br>make agents reliable enough for high-stakes work.<br>Two live demos. A playbook you can take home. Let&#x27;s roll.</aside>
 </section>
 
     <!-- 02-backstory-magic.md -->
@@ -1030,6 +1031,7 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;We&#x27;re in the &#x27;horseless carriage&#x27; stage of coding genies.&quot; — Kent Beck</blockquote></div>
+<aside class="speaker-notes">This is the slide for the skeptics in the room — and you should be skeptical.<br>Why: because the work we do is full of non-deterministic, multi-step tasks<br>that don&#x27;t reduce to a single API call. Review this contract. Plan this<br>migration. Audit this codebase. These are judgment-heavy workflows.<br>What: agents are LLM-driven workers that can plan a sequence of actions,<br>execute them with tools, and validate their own output. Not chatbots —<br>workers.<br>How: the magic is in skills (reusable prompt+tool bundles), context<br>engineering (giving the agent the right information at the right time),<br>and orchestration (coordinating multiple agents and humans).<br>When: start with one agent, one repetitive task, one tight feedback loop.<br>Don&#x27;t boil the ocean. Kent Beck&#x27;s quote nails it — we&#x27;re early. Treat<br>agents like a junior team member: trust but verify.</aside>
 <span class="slide-footer">2</span>
 </section>
 
@@ -1040,7 +1042,7 @@
 <p class="subtitle reveal">A plausible if confabulated situation</p>
 <p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">A Crisis is just an Opportunity (to use agents)</p>
 </div>
-<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run https://www.larpsy.gold (artisan marketplace) and https://larpsalot.party (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
+<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run &lt;https://www.larpsy.gold&gt; (artisan marketplace) and &lt;https://larpsalot.party&gt; (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
 <span class="slide-footer">3</span>
 </section>
 
@@ -1057,6 +1059,7 @@
 </ul>
 <p class="subtitle reveal">The clock is ticking. Let&#x27;s see what we&#x27;re working with.</p>
 </div>
+<aside class="speaker-notes">This is the &quot;quest inventory&quot; moment — what tools and artifacts do we<br>actually have to work with?<br>Tasha has handed over a tarball. The buildpack tells us how the apps<br>are built and deployed. The repos give us the codebase. The database<br>dump is the state of the world. And the OGL content dump is the thing<br>that&#x27;s on fire right now.<br>Key point: before you throw agents at a problem, you need to understand<br>the artifacts. Context engineering starts here — what goes into the<br>agent&#x27;s context window, in what order, and with what framing.<br>Transition: now that we know what we&#x27;re working with, let&#x27;s talk about<br>how we actually approach it with agents.</aside>
 <span class="slide-footer">6</span>
 </section>
 
@@ -1110,6 +1113,7 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;The medium is the message.&quot; — Marshall McLuhan</blockquote></div>
+<aside class="speaker-notes">Pause here. This is a Critical Role reference — the moment where the<br>DM asks the player &quot;how do you want to do this?&quot; after a killing blow.<br>We&#x27;ve introduced the scenario, the team, and the agent. Now the question<br>is: how do we actually put them together?<br>The audience should be thinking about their own teams right now. The<br>D&amp;D class metaphor is playful, but the point is real: agents are not<br>all the same, and neither are the humans coordinating with them. The<br>orchestration challenge is matching capabilities to tasks.<br>Transition: we&#x27;re about to jump into the first live demo. The team is<br>assembled. Time to roll for initiative.</aside>
 <span class="slide-footer">7</span>
 </section>
 
@@ -1117,7 +1121,6 @@
     <section class="slide dark-slide" aria-label="Join the fray">
 <div class="slide-content">
 <h2 class="reveal">Join the fray</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![a d20, also a natural 20](img:shiny and metallic)</p>
 <p class="subtitle reveal">Demo: the OGL content crisis</p>
 <ul class="bullet-list">
 <li class="reveal">Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat — lose content or face legal action</li>
@@ -1131,6 +1134,7 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Roll for initiative!&quot;</blockquote></div>
+<aside class="speaker-notes">DEMO TIME — the OGL content crisis.<br>Walk through the scenario out loud: L&amp;LL faces a dual existential threat.<br>If they keep OGL content, Hasbro may sue. If they pull it all blindly,<br>they gut their platform. We need to know exactly what&#x27;s affected.<br>Demo flow:<br>1. Sera and Finn (BizOps) frame the problem — the cleric and bard<br>   aren&#x27;t scared of the command line<br>2. Ranger Kyle stands up an isolated database for the analysis<br>3. COO Mira fires up the coding agent<br>4. Agent searches PDFs for protected names (places, items, characters)<br>5. Cross-references against L&amp;LL&#x27;s content database<br>6. Reports the damage — what percentage is at risk<br>7. Generates replacement names where needed<br>Key points to hit: isolation (separate DB), context engineering (targeted<br>PDF search, not &quot;review everything&quot;), and human-in-the-loop (Mira drives,<br>agent executes).<br>If demo hiccups: fall back to prebaked output in demo-assets/prebaked/.</aside>
 <span class="slide-footer">8</span>
 </section>
 
@@ -1197,6 +1201,7 @@
 <p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The OGL crisis is handled. Now the original contract: migrate off Heroku, modernize the sites, prepare for mobile.</p>
 <p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">Time to level up our orchestration.</p>
 </div>
+<aside class="speaker-notes">Breather slide. The OGL crisis is handled — the audience has seen agents<br>do useful work with real artifacts.<br>But the original contract was about migrating off Heroku and modernizing<br>the sites. That work is more complex: infrastructure, code changes,<br>testing, deployment. The stakes are higher and the tasks are less<br>clear-cut.<br>This is the pivot from &quot;agents can help in a crisis&quot; to &quot;agents can<br>handle sustained engineering work.&quot; The orchestration needs to level up<br>from single-agent-with-human to multi-agent coordination.<br>Transition: and just when you think things are going well... it&#x27;s a trap.</aside>
 <span class="slide-footer">11</span>
 </section>
 
@@ -1214,7 +1219,8 @@
 </ul>
 
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; Somebody??  &quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; — DevSecOps proverb  &quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
+<aside class="speaker-notes">DEMO TIME — contract analysis and adversarial review.<br>This demo shows the full stack of agentic orchestration:<br>1. Ingest the consulting contract PDF — agent generates visual<br>   explainers and a review checklist automatically<br>2. Security as a first-class requirement: show the security skills<br>   (risk review, guardrails) that are baked into the workflow<br>3. Swarm with /c^2 — fan out to Codex and Gemini for adversarial<br>   review. Multiple models catch what a single model misses.<br>4. Show the visual explainers: project overlay, risk report, and<br>   adversarial findings side by side<br>5. Fire up speckit: turn findings into actionable specs, clarify<br>   ambiguities, generate a plan<br>Key points: this is multi-agent, multi-model orchestration. Security<br>isn&#x27;t an afterthought — it&#x27;s a skill the agent uses automatically.<br>The Gygax quote lands here: the trap isn&#x27;t the contract, it&#x27;s<br>skipping the review.<br>If demo hiccups: prebaked outputs in demo-assets/prebaked/ cover<br>contract-review-checklist and ogl-crisis-report.</aside>
 <span class="slide-footer">12</span>
 </section>
 
@@ -1285,6 +1291,7 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Most important advice in software: underpromise, deliver.&quot; — maybe Tom Conrad</blockquote></div>
+<aside class="speaker-notes">Bring it home. These are the six things to remember:<br>1. You already have frameworks for orchestrating nondeterministic work —<br>   OODA and Cynefin apply directly to agent orchestration.<br>2. Skills are the compound interest of agent work — every skill you<br>   build makes the next task faster and more reliable.<br>3. Security and trust are not overhead — they&#x27;re what let you go faster.<br>   Bake them in from the start.<br>4. Orchestrate everybody — agents and humans are both part of the party.<br>   Conway&#x27;s Law applies to agent teams too.<br>5. The agent is a party member, not a replacement. It augments the team.<br>6. Underpromise, deliver, iterate. The brownian ratchet pattern means<br>   you don&#x27;t need perfection on the first pass — you need convergence.<br>Callback to the journey: we started with a crisis, assembled a party,<br>ran two missions, and leveled up our orchestration along the way.<br>Pause. Let the closing image and quote land. Then transition to the<br>playbook slide or straight to questions.</aside>
 <span class="slide-footer">14</span>
 </section>
 
@@ -1294,8 +1301,8 @@
 <div class="slide-content">
 <p class="tagline reveal">Thank You</p>
 <h1 class="reveal">Questions?</h1>
-<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
-<p class="subtitle reveal">github.com/sixfeetup/agentic-quest</p>
+<p class="tagline reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<p class="tagline reveal">github.com/sixfeetup/agentic-quest</p>
 </div>
 <aside class="speaker-notes">Presenter resources:<br>- [explainer: System Overview](explainers/system-overview.html) — repo structure, build pipeline, slide format<br>- [explainer: Playbook](explainers/playbook.html) — grab-and-go takeaway for attendees<br>- [explainer: Checklist Progress](explainers/checklist-progress.html) — talk readiness vs expectations<br>- [explainer: Demo Plan](explainers/demo-plan.html) — demo execution strategy and fallbacks<br>- Speaker notes: press N to toggle<br>- Demo assets: see demo-assets/ directory for prebaked safety nets</aside>
 </section>

@@ -20,7 +20,6 @@ _the team has some concerns_
 
 Call them Clawd, Gem, Dex, Cecily, or any combo thereof.
 
-
 Proceeded w/ hype  — Agentic AI, ready to
 chew gum and take jobs, rumored to be both ninja and rockstar who can
 do the laundry, walk the dog, and file the taxes.

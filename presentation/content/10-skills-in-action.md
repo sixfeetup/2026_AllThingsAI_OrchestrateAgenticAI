@@ -11,6 +11,7 @@ _Demo: codifying problem solving on the fly_
 > — Matt Beane, The Skill Code
 
 ???
+
 - Create a skill live to use "say" for audio notifications when tasks complete
 - Separate databases for each step — isolation as a feature
 - Skills compound: each one you build makes the next task faster

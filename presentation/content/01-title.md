@@ -6,11 +6,11 @@ type: title-slide
 
 # The Orchestrator Dilemma
 
-_Context, Checklists, and No-Miss Reviews_
+*Context, Checklists, and No-Miss Reviews*
 
-_Calvin Hendryx-Parker — Six Feet Up_
+*Calvin Hendryx-Parker — Six Feet Up*
 
-_Built 2026-03-10_
+*Built 2026-03-10*
 
 > “The secret we should never let the gamerunners know is that they don't need any rules.”
 > ― Gary Gygax

@@ -14,7 +14,7 @@ WEB_JPGS  := $(patsubst $(IMAGES)/%.png,$(IMAGES)/%_web.jpg,$(PNG_SRCS))
 # Pass --root to build.py when ROOT is set (e.g. make build ROOT=/some/path)
 BUILD_FLAGS := $(if $(ROOT),--root $(ROOT))
 
-.PHONY: build open clean reset-content watch list deploy serve web-images
+.PHONY: build open clean reset-content watch list deploy serve web-images lint
 
 ## build — render content/*.md into output/deck.html + dist/deck.html
 build: $(OUTPUT)
@@ -66,6 +66,10 @@ web-images: $(WEB_JPGS)
 
 $(IMAGES)/%_web.jpg: $(IMAGES)/%.png
 	sips -s format jpeg -s formatOptions $(WEB_QUAL) --resampleWidth $(WEB_WIDTH) $< --out $@
+
+## lint — check content markdown with markdownlint
+lint:
+	npx --yes markdownlint-cli 'content/*.md'
 
 ## list — show slide order
 list:
