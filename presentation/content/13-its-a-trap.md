@@ -13,7 +13,7 @@ _Demo: contract analysis, security, adversarial review_
 - Visual explainers: project overlay, risk report, adversarial findings
 - Fire up speckit: create specs from findings, clarify, plan
 
-> "Security enables speed when baked in, not bolted on." Somebody??
+> "Security enables speed when baked in, not bolted on." — DevSecOps proverb
 >
 > "The worthy GM never purposely kills players' PCs. He presents opportunities for the rash and unthinking players to do that all on their own."
 > — Gary Gygax
