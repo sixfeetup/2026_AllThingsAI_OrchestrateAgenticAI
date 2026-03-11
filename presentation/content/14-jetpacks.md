@@ -17,8 +17,8 @@ footer: "13"
 > "The medium is the message."
 > — Marshall McLuhan
 
-
 ???
+
 - Agents are now a medium with their own message
 - Like organisms that take evolutionary leaps through symbiogenesis — acting as environments for other organisms
 - Specify a feature, use multiclaude to implement — built-in TDD, CI/CD

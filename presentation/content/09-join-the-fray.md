@@ -25,6 +25,7 @@ If they keep OGL content, Hasbro may sue. If they pull it all blindly,
 they gut their platform. We need to know exactly what's affected.
 
 Demo flow:
+
 1. Sera and Finn (BizOps) frame the problem — the cleric and bard
    aren't scared of the command line
 2. Ranger Kyle stands up an isolated database for the analysis

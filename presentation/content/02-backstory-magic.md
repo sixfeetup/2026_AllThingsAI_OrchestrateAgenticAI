@@ -10,7 +10,6 @@ footer: "1"
 
 Working together for outcomes and incomes.
 
-
 ???
 Business as usual can feel more like an epic quest into Mordor than a
 stock photo of smiling people around a laptop.

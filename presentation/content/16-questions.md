@@ -6,12 +6,13 @@ type: title-slide
 
 # Questions?
 
-_Calvin Hendryx-Parker — Six Feet Up_
+*Calvin Hendryx-Parker — Six Feet Up*
 
-_github.com/sixfeetup/agentic-quest_
+*github.com/sixfeetup/agentic-quest*
 
 ???
 Presenter resources:
+
 - [explainer: System Overview](explainers/system-overview.html) — repo structure, build pipeline, slide format
 - [explainer: Playbook](explainers/playbook.html) — grab-and-go takeaway for attendees
 - [explainer: Checklist Progress](explainers/checklist-progress.html) — talk readiness vs expectations

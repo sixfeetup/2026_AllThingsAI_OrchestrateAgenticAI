@@ -10,8 +10,6 @@ footer: "10"
 
 Spoils to victor
 
-
-
 ???
 L&LL is psyched. The team has landed more work — a database migration.
 
