@@ -688,11 +688,291 @@
         .nav-dot:hover {
             background: var(--sfu-teal-light);
         }
+
+        /* ===========================================
+           HELP MODAL
+           =========================================== */
+        .help-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .help-modal-backdrop.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .help-modal {
+            background: var(--sfu-charcoal);
+            border: 1px solid var(--sfu-teal-deep);
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            position: relative;
+            transform: translateY(16px) scale(0.97);
+            transition: transform 0.25s var(--ease-out-expo);
+            color: var(--sfu-white);
+            font-family: var(--font-body);
+            scrollbar-width: thin;
+            scrollbar-color: var(--sfu-teal-deep) var(--sfu-charcoal);
+        }
+
+        .help-modal-backdrop.open .help-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .help-modal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .help-modal::-webkit-scrollbar-track {
+            background: var(--sfu-charcoal);
+        }
+
+        .help-modal::-webkit-scrollbar-thumb {
+            background: var(--sfu-teal-deep);
+            border-radius: 3px;
+        }
+
+        .help-modal-close {
+            position: absolute;
+            top: clamp(0.75rem, 1.5vw, 1.25rem);
+            right: clamp(0.75rem, 1.5vw, 1.25rem);
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: var(--sfu-ice);
+            font-size: 1.25rem;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            line-height: 1;
+        }
+
+        .help-modal-close:hover,
+        .help-modal-close:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--sfu-teal-light);
+            outline: none;
+        }
+
+        .help-modal-section {
+            margin-bottom: 1.75rem;
+        }
+
+        .help-modal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .help-modal-section h3 {
+            font-family: var(--font-display);
+            font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+            color: var(--sfu-teal);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(42, 138, 154, 0.3);
+        }
+
+        /* Keyboard shortcuts grid */
+        .help-shortcuts {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.4rem 1.25rem;
+            align-items: center;
+        }
+
+        .help-shortcuts kbd {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 4px;
+            padding: 0.15rem 0.5rem;
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 500;
+            color: var(--sfu-ice);
+            min-width: 1.5rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .help-shortcuts .shortcut-desc {
+            font-size: var(--small-size);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Resource links */
+        .help-resources {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .help-resources li a {
+            color: var(--sfu-teal-light);
+            text-decoration: none;
+            font-size: var(--small-size);
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .help-resources li a:hover,
+        .help-resources li a:focus {
+            color: var(--sfu-ice);
+            outline: none;
+        }
+
+        .help-resources li a::before {
+            content: '\2192';
+            color: var(--sfu-teal-deep);
+            font-size: 0.85em;
+        }
+
+        /* Quick jump list */
+        .help-quick-jump {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            max-height: 30vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--sfu-teal-deep) transparent;
+        }
+
+        .help-quick-jump li button {
+            background: none;
+            border: none;
+            color: var(--sfu-teal-light);
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            text-align: left;
+            width: 100%;
+            transition: background 0.15s ease, color 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-quick-jump li button:hover,
+        .help-quick-jump li button:focus {
+            background: rgba(42, 138, 154, 0.2);
+            color: var(--sfu-ice);
+            outline: none;
+        }
+
+        .help-quick-jump li button .jump-index {
+            color: var(--sfu-gray);
+            font-size: 0.8em;
+            min-width: 1.5rem;
+        }
+
+        /* Help hint shown on first load */
+        .help-hint {
+            position: fixed;
+            bottom: clamp(1rem, 2vw, 1.5rem);
+            left: clamp(1rem, 2vw, 1.5rem);
+            background: rgba(42, 138, 154, 0.9);
+            color: var(--sfu-white);
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 500;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: helpHintIn 0.5s ease 2s forwards, helpHintOut 0.5s ease 7s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes helpHintIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes helpHintOut {
+            to { opacity: 0; transform: translateY(8px); }
+        }
     </style>
 </head>
 <body>
     <div class="progress-bar" id="progressBar"></div>
     <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- Help Modal -->
+    <div class="help-modal-backdrop" id="helpModal" role="dialog" aria-modal="true" aria-label="Help and navigation">
+        <div class="help-modal">
+            <button class="help-modal-close" id="helpModalClose" aria-label="Close help dialog">&times;</button>
+
+            <div class="help-modal-section">
+                <h3>Keyboard Shortcuts</h3>
+                <div class="help-shortcuts">
+                    <kbd>&larr; &rarr; &uarr; &darr;</kbd>
+                    <span class="shortcut-desc">Navigate slides</span>
+
+                    <kbd>Space</kbd> / <kbd>PageDown</kbd>
+                    <span class="shortcut-desc">Next slide</span>
+
+                    <kbd>PageUp</kbd>
+                    <span class="shortcut-desc">Previous slide</span>
+
+                    <kbd>Home</kbd> / <kbd>End</kbd>
+                    <span class="shortcut-desc">First / last slide</span>
+
+                    <kbd>N</kbd>
+                    <span class="shortcut-desc">Toggle speaker notes</span>
+
+                    <kbd>?</kbd>
+                    <span class="shortcut-desc">This help dialog</span>
+                </div>
+            </div>
+
+            <div class="help-modal-section">
+                <h3>Presenter Resources</h3>
+                <ul class="help-resources">
+                    <li><a href="explainers/system-overview.html" target="_blank" rel="noopener">System Overview</a></li>
+                    <li><a href="explainers/playbook.html" target="_blank" rel="noopener">Playbook</a></li>
+                    <li><a href="explainers/checklist-progress.html" target="_blank" rel="noopener">Checklist Progress</a></li>
+                    <li><a href="explainers/demo-plan.html" target="_blank" rel="noopener">Demo Plan</a></li>
+                    <li><a href="demo-assets/" target="_blank" rel="noopener">Demo Assets</a></li>
+                </ul>
+            </div>
+
+            <div class="help-modal-section">
+                <h3>Quick Jump</h3>
+                <ul class="help-quick-jump" id="helpQuickJump">
+                    <!-- Populated dynamically -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-hint" aria-hidden="true">Press <kbd style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:3px;padding:0.1rem 0.35rem;font-size:0.9em;">?</kbd> for help</div>
 
     <!-- ═══════════════════════════════════════════
          SLIDE 1: Title
@@ -883,6 +1163,32 @@
 <span class="slide-footer">10</span>
 </section>
 
+    <!-- 11.5-eventual-consistency.md -->
+    <section class="slide content-slide" aria-label="The Brownian Ratchet">
+<div class="slide-content">
+<h2 class="reveal">The Brownian Ratchet</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<p class="subtitle reveal">Eventual consistency as a strategy</p>
+<ul class="bullet-list">
+<li class="reveal">Testing validity &gt; initial correctness</li>
+<li class="reveal">Each iteration catches what the last missed</li>
+<li class="reveal">Agent proposes → tests validate → agent fixes → loop</li>
+<li class="reveal">Like TDD, but the agent writes both sides</li>
+<li class="reveal">Converges because the ratchet only moves forward</li>
+</ul>
+
+</div>
+<div class="split-image">
+<img src="../../images/sorcerors-apprentice-grok.jpg" alt="The sorcerer&#x27;s apprentice — iteration as a feature" class="slide-image">
+</div>
+</div>
+</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Make it work, make it right, make it fast.&quot; — Kent Beck</blockquote></div>
+<aside class="speaker-notes">The key insight: we don&#x27;t need the agent to be right the first time.<br>We need it to be right eventually, with proof.<br>The brownian ratchet pattern:<br>1. Agent generates code/content<br>2. Automated checks run (tests, linting, type checking, security scans)<br>3. Failures feed back as context for the next attempt<br>4. Each pass fixes something — the ratchet clicks forward<br>5. When all checks pass, we have both the result AND the proof it works<br>This is not wishful thinking — it&#x27;s the same pattern CI/CD uses.<br>The difference is the agent closes the loop automatically.<br>Real example: multiclaude swarm generates 5 PRs, each with TDD.<br>3 pass immediately. 2 fail tests, get auto-fixed on retry.<br>All 5 land with green CI. That&#x27;s eventual consistency in practice.</aside>
+<span class="slide-footer">12</span>
+</section>
+
     <!-- 12-more-work.md -->
     <section class="slide divider-slide" aria-label="Great, But I Hired You For This Other Thing">
 <div class="slide-content">
@@ -936,6 +1242,26 @@
 <span class="slide-footer">13</span>
 </section>
 
+    <!-- 14.5-playbook.md -->
+    <section class="slide content-slide" aria-label="Your Playbook">
+<div class="slide-content">
+<h2 class="reveal">Your Playbook</h2>
+<p class="subtitle reveal">Grab-and-go for Monday morning</p>
+<ul class="bullet-list">
+<li class="reveal">Pick one repetitive workflow — build a skill for it</li>
+<li class="reveal">Start with OODA loops — observe what the agent does before trusting it</li>
+<li class="reveal">Use Cynefin to classify tasks: only automate what&#x27;s clear or complicated</li>
+<li class="reveal">Isolate agents: sandboxed environments, separate branches, review gates</li>
+<li class="reveal">Codify your checklists — they become agent acceptance criteria</li>
+<li class="reveal">Underpromise, deliver, iterate — brownian ratchet forward</li>
+</ul>
+
+</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Plans are useless, but planning is indispensable.&quot; — Dwight D. Eisenhower</blockquote></div>
+<aside class="speaker-notes">This is your Monday morning starter kit. You don&#x27;t need to adopt everything at once.<br>Pick the workflow that causes the most pain, build one skill around it,<br>and let it compound from there. The playbook is also available as a<br>standalone page linked from the repo.</aside>
+<span class="slide-footer">15</span>
+</section>
+
     <!-- 15-closing.md -->
     <section class="slide dark-slide" aria-label="Closing Thoughts">
 <div class="slide-content">
@@ -971,6 +1297,7 @@
 <p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
 <p class="subtitle reveal">github.com/sixfeetup/agentic-quest</p>
 </div>
+<aside class="speaker-notes">Presenter resources:<br>- [explainer: System Overview](explainers/system-overview.html) — repo structure, build pipeline, slide format<br>- [explainer: Playbook](explainers/playbook.html) — grab-and-go takeaway for attendees<br>- [explainer: Checklist Progress](explainers/checklist-progress.html) — talk readiness vs expectations<br>- [explainer: Demo Plan](explainers/demo-plan.html) — demo execution strategy and fallbacks<br>- Speaker notes: press N to toggle<br>- Demo assets: see demo-assets/ directory for prebaked safety nets</aside>
 </section>
 <!-- ═══════════════════════════════════════════
          SLIDE CONTROLLER
@@ -985,6 +1312,7 @@
                 this.setupTouchNav();
                 this.setupProgressBar();
                 this.setupNavDots();
+                this.setupHelpModal();
             }
 
             setupIntersectionObserver() {
@@ -1005,6 +1333,10 @@
 
             setupKeyboardNav() {
                 document.addEventListener('keydown', (e) => {
+                    // When help modal is open, only handle Escape and ?
+                    if (this.helpModalOpen && e.key !== 'Escape' && e.key !== '?' && e.key !== 'Tab') {
+                        return;
+                    }
                     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
                         e.preventDefault();
                         this.goToSlide(this.currentSlide + 1);
@@ -1018,7 +1350,17 @@
                         e.preventDefault();
                         this.goToSlide(this.slides.length - 1);
                     } else if (e.key === 'n' || e.key === 'N') {
-                        document.body.classList.toggle('show-notes');
+                        if (!this.helpModalOpen) {
+                            document.body.classList.toggle('show-notes');
+                        }
+                    } else if (e.key === '?') {
+                        e.preventDefault();
+                        this.toggleHelpModal();
+                    } else if (e.key === 'Escape') {
+                        if (this.helpModalOpen) {
+                            e.preventDefault();
+                            this.closeHelpModal();
+                        }
                     }
                 });
             }
@@ -1060,6 +1402,89 @@
                 this.dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === this.currentSlide);
                 });
+            }
+
+            setupHelpModal() {
+                this.helpModalOpen = false;
+                this.helpBackdrop = document.getElementById('helpModal');
+                this.helpCloseBtn = document.getElementById('helpModalClose');
+                this.helpQuickJump = document.getElementById('helpQuickJump');
+
+                // Populate Quick Jump list from slides
+                this.slides.forEach((slide, i) => {
+                    const label = slide.getAttribute('aria-label')
+                        || slide.querySelector('h1, h2')?.textContent?.trim()
+                        || `Slide ${i + 1}`;
+                    const li = document.createElement('li');
+                    const btn = document.createElement('button');
+                    btn.innerHTML = `<span class="jump-index">${i + 1}</span> ${label}`;
+                    btn.addEventListener('click', () => {
+                        this.closeHelpModal();
+                        this.goToSlide(i);
+                    });
+                    li.appendChild(btn);
+                    this.helpQuickJump.appendChild(li);
+                });
+
+                // Close button
+                this.helpCloseBtn.addEventListener('click', () => this.closeHelpModal());
+
+                // Backdrop click closes modal
+                this.helpBackdrop.addEventListener('click', (e) => {
+                    if (e.target === this.helpBackdrop) {
+                        this.closeHelpModal();
+                    }
+                });
+
+                // Focus trap: Tab cycles within the modal
+                this.helpBackdrop.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Tab') return;
+                    const focusable = this.helpBackdrop.querySelectorAll(
+                        'button, a[href], [tabindex]:not([tabindex="-1"])'
+                    );
+                    if (focusable.length === 0) return;
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    if (e.shiftKey) {
+                        if (document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else {
+                        if (document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                });
+            }
+
+            toggleHelpModal() {
+                if (this.helpModalOpen) {
+                    this.closeHelpModal();
+                } else {
+                    this.openHelpModal();
+                }
+            }
+
+            openHelpModal() {
+                this.helpModalOpen = true;
+                this.helpBackdrop.classList.add('open');
+                // Store the element that had focus before opening
+                this._previousFocus = document.activeElement;
+                // Focus the close button
+                requestAnimationFrame(() => {
+                    this.helpCloseBtn.focus();
+                });
+            }
+
+            closeHelpModal() {
+                this.helpModalOpen = false;
+                this.helpBackdrop.classList.remove('open');
+                // Restore focus
+                if (this._previousFocus) {
+                    this._previousFocus.focus();
+                }
             }
 
             goToSlide(idx) {
