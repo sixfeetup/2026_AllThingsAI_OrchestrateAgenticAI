@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <radialGradient id="torchLight1" cx="15%" cy="30%" r="35%">
+      <stop offset="0%" stop-color="#4a3520" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="torchLight2" cx="85%" cy="30%" r="35%">
+      <stop offset="0%" stop-color="#4a3520" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="fireGlow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="stonePattern" patternUnits="userSpaceOnUse" width="60" height="30">
+      <rect width="60" height="30" fill="#1a1a22"/>
+      <rect x="0" y="0" width="58" height="28" fill="#1e1e28" rx="1"/>
+      <rect x="30" y="15" width="28" height="13" fill="#1a1a22"/>
+    </pattern>
+  </defs>
+
+  <!-- Dungeon background -->
+  <rect width="1200" height="675" fill="#0d1117"/>
+
+  <!-- Stone walls - left -->
+  <rect x="0" y="0" width="200" height="675" fill="url(#stonePattern)"/>
+  <!-- Stone walls - right -->
+  <rect x="1000" y="0" width="200" height="675" fill="url(#stonePattern)"/>
+
+  <!-- Corridor floor - perspective -->
+  <path d="M200,675 L400,250 L800,250 L1000,675 Z" fill="#151520"/>
+  <!-- Floor tiles -->
+  <g stroke="#1e1e2e" stroke-width="1" fill="none">
+    <line x1="300" y1="462" x2="900" y2="462"/>
+    <line x1="350" y1="370" x2="850" y2="370"/>
+    <line x1="380" y1="310" x2="820" y2="310"/>
+    <line x1="395" y1="275" x2="805" y2="275"/>
+    <line x1="500" y1="675" x2="550" y2="250"/>
+    <line x1="700" y1="675" x2="650" y2="250"/>
+    <line x1="350" y1="675" x2="480" y2="250"/>
+    <line x1="850" y1="675" x2="720" y2="250"/>
+  </g>
+
+  <!-- Ceiling perspective -->
+  <path d="M200,0 L400,250 L800,250 L1000,0 Z" fill="#111118"/>
+  <g stroke="#1a1a24" stroke-width="1" fill="none">
+    <line x1="300" y1="125" x2="900" y2="125"/>
+    <line x1="350" y1="180" x2="850" y2="180"/>
+    <line x1="380" y1="220" x2="820" y2="220"/>
+  </g>
+
+  <!-- Torch light ambiance -->
+  <rect width="1200" height="675" fill="url(#torchLight1)"/>
+  <rect width="1200" height="675" fill="url(#torchLight2)"/>
+
+  <!-- Left wall torches -->
+  <g transform="translate(200, 180)">
+    <rect x="-5" y="0" width="10" height="20" fill="#4a3a20"/>
+    <ellipse cx="0" cy="-5" rx="8" ry="12" fill="#c8600a" opacity="0.7" filter="url(#fireGlow)"/>
+    <ellipse cx="0" cy="-8" rx="5" ry="8" fill="#e8a020" opacity="0.5"/>
+    <ellipse cx="0" cy="-10" rx="3" ry="5" fill="#ffe880" opacity="0.4"/>
+  </g>
+  <g transform="translate(200, 420)">
+    <rect x="-5" y="0" width="10" height="20" fill="#4a3a20"/>
+    <ellipse cx="0" cy="-5" rx="8" ry="12" fill="#c8600a" opacity="0.7" filter="url(#fireGlow)"/>
+    <ellipse cx="0" cy="-8" rx="5" ry="8" fill="#e8a020" opacity="0.5"/>
+    <ellipse cx="0" cy="-10" rx="3" ry="5" fill="#ffe880" opacity="0.4"/>
+  </g>
+
+  <!-- Right wall torches -->
+  <g transform="translate(1000, 180)">
+    <rect x="-5" y="0" width="10" height="20" fill="#4a3a20"/>
+    <ellipse cx="0" cy="-5" rx="8" ry="12" fill="#c8600a" opacity="0.7" filter="url(#fireGlow)"/>
+    <ellipse cx="0" cy="-8" rx="5" ry="8" fill="#e8a020" opacity="0.5"/>
+    <ellipse cx="0" cy="-10" rx="3" ry="5" fill="#ffe880" opacity="0.4"/>
+  </g>
+  <g transform="translate(1000, 420)">
+    <rect x="-5" y="0" width="10" height="20" fill="#4a3a20"/>
+    <ellipse cx="0" cy="-5" rx="8" ry="12" fill="#c8600a" opacity="0.7" filter="url(#fireGlow)"/>
+    <ellipse cx="0" cy="-8" rx="5" ry="8" fill="#e8a020" opacity="0.5"/>
+    <ellipse cx="0" cy="-10" rx="3" ry="5" fill="#ffe880" opacity="0.4"/>
+  </g>
+
+  <!-- Dart holes in left wall -->
+  <g fill="#0a0a10">
+    <circle cx="210" cy="320" r="4"/>
+    <circle cx="215" cy="350" r="4"/>
+    <circle cx="212" cy="380" r="4"/>
+    <circle cx="210" cy="480" r="4"/>
+    <circle cx="215" cy="510" r="4"/>
+    <circle cx="212" cy="540" r="4"/>
+  </g>
+  <!-- Dart holes in right wall -->
+  <g fill="#0a0a10">
+    <circle cx="990" cy="320" r="4"/>
+    <circle cx="985" cy="350" r="4"/>
+    <circle cx="988" cy="380" r="4"/>
+    <circle cx="990" cy="480" r="4"/>
+    <circle cx="985" cy="510" r="4"/>
+    <circle cx="988" cy="540" r="4"/>
+  </g>
+
+  <!-- Pressure plates on floor (glowing teal outlines) -->
+  <g stroke="#1a6b7a" stroke-width="2" fill="#1a6b7a" fill-opacity="0.1" filter="url(#glow)">
+    <path d="M420,500 L480,430 L620,430 L680,500 Z"/>
+    <path d="M460,380 L500,340 L580,340 L620,380 Z"/>
+    <path d="M350,620 L430,530 L550,530 L630,620 Z"/>
+  </g>
+
+  <!-- Tripwires across corridor -->
+  <g stroke="#c83030" stroke-width="1.5" opacity="0.7">
+    <line x1="280" y1="555" x2="920" y2="555"/>
+    <line x1="350" y1="440" x2="850" y2="440"/>
+    <line x1="390" y1="350" x2="810" y2="350"/>
+  </g>
+  <!-- Tripwire anchor points -->
+  <g fill="#c83030" opacity="0.8">
+    <circle cx="280" cy="555" r="3"/><circle cx="920" cy="555" r="3"/>
+    <circle cx="350" cy="440" r="3"/><circle cx="850" cy="440" r="3"/>
+    <circle cx="390" cy="350" r="3"/><circle cx="810" cy="350" r="3"/>
+  </g>
+
+  <!-- Swinging blade pendulum -->
+  <g transform="translate(600, 250)">
+    <!-- Chain -->
+    <line x1="0" y1="0" x2="-30" y2="80" stroke="#5a5a6a" stroke-width="2"/>
+    <!-- Blade -->
+    <path d="M-45,75 L-30,80 L-15,75 L-30,120 Z" fill="#8a8a9a" stroke="#aaaabc" stroke-width="1"/>
+    <!-- Blade edge glow -->
+    <path d="M-45,75 L-30,120 L-15,75" fill="none" stroke="#ccccdd" stroke-width="0.5" opacity="0.6"/>
+  </g>
+
+  <!-- Fish-headed Admiral figure -->
+  <g transform="translate(600, 480)">
+    <!-- Body / plate armor -->
+    <path d="M-30,-80 L-35,-30 L-40,30 L-25,50 L25,50 L40,30 L35,-30 L30,-80 Z" fill="#2a3a5a" stroke="#3a5a8a" stroke-width="1.5"/>
+    <!-- Armor details - chest plate -->
+    <path d="M-25,-70 L-28,-20 L0,-10 L28,-20 L25,-70 Z" fill="#3a4a6a" stroke="#4a6a9a" stroke-width="1"/>
+    <!-- Pauldrons -->
+    <ellipse cx="-38" cy="-70" rx="15" ry="10" fill="#2a3a5a" stroke="#3a5a8a" stroke-width="1.5"/>
+    <ellipse cx="38" cy="-70" rx="15" ry="10" fill="#2a3a5a" stroke="#3a5a8a" stroke-width="1.5"/>
+    <!-- Belt -->
+    <rect x="-30" y="10" width="60" height="8" fill="#4a3a20" stroke="#6a5a30" stroke-width="1"/>
+    <!-- Belt buckle -->
+    <rect x="-6" y="11" width="12" height="6" fill="#8a7a40" rx="1"/>
+
+    <!-- Arms -->
+    <path d="M-38,-60 L-55,-20 L-50,10" fill="none" stroke="#2a3a5a" stroke-width="10" stroke-linecap="round"/>
+    <path d="M38,-60 L55,-20 L50,10" fill="none" stroke="#2a3a5a" stroke-width="10" stroke-linecap="round"/>
+
+    <!-- Gauntlets -->
+    <circle cx="-50" cy="13" r="7" fill="#3a4a6a"/>
+    <circle cx="50" cy="13" r="7" fill="#3a4a6a"/>
+
+    <!-- Head - fish/Mon Calamari style -->
+    <ellipse cx="0" cy="-100" rx="22" ry="25" fill="#c87848"/>
+    <!-- Cranial dome (larger, bulbous) -->
+    <ellipse cx="0" cy="-115" rx="25" ry="20" fill="#b06838"/>
+    <!-- Eyes (large, round, on sides) -->
+    <ellipse cx="-15" cy="-100" rx="8" ry="6" fill="#e8d8a0"/>
+    <circle cx="-15" cy="-100" r="3" fill="#1a1a2e"/>
+    <ellipse cx="15" cy="-100" rx="8" ry="6" fill="#e8d8a0"/>
+    <circle cx="15" cy="-100" r="3" fill="#1a1a2e"/>
+    <!-- Mouth area -->
+    <ellipse cx="0" cy="-88" rx="10" ry="5" fill="#a05828" stroke="#8a4818" stroke-width="1"/>
+    <!-- Gill-like texture lines -->
+    <path d="M-22,-95 Q-25,-90 -22,-85" fill="none" stroke="#a05828" stroke-width="1"/>
+    <path d="M22,-95 Q25,-90 22,-85" fill="none" stroke="#a05828" stroke-width="1"/>
+    <!-- Neck/chin barbels -->
+    <path d="M-8,-85 Q-12,-75 -8,-70" fill="none" stroke="#b06838" stroke-width="2"/>
+    <path d="M8,-85 Q12,-75 8,-70" fill="none" stroke="#b06838" stroke-width="2"/>
+
+    <!-- Cape -->
+    <path d="M-35,-75 Q-60,-20 -55,50 L-30,50 L-30,-60 Z" fill="#3a1a2a" opacity="0.7"/>
+    <path d="M35,-75 Q60,-20 55,50 L30,50 L30,-60 Z" fill="#3a1a2a" opacity="0.7"/>
+
+    <!-- Legs -->
+    <rect x="-22" y="50" width="16" height="40" fill="#2a3a5a" stroke="#3a5a8a" stroke-width="1"/>
+    <rect x="6" y="50" width="16" height="40" fill="#2a3a5a" stroke="#3a5a8a" stroke-width="1"/>
+    <!-- Boots -->
+    <path d="M-24,85 L-24,95 L-2,95 L-2,88 Z" fill="#1a1a2e"/>
+    <path d="M4,85 L4,95 L26,95 L26,88 Z" fill="#1a1a2e"/>
+  </g>
+
+  <!-- Warning triangle symbols on walls -->
+  <g fill="none" stroke="#c83030" stroke-width="2" opacity="0.5">
+    <path d="M140,300 L160,270 L180,300 Z"/>
+    <circle cx="160" cy="292" r="3" fill="#c83030"/>
+    <path d="M1020,300 L1040,270 L1060,300 Z"/>
+    <circle cx="1040" cy="292" r="3" fill="#c83030"/>
+  </g>
+
+  <!-- Skull and crossbones warning on far wall -->
+  <g transform="translate(600, 268)" opacity="0.4">
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#8a8a9a" stroke-width="1.5"/>
+    <circle cx="-3" cy="-2" r="2" fill="#8a8a9a"/>
+    <circle cx="3" cy="-2" r="2" fill="#8a8a9a"/>
+    <path d="M-3,4 L3,4" stroke="#8a8a9a" stroke-width="1"/>
+    <path d="M-8,12 L8,12" stroke="#8a8a9a" stroke-width="2"/>
+    <path d="M-5,15 L5,15" stroke="#8a8a9a" stroke-width="2"/>
+  </g>
+
+  <!-- Teal accent lines along floor edges -->
+  <g stroke="#1a6b7a" stroke-width="1" opacity="0.3">
+    <line x1="200" y1="675" x2="400" y2="250"/>
+    <line x1="1000" y1="675" x2="800" y2="250"/>
+  </g>
+</svg>

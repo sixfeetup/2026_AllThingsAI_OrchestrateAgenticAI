@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendored Skills — Agent of Legends Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Fragment+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --surface2: #f3eeea;
+    --surface-elevated: #fff8f3;
+    --surface-recessed: #ede8e3;
+    --border: rgba(0, 0, 0, 0.07);
+    --border-bright: rgba(0, 0, 0, 0.13);
+    --text: #1e1a14;
+    --text-dim: #7a7068;
+    --accent: #1e3a5f;
+    --accent-dim: rgba(30, 58, 95, 0.07);
+    --gold: #d4a73a;
+    --gold-dim: rgba(212, 167, 58, 0.08);
+    --teal: #0f766e;
+    --teal-dim: rgba(15, 118, 110, 0.07);
+    --terracotta: #c2410c;
+    --terracotta-dim: rgba(194, 65, 12, 0.06);
+    --sage: #4d7c0f;
+    --sage-dim: rgba(77, 124, 15, 0.07);
+    --plum: #7e22ce;
+    --plum-dim: rgba(126, 34, 206, 0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12100e;
+      --surface: #1a1714;
+      --surface2: #231f1b;
+      --surface-elevated: #2a2520;
+      --surface-recessed: #0f0d0b;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-bright: rgba(255, 255, 255, 0.12);
+      --text: #ede5db;
+      --text-dim: #9a8e82;
+      --accent: #7db4e0;
+      --accent-dim: rgba(125, 180, 224, 0.1);
+      --gold: #fbbf24;
+      --gold-dim: rgba(251, 191, 36, 0.1);
+      --teal: #5eead4;
+      --teal-dim: rgba(94, 234, 212, 0.08);
+      --terracotta: #fb923c;
+      --terracotta-dim: rgba(251, 146, 60, 0.08);
+      --sage: #a3e635;
+      --sage-dim: rgba(163, 230, 53, 0.08);
+      --plum: #c084fc;
+      --plum-dim: rgba(192, 132, 252, 0.08);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    background-image:
+      radial-gradient(at 15% 10%, var(--gold-dim) 0%, transparent 50%),
+      radial-gradient(at 85% 70%, var(--accent-dim) 0%, transparent 50%);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 2px; }
+  a:hover { color: var(--gold); }
+
+  .wrap {
+    max-width: 1360px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 0 44px;
+    padding: 0 24px;
+  }
+  .main { min-width: 0; padding-bottom: 80px; }
+
+  /* TOC */
+  .toc {
+    position: sticky;
+    top: 28px;
+    align-self: start;
+    padding: 16px 0;
+    grid-row: 1 / -1;
+    max-height: calc(100dvh - 56px);
+    overflow-y: auto;
+  }
+  .toc::-webkit-scrollbar { width: 3px; }
+  .toc::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--text-dim);
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc a {
+    display: block;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 0;
+    border-left: 2px solid transparent;
+    padding-left: 10px;
+    transition: all 0.2s;
+  }
+  .toc a:hover, .toc a.active {
+    color: var(--text);
+    border-left-color: var(--gold);
+  }
+
+  /* Hero */
+  .hero {
+    padding: 64px 0 48px;
+  }
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero .lead {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 640px;
+    line-height: 1.6;
+  }
+
+  /* Section heads */
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 52px 0 20px;
+    scroll-margin-top: 24px;
+  }
+  .sec-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .sec-head h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .sec-desc {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  /* Cards */
+  .ve-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .ve-card:hover { border-color: var(--border-bright); }
+  .ve-card--hero {
+    background: var(--surface-elevated);
+    border-color: var(--border-bright);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  }
+  .ve-card--recessed {
+    background: var(--surface-recessed);
+    border-color: var(--border);
+  }
+  .ve-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ve-card h3 .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ve-card p, .ve-card li {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+  .ve-card ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 8px;
+  }
+  .ve-card li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .ve-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border-bright);
+  }
+  .ve-card code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--surface2);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* File badge */
+  .file-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin: 2px 3px 2px 0;
+    color: var(--text-dim);
+  }
+
+  /* Grid layouts */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* Flow arrow */
+  .flow-arrow {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+  .flow-arrow svg { width: 20px; height: 28px; }
+
+  /* Accent color classes */
+  .accent-gold .dot { background: var(--gold); }
+  .accent-gold .sec-num { background: var(--gold-dim); color: var(--gold); }
+  .accent-gold .ve-card { border-left: 3px solid var(--gold); }
+
+  .accent-teal .dot { background: var(--teal); }
+  .accent-teal .sec-num { background: var(--teal-dim); color: var(--teal); }
+  .accent-teal .ve-card { border-left: 3px solid var(--teal); }
+
+  .accent-terracotta .dot { background: var(--terracotta); }
+  .accent-terracotta .sec-num { background: var(--terracotta-dim); color: var(--terracotta); }
+  .accent-terracotta .ve-card { border-left: 3px solid var(--terracotta); }
+
+  .accent-sage .dot { background: var(--sage); }
+  .accent-sage .sec-num { background: var(--sage-dim); color: var(--sage); }
+  .accent-sage .ve-card { border-left: 3px solid var(--sage); }
+
+  .accent-plum .dot { background: var(--plum); }
+  .accent-plum .sec-num { background: var(--plum-dim); color: var(--plum); }
+  .accent-plum .ve-card { border-left: 3px solid var(--plum); }
+
+  .accent-navy .dot { background: var(--accent); }
+  .accent-navy .sec-num { background: var(--accent-dim); color: var(--accent); }
+  .accent-navy .ve-card { border-left: 3px solid var(--accent); }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 16px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--border-bright);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: var(--surface);
+  }
+  .timeline-item strong {
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .timeline-item span {
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+
+  /* Comparison table */
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  .cmp-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border-bright);
+    font-weight: 400;
+  }
+  .cmp-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+  .cmp-table tr:hover td { background: var(--surface2); }
+
+  /* Meta banner */
+  .meta-banner {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 48px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .meta-banner strong { color: var(--text); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards;
+    animation-delay: calc(var(--i, 0) * 0.07s);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; opacity: 1; }
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .wrap { grid-template-columns: 1fr; }
+    .toc {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      grid-row: auto;
+      max-height: none;
+    }
+    .toc-title { display: none; }
+    .toc a { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; padding: 4px 10px; font-size: 11px; }
+    .toc a:hover, .toc a.active { border-left-color: transparent; border-bottom-color: var(--gold); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <div class="toc-title">Vendored Skills</div>
+    <a href="#s1">Build Pipeline</a>
+    <a href="#s2">Watch Loop</a>
+    <a href="#s3">Parallel Dispatch</a>
+    <a href="#s4">Content Generation</a>
+    <a href="#s5">Session Management</a>
+    <a href="#overview">Overview Map</a>
+  </nav>
+
+  <div class="main">
+
+    <div class="hero reveal" style="--i:0">
+      <h1>Vendored <em>Skills</em></h1>
+      <p class="lead">The tools, skills, and scripts that built the <strong>Agent of Legends</strong> presentation — vendored into the repo with documentation of their historical importance. Five categories, 19 artifacts, one self-referential thesis.</p>
+    </div>
+
+    <!-- ===== 1. BUILD PIPELINE ===== -->
+    <div id="s1" class="sec-head accent-gold reveal" style="--i:1">
+      <span class="sec-num">1</span>
+      <h2>Build Pipeline</h2>
+    </div>
+    <p class="sec-desc reveal" style="--i:2">The core compilation loop: markdown slides in, HTML deck out. These scripts were the first non-content artifacts created and were iterated on more than any other component.</p>
+
+    <div class="accent-gold">
+      <div class="ve-card ve-card--hero reveal" style="--i:3">
+        <h3><span class="dot"></span> build.py</h3>
+        <p>Single-file Python slide compiler. Parses YAML frontmatter + markdown body from <code>content/*.md</code>, renders HTML slides, wraps them in <code>template.html</code>. Modified 6+ times across the project's life.</p>
+        <ul>
+          <li>YAML frontmatter: <code>type</code>, <code>image</code>, <code>image_layout</code>, <code>footer</code></li>
+          <li><code>???</code> separator for speaker notes (Remark.js convention)</li>
+          <li><code>@@</code> directive scanning + stripping</li>
+          <li>Image path rewriting for output depth (<code>../images/</code> → <code>../../images/</code>)</li>
+          <li>Quote extraction into absolute-positioned <code>.slide-quote</code></li>
+          <li>Blockquote splitting on blank <code>&gt;</code> lines, link rendering inside quotes</li>
+        </ul>
+      </div>
+
+      <div class="grid-2">
+        <div class="ve-card reveal" style="--i:4">
+          <h3><span class="dot"></span> check-changes.sh</h3>
+          <p>MD5 hash-based change detection. Computes a hash of all watched files, compares to stored <code>.watch-state</code>. Exit 0 = changed, exit 1 = no changes. Makes the 90-second watch interval practical — most ticks are no-ops.</p>
+        </div>
+        <div class="ve-card reveal" style="--i:5">
+          <h3><span class="dot"></span> Makefile</h3>
+          <p>Build orchestration: <code>build</code>, <code>open</code>, <code>clean</code>, <code>deploy</code> (gh-pages), <code>serve</code>, <code>watch</code>, <code>list</code>. The deploy target syncs referenced images and commits to the gh-pages branch. Uses <code>uv run build.py</code>.</p>
+        </div>
+      </div>
+
+      <div class="flow-arrow reveal" style="--i:6">
+        <svg viewBox="0 0 20 28"><path d="M10 2 L10 22 M5 17 L10 24 L15 17" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="ve-card ve-card--recessed reveal" style="--i:7">
+        <h3><span class="dot"></span> Evolution Timeline</h3>
+        <div class="timeline">
+          <div class="timeline-item"><strong>Initial generation</strong> <span>First build.py — basic slide compilation from plan.md</span></div>
+          <div class="timeline-item"><strong>Visual explainer links</strong> <span>Added <code>[explainer: Title](url)</code> syntax in slides</span></div>
+          <div class="timeline-item"><strong>@@ directive system</strong> <span>Inline AI instructions: scan, execute, strip from source</span></div>
+          <div class="timeline-item"><strong>Quote visibility fix</strong> <span>Dark text on dark slides — added title/divider-slide overrides</span></div>
+          <div class="timeline-item"><strong>Blockquote splitting</strong> <span>Multiple quotes merged into one blob → split on blank <code>&gt;</code> lines</span></div>
+          <div class="timeline-item"><strong>Link rendering in quotes</strong> <span>Markdown links inside blockquotes now clickable</span></div>
+          <div class="timeline-item"><strong>Deploy pipeline</strong> <span>Makefile deploy target: image sync + gh-pages commit + push</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 2. WATCH LOOP ===== -->
+    <div id="s2" class="sec-head accent-teal reveal" style="--i:8">
+      <span class="sec-num">2</span>
+      <h2>Watch Loop</h2>
+    </div>
+    <p class="sec-desc reveal" style="--i:9">The continuous integration system. One command — <code>/loop 90s /deck-watch</code> — set the heartbeat for the entire development workflow.</p>
+
+    <div class="accent-teal">
+      <div class="ve-card ve-card--hero reveal" style="--i:10">
+        <h3><span class="dot"></span> /deck-watch</h3>
+        <p>The core watcher skill. Five-step algorithm on every 90-second tick:</p>
+        <ul>
+          <li><strong>Check</strong> — run <code>check-changes.sh</code>; bail if hash unchanged</li>
+          <li><strong>Read</strong> — load plan.md, README.md, quotes.md, all content/*.md</li>
+          <li><strong>Process @@</strong> — find inline directives, execute them, remove from source</li>
+          <li><strong>Regenerate</strong> — compare plan structure vs existing slides, create/update/delete</li>
+          <li><strong>Build</strong> — run <code>make build</code>, report result</li>
+        </ul>
+      </div>
+
+      <div class="grid-2">
+        <div class="ve-card reveal" style="--i:11">
+          <h3><span class="dot"></span> /render-deck</h3>
+          <p>Manual build-and-open. Wraps <code>make open</code>. Used constantly for one-off rebuilds and quick previews. Documents slide markdown format, frontmatter fields, body syntax.</p>
+        </div>
+        <div class="ve-card reveal" style="--i:12">
+          <h3><span class="dot"></span> /loop <span style="font-weight:400; color: var(--text-dim)">(bundled)</span></h3>
+          <p>Built-in Claude Code skill. Schedules recurring prompts via CronCreate. Usage: <code>/loop 90s /deck-watch</code>. The timer that makes the watch loop possible. Not vendored — ships with Claude Code.</p>
+        </div>
+      </div>
+
+      <div class="ve-card ve-card--recessed reveal" style="--i:13">
+        <h3><span class="dot"></span> The @@ Directive Innovation</h3>
+        <p>The most distinctive feature. The author leaves inline instructions in any watched file:</p>
+        <p style="font-family: var(--font-mono); font-size: 12px; background: var(--surface); padding: 10px 14px; border-radius: 6px; margin: 10px 0; border: 1px solid var(--border);">
+          ## Testing Strategy<br>
+          <span style="color: var(--teal);">@@ add a slide about property-based testing</span><br>
+          - Unit tests for core logic
+        </p>
+        <p>On the next tick, the watcher finds the <code>@@</code> line, interprets it, creates or modifies the appropriate slide, and removes the directive. Every source file becomes a two-way communication channel between author and AI.</p>
+      </div>
+    </div>
+
+    <!-- ===== 3. PARALLEL DISPATCH ===== -->
+    <div id="s3" class="sec-head accent-terracotta reveal" style="--i:14">
+      <span class="sec-num">3</span>
+      <h2>Parallel Dispatch</h2>
+    </div>
+    <p class="sec-desc reveal" style="--i:15">Two complementary orchestrators for fanning work across independent AI agents. The project demonstrates its own thesis: using agents to build a talk about agents.</p>
+
+    <div class="accent-terracotta">
+      <div class="grid-2">
+        <div class="ve-card ve-card--hero reveal" style="--i:16">
+          <h3><span class="dot"></span> /c^2 (Claude²)</h3>
+          <p>Agent-tool-native dispatch. Lightweight, no daemon. Workers run in isolated git worktrees, commit to branches, create PRs.</p>
+          <ul>
+            <li><code>swarm</code> — fan out 2-10 parallel workers</li>
+            <li><code>work</code> — dispatch a single task</li>
+            <li><code>status</code> / <code>gather</code> — track progress</li>
+            <li><code>msg</code> — send course corrections</li>
+            <li>Multi-repo dispatch via registry</li>
+          </ul>
+        </div>
+        <div class="ve-card ve-card--hero reveal" style="--i:17">
+          <h3><span class="dot"></span> /mc (MultiClaude)</h3>
+          <p>Daemon-based orchestrator. Persistent binary manages agent lifecycles, worktrees, messaging, PR workflows.</p>
+          <ul>
+            <li><code>swarm</code> — parallel research workers</li>
+            <li><code>attach</code> / <code>logs</code> — live observability</li>
+            <li>Survives terminal disconnects</li>
+            <li>Long-running research tasks</li>
+            <li>Worker naming (happy-elephant, zealous-rabbit)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ve-card reveal" style="--i:18">
+        <h3><span class="dot"></span> Swarm History</h3>
+        <table class="cmp-table">
+          <thead><tr><th>Swarm</th><th>Tool</th><th>Workers</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PRs #1-6</strong></td><td>/c^2</td><td>6</td><td>Show-don't-tell pass, explainer links, images</td></tr>
+            <tr><td><strong>PRs #8-10</strong></td><td>/c^2</td><td>3</td><td>Eventual consistency slide, playbook, demo assets</td></tr>
+            <tr><td><strong>PR #12</strong></td><td>/c^2</td><td>1</td><td>Help modal (? key accessibility feature)</td></tr>
+            <tr><td><strong>PRs #13-18</strong></td><td>/c^2</td><td>5</td><td>Vendored skills (this swarm)</td></tr>
+            <tr><td><strong>Research</strong></td><td>/mc</td><td>2</td><td>Pipeline audit + framework survey for determinism plan</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ve-card ve-card--recessed reveal" style="--i:19">
+        <h3><span class="dot"></span> c^2 vs mc</h3>
+        <table class="cmp-table">
+          <thead><tr><th>Dimension</th><th>/c^2</th><th>/mc</th></tr></thead>
+          <tbody>
+            <tr><td>Architecture</td><td>Agent tool native</td><td>Persistent daemon</td></tr>
+            <tr><td>Startup cost</td><td>None</td><td>Requires <code>multiclaude start</code></td></tr>
+            <tr><td>Best for</td><td>Quick swarms (2-10 workers)</td><td>Long-running research</td></tr>
+            <tr><td>Lifecycle</td><td>Tied to session</td><td>Survives disconnects</td></tr>
+            <tr><td>Isolation</td><td>Git worktree (auto)</td><td>Git worktree (daemon-managed)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== 4. CONTENT GENERATION ===== -->
+    <div id="s4" class="sec-head accent-sage reveal" style="--i:20">
+      <span class="sec-num">4</span>
+      <h2>Content Generation</h2>
+    </div>
+    <p class="sec-desc reveal" style="--i:21">Tools for generating all non-text assets — images, HTML visualizations, demo data, and reference material downloads.</p>
+
+    <div class="accent-sage">
+      <div class="ve-card ve-card--hero reveal" style="--i:22">
+        <h3><span class="dot"></span> /visual-explainer</h3>
+        <p>Generates self-contained HTML pages for technical diagrams, visualizations, and data tables. This very page was built with it. Supports Mermaid, CSS Grid, Chart.js, multiple aesthetic presets. Strong anti-slop guardrails.</p>
+        <p style="margin-top:8px"><strong>Pages generated for this project:</strong></p>
+        <ul>
+          <li><span class="file-badge">system-overview.html</span> Build system guide</li>
+          <li><span class="file-badge">playbook.html</span> Operational playbook</li>
+          <li><span class="file-badge">demo-plan.html</span> Live demo sequence</li>
+          <li><span class="file-badge">checklist-progress.html</span> Readiness tracking</li>
+          <li><span class="file-badge">vendored-skills.html</span> This page</li>
+        </ul>
+      </div>
+
+      <div class="grid-3">
+        <div class="ve-card reveal" style="--i:23">
+          <h3><span class="dot"></span> /gen-image</h3>
+          <p>Image generation via Gemini or Codex (DALL-E). Style hints, size control, backend selection. Used for slide backgrounds throughout.</p>
+        </div>
+        <div class="ve-card reveal" style="--i:24">
+          <h3><span class="dot"></span> /aix</h3>
+          <p>1Password API key cache. Wraps <code>op run</code> to cache keys to <code>/tmp/ai-keys.env</code>. Required before any Gemini API calls.</p>
+        </div>
+        <div class="ve-card reveal" style="--i:25">
+          <h3><span class="dot"></span> generate_images.py</h3>
+          <p>Batch Gemini image generator with 6 RPG-themed prompts. Skip-if-exists logic for safe re-runs.</p>
+        </div>
+      </div>
+
+      <div class="ve-card reveal" style="--i:26">
+        <h3><span class="dot"></span> dl.py</h3>
+        <p>D&D archive PDF downloader. Scrapes reference PDFs to populate the demo scenario's OGL content library. Used to simulate the "OGL crisis" that the talk's narrative is built around — Lady Tasha Tiamata's fictional licensing emergency.</p>
+      </div>
+
+      <div class="ve-card ve-card--recessed reveal" style="--i:27">
+        <h3><span class="dot"></span> The Image Pipeline</h3>
+        <p style="font-family: var(--font-mono); font-size: 12px; line-height: 2;">
+          <span class="file-badge">/aix env</span> → cache GEMINI_API_KEY →
+          <span class="file-badge">/gen-image "prompt"</span> → Gemini API →
+          <span class="file-badge">images/*.png</span> → referenced in slide frontmatter →
+          <span class="file-badge">build.py</span> → path rewrite → deck.html
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== 5. SESSION MANAGEMENT ===== -->
+    <div id="s5" class="sec-head accent-plum reveal" style="--i:28">
+      <span class="sec-num">5</span>
+      <h2>Session Management</h2>
+    </div>
+    <p class="sec-desc reveal" style="--i:29">Human-AI collaboration workflow: notifications, backgrounding, memory persistence, and session lifecycle. The connective tissue of the development process.</p>
+
+    <div class="accent-plum">
+      <div class="grid-2">
+        <div class="ve-card ve-card--hero reveal" style="--i:30">
+          <h3><span class="dot"></span> /say</h3>
+          <p>macOS text-to-speech notifications. Used at every milestone: "Done. Deck deployed." "Swarm complete." Different voices for different event types — Zarvox for swarm completions. Enabled async collaboration: walk away, come back when you hear it.</p>
+        </div>
+        <div class="ve-card ve-card--hero reveal" style="--i:31">
+          <h3><span class="dot"></span> /bg</h3>
+          <p>Background job alias. The most-used prefix in the entire project. Nearly every command started with <code>/bg</code> to keep the UI responsive. Fire → do something else → come back when notified. The default interaction pattern.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="ve-card reveal" style="--i:32">
+          <h3><span class="dot"></span> /end-session</h3>
+          <p>Born from this project. The user described it as a user story, then asked for it to become a skill. Reviews conversation for corrections, conventions, decisions. Writes to auto-memory. Has a <code>UserPromptSubmit</code> hook — just say "end session" and it triggers.</p>
+        </div>
+        <div class="ve-card reveal" style="--i:33">
+          <h3><span class="dot"></span> /finished</h3>
+          <p>Transcript finalization. Locates session transcript, adds summary section, stamps completion time. Chains from <code>/end-session</code> for full session close-out.</p>
+        </div>
+      </div>
+
+      <div class="ve-card ve-card--recessed reveal" style="--i:34">
+        <h3><span class="dot"></span> Design Principles</h3>
+        <ul>
+          <li><strong>Audio for async awareness</strong> — <code>/say</code> turns a text interface into one with ambient awareness. Listen, don't watch.</li>
+          <li><strong>Background-first interaction</strong> — the human should never be blocked waiting for the agent.</li>
+          <li><strong>Persistent memory</strong> — knowledge accumulates across sessions via <code>/end-session</code> auto-memory writes.</li>
+          <li><strong>Natural language triggers</strong> — "end session" fires a hook, no slash command needed. Collaboration, not commands.</li>
+          <li><strong>Memory vs transcript</strong> — <code>/end-session</code> captures what the agent should remember. <code>/finished</code> captures what the human should be able to read later.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== OVERVIEW MAP ===== -->
+    <div id="overview" class="sec-head accent-navy reveal" style="--i:35">
+      <span class="sec-num">&#x25C6;</span>
+      <h2>Overview Map</h2>
+    </div>
+    <p class="sec-desc reveal" style="--i:36">How all 19 vendored artifacts connect. The build pipeline compiles, the watch loop drives, dispatch fans out, content generation creates assets, and session management keeps the human in the loop.</p>
+
+    <div class="accent-navy">
+      <div class="ve-card ve-card--hero reveal" style="--i:37">
+        <h3><span class="dot"></span> The Full Cycle</h3>
+        <p style="font-family: var(--font-mono); font-size: 12px; line-height: 2.2; margin-top: 8px;">
+          <strong style="color: var(--plum);">Session</strong>: <span class="file-badge">/bg</span> dispatch task → <span class="file-badge">/say</span> notify on completion<br>
+          <strong style="color: var(--teal);">Watch</strong>: <span class="file-badge">/loop 90s</span> → <span class="file-badge">/deck-watch</span> detects change → processes <code>@@</code><br>
+          <strong style="color: var(--gold);">Build</strong>: <span class="file-badge">check-changes.sh</span> → <span class="file-badge">build.py</span> compiles → <span class="file-badge">Makefile</span> orchestrates<br>
+          <strong style="color: var(--terracotta);">Swarm</strong>: <span class="file-badge">/c^2 swarm</span> fans out → N workers → N PRs → merge<br>
+          <strong style="color: var(--sage);">Assets</strong>: <span class="file-badge">/aix</span> → <span class="file-badge">/gen-image</span> → <span class="file-badge">/visual-explainer</span> → self-contained HTML<br>
+          <strong style="color: var(--plum);">Close</strong>: "end session" → <span class="file-badge">/end-session</span> → memory persisted → <span class="file-badge">/finished</span>
+        </p>
+      </div>
+
+      <div class="ve-card reveal" style="--i:38">
+        <h3><span class="dot"></span> Artifact Inventory</h3>
+        <table class="cmp-table">
+          <thead><tr><th>Category</th><th>Directory</th><th>Files</th><th>Artifacts</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--gold)">Build Pipeline</td><td><code>vendored/build-pipeline/</code></td><td>4</td><td>build.py, check-changes.sh, Makefile, README</td></tr>
+            <tr><td style="color:var(--teal)">Watch Loop</td><td><code>vendored/watch-loop/</code></td><td>3</td><td>deck-watch.md, render-deck.md, README</td></tr>
+            <tr><td style="color:var(--terracotta)">Parallel Dispatch</td><td><code>vendored/parallel-dispatch/</code></td><td>3</td><td>c2.md, mc.md, README</td></tr>
+            <tr><td style="color:var(--sage)">Content Generation</td><td><code>vendored/content-generation/</code></td><td>6</td><td>visual-explainer.md, gen-image.md, aix.md, generate_images.py, dl.py, README</td></tr>
+            <tr><td style="color:var(--plum)">Session Management</td><td><code>vendored/session-management/</code></td><td>5</td><td>say.md, bg.md, end-session.md, finished.md, README</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="meta-banner reveal" style="--i:39">
+      <strong>Meta note:</strong> This page was generated by <code>/visual-explainer</code>, one of the vendored skills it documents. The vendoring swarm was dispatched by <code>/c^2 swarm</code>, another vendored skill. The project is its own demonstration.
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /wrap -->
+
+<script>
+// Intersection Observer for TOC highlighting
+const sections = document.querySelectorAll('.sec-head');
+const tocLinks = document.querySelectorAll('.toc a');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const id = entry.target.id;
+      const link = document.querySelector(`.toc a[href="#${id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
