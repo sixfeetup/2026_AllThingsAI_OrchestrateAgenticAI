@@ -30,7 +30,24 @@
       "Bash(echo === DIFFERS: $f ===:*)",
       "WebFetch(domain:super-tribble-8w5zrvy.pages.github.io)",
       "Bash(grep:*)",
-      "Bash(multiclaude:*)"
+      "Bash(multiclaude:*)",
+      "Bash(do echo:*)"
+    ]
+  }
+
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "high",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "end session",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"additionalContext\": \"The user said \\\"end session\\\". Invoke the /end-session skill now to write notes for future-you and future-me before wrapping up.\"}'"
+          }
+        ]
+      }
     ]
   }
 }
