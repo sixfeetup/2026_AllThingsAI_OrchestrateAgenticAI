@@ -118,6 +118,7 @@ def render_grid(cards: list[tuple[str, str]]) -> str:
 
 
 _DIRECTIVE_RE = re.compile(r"@@\S.*|!\[.*?\]\(@@.*?\)")
+_MD_IMAGE_RE = re.compile(r"!\[.*?\]\((.+?)\)")
 
 
 def scan_directives(text: str, filename: str) -> list[str]:
@@ -140,6 +141,64 @@ def strip_directives(body: str) -> str:
             continue
         out.append(line)
     return "\n".join(out)
+
+
+def validate_images(
+    md_files: list[Path],
+) -> list[str]:
+    """Check that all image references in slides point to existing files.
+
+    Scans both YAML frontmatter ``image:`` fields and markdown ``![](...)``
+    syntax.  Returns a list of human-readable warning strings (empty = all OK).
+    Also flags ``_web.jpg`` references where only the source ``.png`` exists.
+    """
+    warnings: list[str] = []
+
+    for md_file in md_files:
+        text = md_file.read_text()
+        meta, body = parse_frontmatter(text)
+
+        refs: list[tuple[str, str]] = []  # (raw_ref, source_label)
+
+        # Frontmatter image: field
+        fm_image = meta.get("image")
+        if fm_image:
+            refs.append((fm_image, "frontmatter 'image'"))
+
+        # Markdown ![alt](path) in body
+        for m in _MD_IMAGE_RE.finditer(body):
+            refs.append((m.group(1), f"line reference"))
+
+        for raw_ref, source in refs:
+            # Refs use ../images/FILENAME — images live at REPO_ROOT/images/
+            # (the build rewrites src paths in output HTML, so ../images/ from
+            # content/ doesn't resolve literally on disk).
+            m_img = re.match(r"\.\./images/(.+)$", raw_ref)
+            if m_img:
+                ref_path = (REPO_ROOT / "images" / m_img.group(1)).resolve()
+            else:
+                ref_path = (CONTENT_DIR / raw_ref).resolve()
+
+            if not ref_path.exists():
+                # Check for _web.jpg -> .png fallback hint
+                stem = ref_path.stem  # e.g. "foo_web"
+                if stem.endswith("_web") and ref_path.suffix in (".jpg", ".jpeg"):
+                    source_png = ref_path.parent / (
+                        stem.removesuffix("_web") + ".png"
+                    )
+                    if source_png.exists():
+                        warnings.append(
+                            f"  ⚠  {md_file.name}: {source} references "
+                            f"'{raw_ref}' which does not exist, but source "
+                            f"'{source_png.name}' found — run 'make web-images'"
+                        )
+                        continue
+                warnings.append(
+                    f"  ✗  {md_file.name}: {source} references "
+                    f"'{raw_ref}' — file not found"
+                )
+
+    return warnings
 
 
 def split_notes(body: str) -> tuple[str, str]:
@@ -557,6 +616,13 @@ def build():
         print(f"\n  {len(all_directives)} unresolved @@ directive(s):")
         for d in all_directives:
             print(d)
+
+    # Validate image references
+    image_warnings = validate_images(md_files)
+    if image_warnings:
+        print(f"\n  {len(image_warnings)} image reference issue(s):")
+        for w in image_warnings:
+            print(w)
 
     head, tail = load_template_shell()
     OUTPUT_DIR.mkdir(exist_ok=True)
