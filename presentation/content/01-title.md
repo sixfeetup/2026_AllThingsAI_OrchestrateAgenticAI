@@ -8,9 +8,9 @@ type: title-slide
 
 *Context, Checklists, and No-Miss Reviews*
 
-*Calvin Hendryx-Parker — Six Feet Up*
+_Calvin Hendryx-Parker — Six Feet Up_
 
-*Built 2026-03-10*
+_Built 2026-03-10_
 
 > “The secret we should never let the gamerunners know is that they don't need any rules.”
 > ― Gary Gygax
