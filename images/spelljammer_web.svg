@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <radialGradient id="nebula1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#2a1a4e" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula2" cx="75%" cy="60%" r="40%">
+      <stop offset="0%" stop-color="#1a3a5c" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="arcaneGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a6b7a" stop-opacity="0.6"/>
+      <stop offset="60%" stop-color="#1a6b7a" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#1a6b7a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="starGlow">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- Deep space background -->
+  <rect width="1200" height="675" fill="#0d1117"/>
+  <rect width="1200" height="675" fill="url(#nebula1)"/>
+  <rect width="1200" height="675" fill="url(#nebula2)"/>
+
+  <!-- Stars - scattered across the sky -->
+  <g fill="white" opacity="0.9">
+    <circle cx="50" cy="30" r="1.2"/><circle cx="120" cy="80" r="0.8"/>
+    <circle cx="200" cy="50" r="1.5"/><circle cx="310" cy="120" r="0.7"/>
+    <circle cx="80" cy="200" r="1.0"/><circle cx="450" cy="60" r="1.3"/>
+    <circle cx="550" cy="30" r="0.9"/><circle cx="670" cy="90" r="1.1"/>
+    <circle cx="780" cy="45" r="0.6"/><circle cx="890" cy="110" r="1.4"/>
+    <circle cx="1000" cy="50" r="0.8"/><circle cx="1100" cy="80" r="1.2"/>
+    <circle cx="1150" cy="30" r="0.7"/><circle cx="60" cy="320" r="0.9"/>
+    <circle cx="150" cy="400" r="1.1"/><circle cx="30" cy="500" r="0.8"/>
+    <circle cx="1050" cy="200" r="1.0"/><circle cx="1130" cy="350" r="0.7"/>
+    <circle cx="1080" cy="500" r="1.3"/><circle cx="950" cy="150" r="0.6"/>
+    <circle cx="400" cy="180" r="0.5"/><circle cx="700" cy="140" r="0.8"/>
+    <circle cx="850" cy="200" r="1.0"/><circle cx="250" cy="250" r="0.7"/>
+    <circle cx="500" cy="500" r="0.9"/><circle cx="350" cy="550" r="1.1"/>
+    <circle cx="750" cy="580" r="0.8"/><circle cx="1100" cy="600" r="0.6"/>
+    <circle cx="180" cy="600" r="1.0"/><circle cx="630" cy="620" r="0.7"/>
+  </g>
+
+  <!-- Brighter stars with glow -->
+  <g filter="url(#starGlow)" fill="white" opacity="0.7">
+    <circle cx="300" cy="70" r="2.5"/>
+    <circle cx="750" cy="50" r="2.0"/>
+    <circle cx="1050" cy="130" r="2.2"/>
+    <circle cx="100" cy="150" r="1.8"/>
+    <circle cx="950" cy="300" r="2.0"/>
+  </g>
+
+  <!-- Arcane glow behind ship -->
+  <ellipse cx="600" cy="380" rx="250" ry="150" fill="url(#arcaneGlow)"/>
+
+  <!-- Ship hull - a flying galleon -->
+  <g transform="translate(600, 370)" filter="url(#glow)">
+    <!-- Hull body -->
+    <path d="M-180,30 Q-200,0 -170,-20 L-150,-30 L150,-30 Q200,-20 180,30 L120,50 Q0,65 -120,50 Z" fill="#3a2518" stroke="#5a3a25" stroke-width="2"/>
+    <!-- Hull detail lines -->
+    <path d="M-160,-20 Q0,-35 160,-20" fill="none" stroke="#5a3a25" stroke-width="1.5"/>
+    <path d="M-170,0 Q0,-12 170,0" fill="none" stroke="#5a3a25" stroke-width="1"/>
+    <!-- Hull bottom keel -->
+    <path d="M-100,50 Q0,70 100,50" fill="#2a1a10" stroke="#4a2a18" stroke-width="1.5"/>
+
+    <!-- Bowsprit -->
+    <line x1="170" y1="-25" x2="260" y2="-55" stroke="#5a3a25" stroke-width="3"/>
+
+    <!-- Stern decoration -->
+    <path d="M-180,20 Q-210,10 -200,-20 Q-195,-35 -170,-30" fill="none" stroke="#1a6b7a" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Main mast -->
+    <line x1="30" y1="-30" x2="30" y2="-200" stroke="#4a2a18" stroke-width="4"/>
+    <!-- Main sail -->
+    <path d="M-60,-180 Q30,-160 120,-180 Q130,-120 120,-70 Q30,-50 -60,-70 Q-70,-120 -60,-180 Z" fill="#1a2a3a" stroke="#2a4a6a" stroke-width="1.5" opacity="0.85"/>
+    <!-- Sail arcane runes -->
+    <circle cx="30" cy="-125" r="25" fill="none" stroke="#1a6b7a" stroke-width="1.5" opacity="0.7"/>
+    <path d="M30,-150 L30,-100 M10,-135 L50,-115 M10,-115 L50,-135" stroke="#1a6b7a" stroke-width="1" opacity="0.6"/>
+
+    <!-- Fore mast -->
+    <line x1="120" y1="-30" x2="120" y2="-150" stroke="#4a2a18" stroke-width="3"/>
+    <!-- Fore sail -->
+    <path d="M80,-140 Q120,-130 160,-140 Q165,-100 160,-65 Q120,-55 80,-65 Q75,-100 80,-140 Z" fill="#1a2a3a" stroke="#2a4a6a" stroke-width="1.5" opacity="0.8"/>
+
+    <!-- Mizzen mast -->
+    <line x1="-80" y1="-30" x2="-80" y2="-160" stroke="#4a2a18" stroke-width="3"/>
+    <!-- Mizzen sail -->
+    <path d="M-115,-150 Q-80,-140 -45,-150 Q-40,-110 -45,-75 Q-80,-65 -115,-75 Q-120,-110 -115,-150 Z" fill="#1a2a3a" stroke="#2a4a6a" stroke-width="1.5" opacity="0.8"/>
+
+    <!-- Arcane engine glow underneath -->
+    <ellipse cx="0" cy="60" rx="80" ry="15" fill="#1a6b7a" opacity="0.4" filter="url(#glow)"/>
+    <ellipse cx="0" cy="60" rx="50" ry="8" fill="#2ae8d4" opacity="0.2" filter="url(#glow)"/>
+
+    <!-- Rune lights along hull -->
+    <g fill="#1a6b7a" filter="url(#glow)" opacity="0.8">
+      <circle cx="-120" cy="10" r="3"/>
+      <circle cx="-70" cy="20" r="3"/>
+      <circle cx="-20" cy="25" r="3"/>
+      <circle cx="30" cy="25" r="3"/>
+      <circle cx="80" cy="20" r="3"/>
+      <circle cx="130" cy="10" r="3"/>
+    </g>
+
+    <!-- Party silhouettes on deck -->
+    <!-- Dwarf (short, stocky) -->
+    <g transform="translate(-60, -32)">
+      <rect x="-8" y="-18" width="16" height="18" rx="3" fill="#1a1a2e"/>
+      <circle cx="0" cy="-22" r="6" fill="#1a1a2e"/>
+      <!-- Axe -->
+      <line x1="10" y1="-15" x2="18" y2="-28" stroke="#8a8a9a" stroke-width="2"/>
+      <path d="M16,-30 Q22,-28 18,-24" fill="#8a8a9a"/>
+    </g>
+
+    <!-- Elf wizard (tall, slender) -->
+    <g transform="translate(-20, -32)">
+      <rect x="-6" y="-28" width="12" height="28" rx="2" fill="#1a1a2e"/>
+      <circle cx="0" cy="-33" r="5.5" fill="#1a1a2e"/>
+      <!-- Wizard hat -->
+      <path d="M-7,-36 L0,-52 L7,-36" fill="#1a1a2e"/>
+      <!-- Staff with glow -->
+      <line x1="10" y1="-5" x2="14" y2="-45" stroke="#6a5a3a" stroke-width="2"/>
+      <circle cx="14" cy="-47" r="4" fill="#1a6b7a" opacity="0.8" filter="url(#glow)"/>
+    </g>
+
+    <!-- Human cleric (medium build) -->
+    <g transform="translate(30, -32)">
+      <rect x="-7" y="-24" width="14" height="24" rx="2" fill="#1a1a2e"/>
+      <circle cx="0" cy="-29" r="6" fill="#1a1a2e"/>
+      <!-- Shield -->
+      <ellipse cx="-12" cy="-15" rx="6" ry="8" fill="#3a3a5e"/>
+      <line x1="-12" y1="-22" x2="-12" y2="-8" stroke="#5a5a7e" stroke-width="1"/>
+      <line x1="-18" y1="-15" x2="-6" y2="-15" stroke="#5a5a7e" stroke-width="1"/>
+    </g>
+
+    <!-- Tiefling rogue (horns, tail) -->
+    <g transform="translate(80, -32)">
+      <rect x="-6" y="-25" width="12" height="25" rx="2" fill="#1a1a2e"/>
+      <circle cx="0" cy="-30" r="5.5" fill="#1a1a2e"/>
+      <!-- Horns -->
+      <path d="M-5,-34 Q-8,-42 -4,-38" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+      <path d="M5,-34 Q8,-42 4,-38" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+      <!-- Daggers -->
+      <line x1="10" y1="-20" x2="15" y2="-12" stroke="#8a8a9a" stroke-width="1.5"/>
+      <!-- Tail -->
+      <path d="M-3,0 Q-15,10 -10,20 Q-5,15 0,5" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- Trailing arcane particles -->
+  <g fill="#1a6b7a" opacity="0.5">
+    <circle cx="350" cy="430" r="2" filter="url(#glow)"/>
+    <circle cx="370" cy="445" r="1.5"/>
+    <circle cx="340" cy="460" r="1"/>
+    <circle cx="360" cy="470" r="1.8" filter="url(#glow)"/>
+    <circle cx="330" cy="485" r="1.2"/>
+    <circle cx="355" cy="500" r="0.8"/>
+  </g>
+
+  <!-- Distant planet -->
+  <circle cx="1050" cy="480" r="60" fill="#1a1a2e" stroke="#2a2a4e" stroke-width="1"/>
+  <ellipse cx="1050" cy="480" rx="90" ry="12" fill="none" stroke="#2a4a6a" stroke-width="2" opacity="0.5"/>
+</svg>
