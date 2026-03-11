@@ -3,7 +3,7 @@ type: dark-slide
 image: ../images/ralph-w-crabs.jpg
 image_alt: Ralph leveled up — still Ralph, but with equipment
 image_layout: split
-footer: "13"
+footer: "14"
 ---
 
 # Closing Thoughts
@@ -13,6 +13,8 @@ footer: "13"
 - Security and trust are enablers, not blockers
 - Orchestrate the humans AND the agents
 - The agent is part of the party, not a replacement for it
+
+[explainer: Playbook](explainers/playbook.html)
 
 > "Most important advice in software: underpromise, deliver."
 > — Tom Conrad
