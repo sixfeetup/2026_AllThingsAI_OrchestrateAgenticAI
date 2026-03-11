@@ -32,3 +32,5 @@
 
 "While object-oriented and functional programming focus on how code is structured (objects vs. functions), fact-oriented development focuses on what the user wants by organizing code into modular, plug-and-play features that can be automatically assembled into different product versions."
 -- Gemini Pro, 2026-03 answering "Oneliner to describe difference between fact/feature orient software development versus object oriented or functional programming"
+
+"AI sharpens your sword, you still have to swing it"
