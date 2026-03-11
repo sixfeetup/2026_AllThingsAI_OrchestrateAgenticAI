@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'presentation/**'
-      - 'images/**'
       - 'plan.md'
   workflow_dispatch:
 
@@ -46,7 +45,7 @@ jobs:
             | sed 's/src="images\///;s/"//' \
             | sort -u \
             | while read f; do
-                [ -f "images/$f" ] && cp "images/$f" "_site/images/$f"
+                [ -f "presentation/images/$f" ] && cp "presentation/images/$f" "_site/images/$f"
               done
 
       - name: Upload Pages artifact
