@@ -882,6 +882,32 @@
 <span class="slide-footer">10</span>
 </section>
 
+    <!-- 11.5-eventual-consistency.md -->
+    <section class="slide content-slide" aria-label="The Brownian Ratchet">
+<div class="slide-content">
+<h2 class="reveal">The Brownian Ratchet</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<p class="subtitle reveal">Eventual consistency as a strategy</p>
+<ul class="bullet-list">
+<li class="reveal">Testing validity &gt; initial correctness</li>
+<li class="reveal">Each iteration catches what the last missed</li>
+<li class="reveal">Agent proposes → tests validate → agent fixes → loop</li>
+<li class="reveal">Like TDD, but the agent writes both sides</li>
+<li class="reveal">Converges because the ratchet only moves forward</li>
+</ul>
+
+</div>
+<div class="split-image">
+<img src="../../images/sorcerors-apprentice-grok.jpg" alt="The sorcerer&#x27;s apprentice — iteration as a feature" class="slide-image">
+</div>
+</div>
+</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Make it work, make it right, make it fast.&quot; — Kent Beck</blockquote></div>
+<aside class="speaker-notes">The key insight: we don&#x27;t need the agent to be right the first time.<br>We need it to be right eventually, with proof.<br>The brownian ratchet pattern:<br>1. Agent generates code/content<br>2. Automated checks run (tests, linting, type checking, security scans)<br>3. Failures feed back as context for the next attempt<br>4. Each pass fixes something — the ratchet clicks forward<br>5. When all checks pass, we have both the result AND the proof it works<br>This is not wishful thinking — it&#x27;s the same pattern CI/CD uses.<br>The difference is the agent closes the loop automatically.<br>Real example: multiclaude swarm generates 5 PRs, each with TDD.<br>3 pass immediately. 2 fail tests, get auto-fixed on retry.<br>All 5 land with green CI. That&#x27;s eventual consistency in practice.</aside>
+<span class="slide-footer">12</span>
+</section>
+
     <!-- 12-its-a-trap.md -->
     <section class="slide dark-slide" aria-label="It&#x27;s a TRAP!">
 <div class="slide-content">
