@@ -1,7 +1,9 @@
 ---
 type: dark-slide
-image: "@@img:a curse amulet"
-footer: "3"
+image: ../images/party-plans.jpg
+image_alt: The party plans their approach
+image_layout: split
+footer: "2"
 ---
 
 # Trouble Comes Knocking: an example

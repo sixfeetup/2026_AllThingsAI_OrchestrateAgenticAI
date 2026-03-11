@@ -1,6 +1,6 @@
 ---
 type: content-slide
-footer: "9"
+footer: "8"
 ---
 
 # Skills in Action

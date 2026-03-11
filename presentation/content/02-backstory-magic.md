@@ -3,7 +3,7 @@ type: dark-slide
 image: ../images/the-team-in-the-office_web.jpg
 image_alt: The party gathers — business as usual meets the quest
 image_layout: split
-footer: "1"
+footer: "0"
 ---
 
 # The Practical Magic

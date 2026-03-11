@@ -3,7 +3,7 @@ type: content-slide
 image: ../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg
 image_alt: The party considers their next move
 image_layout: split
-footer: "10"
+footer: "9"
 ---
 
 # Loot the Room

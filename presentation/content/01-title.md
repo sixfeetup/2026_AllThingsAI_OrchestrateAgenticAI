@@ -1,6 +1,5 @@
 ---
 type: title-slide
-imgage: @@
 ---
 
 # *Agent of Legends*: the orchestrators apprentice
@@ -11,7 +10,7 @@ A journey from useful to industrial.
 
 _Calvin Hendryx-Parker — Six Feet Up_
 
-_Built 2026-03-10 {@@githash}_
+_Built 2026-03-11_
 
 > “The secret we should never let the gamerunners know is that they don't need any rules.”
 > ― Gary Gygax

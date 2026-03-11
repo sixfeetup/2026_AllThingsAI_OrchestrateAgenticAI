@@ -3,7 +3,7 @@ type: dark-slide
 image: ../images/ralph-w-crabs.jpg
 image_alt: Ralph leveled up — still Ralph, but with equipment
 image_layout: split
-footer: "14"
+footer: "15"
 ---
 
 # Closing Thoughts

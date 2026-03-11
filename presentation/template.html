@@ -536,9 +536,22 @@
             color: var(--sfu-teal-deep);
         }
 
-        .dark-slide .quote {
+        .dark-slide .quote,
+        .title-slide .quote,
+        .divider-slide .quote {
             border-right-color: var(--sfu-teal-light);
             color: var(--sfu-ice);
+        }
+
+        .quote a {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: var(--sfu-teal);
+            text-underline-offset: 2px;
+        }
+
+        .quote a:hover {
+            color: var(--sfu-teal-light);
         }
 
         .quote-attribution {

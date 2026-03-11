@@ -1,6 +1,6 @@
 ---
 type: divider-slide
-footer: "7"
+footer: "6"
 ---
 
 # How Do You Want To Do This?
