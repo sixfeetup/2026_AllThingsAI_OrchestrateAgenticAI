@@ -1,0 +1,276 @@
+{
+  "database_name": "L&LL Content Library",
+  "last_updated": "2026-01-10T14:30:00Z",
+  "items": [
+    {
+      "id": "item-001",
+      "name": "Vorpal Blade of the North",
+      "type": "magic_item",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Magic Items - Vorpal Sword",
+      "used_in_events": ["summer-quest-2024", "winter-campaign-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "item-002",
+      "name": "Bag of Holding",
+      "type": "magic_item",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Magic Items",
+      "used_in_events": ["starter-kit", "summer-quest-2024", "spring-faire-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "item-003",
+      "name": "Larpsy's Infinite Satchel",
+      "type": "magic_item",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["larpsy-gold-marketplace"],
+      "replacement_ready": true
+    },
+    {
+      "id": "item-004",
+      "name": "Staff of the Magi",
+      "type": "magic_item",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Magic Items - Staff of the Magi",
+      "used_in_events": ["arcane-academy-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "item-005",
+      "name": "Tasha's Thunderstone Pendant",
+      "type": "magic_item",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["summer-quest-2024", "winter-campaign-2025"],
+      "replacement_ready": true
+    },
+    {
+      "id": "mon-001",
+      "name": "Beholder",
+      "type": "monster",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Monsters - Beholder",
+      "used_in_events": ["winter-campaign-2025", "dungeon-crawl-series"],
+      "replacement_ready": false
+    },
+    {
+      "id": "mon-002",
+      "name": "Owlbear",
+      "type": "monster",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Monsters - Owlbear",
+      "used_in_events": ["forest-run-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "mon-003",
+      "name": "Gloomfang Stalker",
+      "type": "monster",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["winter-campaign-2025", "dungeon-crawl-series"],
+      "replacement_ready": true
+    },
+    {
+      "id": "mon-004",
+      "name": "Mind Flayer",
+      "type": "monster",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Monsters - Mind Flayer",
+      "used_in_events": ["psionic-night-2024", "summer-quest-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "mon-005",
+      "name": "Displacer Beast",
+      "type": "monster",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Monsters - Displacer Beast",
+      "used_in_events": ["forest-run-2024", "spring-faire-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "mon-006",
+      "name": "Thornback Wyrm",
+      "type": "monster",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["dragon-siege-2025"],
+      "replacement_ready": true
+    },
+    {
+      "id": "spell-001",
+      "name": "Fireball",
+      "type": "spell",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Spells - Fireball",
+      "used_in_events": ["arcane-academy-2024", "summer-quest-2024", "winter-campaign-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "spell-002",
+      "name": "Magic Missile",
+      "type": "spell",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Spells - Magic Missile",
+      "used_in_events": ["starter-kit", "arcane-academy-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "spell-003",
+      "name": "Larpsy's Glitterburst",
+      "type": "spell",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["spring-faire-2025", "larpsy-gold-marketplace"],
+      "replacement_ready": true
+    },
+    {
+      "id": "spell-004",
+      "name": "Power Word Kill",
+      "type": "spell",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Spells - Power Word Kill",
+      "used_in_events": ["winter-campaign-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "spell-005",
+      "name": "Wish",
+      "type": "spell",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Spells - Wish",
+      "used_in_events": ["summer-quest-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "spell-006",
+      "name": "Tiamata's Binding Oath",
+      "type": "spell",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["psionic-night-2024", "dungeon-crawl-series"],
+      "replacement_ready": true
+    },
+    {
+      "id": "class-001",
+      "name": "Warlock (Great Old One Patron)",
+      "type": "character_class",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Classes - Warlock",
+      "used_in_events": ["starter-kit", "psionic-night-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "class-002",
+      "name": "Paladin (Oath of Devotion)",
+      "type": "character_class",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Classes - Paladin",
+      "used_in_events": ["starter-kit", "summer-quest-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "class-003",
+      "name": "Faewright",
+      "type": "character_class",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["spring-faire-2025", "forest-run-2024"],
+      "replacement_ready": true
+    },
+    {
+      "id": "class-004",
+      "name": "Ranger (Beast Master)",
+      "type": "character_class",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Classes - Ranger",
+      "used_in_events": ["forest-run-2024", "winter-campaign-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "loc-001",
+      "name": "The Underdark Bazaar",
+      "type": "location",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Environments - Underdark",
+      "used_in_events": ["dungeon-crawl-series", "psionic-night-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "loc-002",
+      "name": "Greyhawk Market Square",
+      "type": "location",
+      "source": "OGL",
+      "ogl_reference": "Greyhawk Campaign Setting",
+      "used_in_events": ["summer-quest-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "loc-003",
+      "name": "The Glimmering Hollows",
+      "type": "location",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["spring-faire-2025", "dragon-siege-2025"],
+      "replacement_ready": true
+    },
+    {
+      "id": "loc-004",
+      "name": "Candlekeep Archives",
+      "type": "location",
+      "source": "OGL",
+      "ogl_reference": "Forgotten Realms - Candlekeep",
+      "used_in_events": ["arcane-academy-2024"],
+      "replacement_ready": false
+    },
+    {
+      "id": "loc-005",
+      "name": "Larpsy's Floating Market",
+      "type": "location",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["larpsy-gold-marketplace", "spring-faire-2025"],
+      "replacement_ready": true
+    },
+    {
+      "id": "item-006",
+      "name": "Deck of Many Things",
+      "type": "magic_item",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Magic Items - Deck of Many Things",
+      "used_in_events": ["summer-quest-2024", "winter-campaign-2025"],
+      "replacement_ready": false
+    },
+    {
+      "id": "mon-007",
+      "name": "Rust Monster",
+      "type": "monster",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Monsters - Rust Monster",
+      "used_in_events": ["dungeon-crawl-series"],
+      "replacement_ready": false
+    },
+    {
+      "id": "mon-008",
+      "name": "Mirequeen",
+      "type": "monster",
+      "source": "original",
+      "ogl_reference": null,
+      "used_in_events": ["spring-faire-2025", "forest-run-2024"],
+      "replacement_ready": true
+    },
+    {
+      "id": "item-007",
+      "name": "Cloak of Elvenkind",
+      "type": "magic_item",
+      "source": "OGL",
+      "ogl_reference": "SRD 5.1 - Magic Items - Cloak of Elvenkind",
+      "used_in_events": ["forest-run-2024"],
+      "replacement_ready": false
+    }
+  ]
+}
