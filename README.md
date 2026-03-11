@@ -53,4 +53,5 @@ The talk description/pitch:
 >   actionable playbook to make AI reliable, auditable, and ready for
 >   high-stakes enterprise use.
 
-https://super-tribble-8w5zrvy.pages.github.io/
+
+[Current Copy of Presentation](https://super-tribble-8w5zrvy.pages.github.io/)
