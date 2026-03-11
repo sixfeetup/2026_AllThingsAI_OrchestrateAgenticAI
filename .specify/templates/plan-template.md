@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Narrative fit: Explain how the change strengthens the conference talk rather than
+  adding repo-only complexity.
+- Slide-source alignment: Identify whether `presentation/content/` changes are required
+  and list any derivative artifacts that must stay in sync.
+- Evidence trail: Name the repo artifacts that support each major claim or demo step.
+- Delivery safety: Describe the fallback path for any live or failure-prone demo step.
+- Reproducibility: State how new assets or outputs are generated, sourced, or refreshed.
 
 ## Project Structure
 
