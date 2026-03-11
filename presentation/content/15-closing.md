@@ -18,3 +18,24 @@ footer: "14"
 
 > "Most important advice in software: underpromise, deliver."
 > — maybe Tom Conrad
+
+???
+Bring it home. These are the six things to remember:
+
+1. You already have frameworks for orchestrating nondeterministic work —
+   OODA and Cynefin apply directly to agent orchestration.
+2. Skills are the compound interest of agent work — every skill you
+   build makes the next task faster and more reliable.
+3. Security and trust are not overhead — they're what let you go faster.
+   Bake them in from the start.
+4. Orchestrate everybody — agents and humans are both part of the party.
+   Conway's Law applies to agent teams too.
+5. The agent is a party member, not a replacement. It augments the team.
+6. Underpromise, deliver, iterate. The brownian ratchet pattern means
+   you don't need perfection on the first pass — you need convergence.
+
+Callback to the journey: we started with a crisis, assembled a party,
+ran two missions, and leveled up our orchestration along the way.
+
+Pause. Let the closing image and quote land. Then transition to the
+playbook slide or straight to questions.
