@@ -1,20 +1,24 @@
 ---
 type: dark-slide
 image: ../images/the-team-in-the-office_web.jpg
-image_alt: Generic business stock photo — smiling people around a laptop
-image_layout: inline
-footer: "01"
+image_alt: The party gathers — business as usual meets the quest
+image_layout: split
+footer: "1"
 ---
 
 # The Backstory Magic
 
-- One second you're planning a cheery offsite
-- The next it's very dark and you might be eaten by a grue
-- Adapting quickly requires tools and experience
+Working together for outcomes and incomes.
+
+
+???
+Business as usual can feel more like an epic quest into Mordor than a
+stock photo of smiling people around a laptop.
+
+One second we are planning a cheery offsite, the next it is very dark
+and we might be eaten by a grue.
+
+Whether good news or bad, adapting quickly requires tools and experience.
 
 > "We become what we behold. We shape our tools and then our tools shape us."
 > — Marshall McLuhan
-
-???
-
-Business as usual can feel more like an epic quest than a stock photo. The image is intentionally generic — contrast with what the work actually feels like.

@@ -22,7 +22,11 @@
       "Bash(uv:*)",
       "Bash(pkill:*)",
       "Bash(mkdir:*)",
-      "Bash(rsync:*)"
+      "Bash(rsync:*)",
+      "Bash(aix printenv:*)",
+      "Bash(aix sh:*)",
+      "Bash(ls:*)",
+      "Bash(gh pr:*)"
     ]
   }
 }

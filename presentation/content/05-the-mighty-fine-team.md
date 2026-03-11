@@ -1,27 +1,27 @@
 ---
 type: content-slide
-image: ../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg
-image_alt: D&D adventuring party planning around a table
-image_layout: inline
-footer: "04"
+footer: "4"
 ---
 
 # The Mighty Fine (Team)
 
-:::grid
-:::card The Cleric & Bard
-Business Ops & Product Management. Keep the business healthy and singing.
-:::
+_The other nondeterministic agents to orchestrate_
 
-:::card The Magic Users
-Product Engineering. Wizards, sorcerers, artificers, and druids of CAPEX.
-:::
+This quest was already agentic — staffed with humans who now will
+coordinate with digital agents for success.
 
-:::card Rangers & Fighters
-Technical Ops — SRE, DevOps, Platform. The OPEX bruisers who keep the roads safe.
-:::
+- BizOps & Product: The Cleric and the Bard — keep the business healthy and singing
+- Product Engineering: Magic users of CAPEX — wizards, sorcerers, artificers, druids
+- Technical Operations (SRE, DevOps, Platform): OPEX bruisers — rangers, barbarians, fighters
+- Security Red Team: Rogues of all shades
+- Security Blue Team: Paladin, Warlock
 
-:::card Rogues & Paladins
-Security. Red team rogues of all shades. Blue team paladins and warlocks.
-:::
-:::grid
+> "Any organization that designs a system will produce a design whose structure is a copy of the organization's communication structure."
+> — Melvin Conway
+
+???
+
+The key is to coordinate our people and agents to avoid creating costs upon the human actor
+- increasing complexity burden
+- breaking communication patterns
+- incurring pure tokens and dollar cost
