@@ -117,6 +117,31 @@ def render_grid(cards: list[tuple[str, str]]) -> str:
     return f'<div class="feature-grid reveal">\n{inner}</div>'
 
 
+_DIRECTIVE_RE = re.compile(r"@@\S.*|!\[.*?\]\(@@.*?\)")
+
+
+def scan_directives(text: str, filename: str) -> list[str]:
+    """Find unresolved @@ directives and warn about them."""
+    found = []
+    for i, line in enumerate(text.split("\n"), 1):
+        if "@@" in line:
+            directive = line.strip()
+            found.append(f"  ⚠  {filename}:{i}  {directive}")
+    return found
+
+
+def strip_directives(body: str) -> str:
+    """Replace @@ directive lines with HTML TODO markers (hidden in output)."""
+    lines = body.split("\n")
+    out = []
+    for line in lines:
+        if "@@" in line:
+            # Skip pure directive lines — don't render them
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def split_notes(body: str) -> tuple[str, str]:
     """Split slide body from speaker notes on '???' separator."""
     parts = re.split(r"^\?\?\?\s*$", body, maxsplit=1, flags=re.MULTILINE)
@@ -493,14 +518,29 @@ def build():
         sys.exit(1)
 
     slides_html = []
+    all_directives: list[str] = []
     for md_file in md_files:
         text = md_file.read_text()
         meta, body = parse_frontmatter(text)
+
+        # Scan for unresolved @@ directives
+        directives = scan_directives(body, md_file.name)
+        all_directives.extend(directives)
+
+        # Strip @@ lines so they don't render as visible text
+        body = strip_directives(body)
+
         slide_html = build_slide(meta, body)
         slides_html.append(
             f"    <!-- {md_file.name} -->\n    {slide_html}"
         )
         print(f"  {md_file.name} -> {meta.get('type', 'content-slide')}")
+
+    # Report unresolved directives
+    if all_directives:
+        print(f"\n  {len(all_directives)} unresolved @@ directive(s):")
+        for d in all_directives:
+            print(d)
 
     head, tail = load_template_shell()
     OUTPUT_DIR.mkdir(exist_ok=True)

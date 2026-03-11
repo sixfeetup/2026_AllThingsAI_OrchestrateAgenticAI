@@ -676,7 +676,9 @@
 <p class="subtitle reveal">Context, Checklists, and No-Miss Reviews</p>
 <p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
 <p class="subtitle reveal">Built 2026-03-10</p>
+
 </div>
+<div class="slide-quote"><blockquote class="quote reveal">“The secret we should never let the gamerunners know is that they don&#x27;t need any rules.” ― Gary Gygax</blockquote></div>
 </section>
 
     <!-- 02-backstory-magic.md -->
@@ -685,17 +687,14 @@
 <h2 class="reveal">The Backstory Magic</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Business as usual can feel more like an epic quest into Mordor than a stock photo of smiling people around a laptop.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">One second we are planning a cheery offsite, the next it is very dark and we might be eaten by a grue.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Whether good news or bad, adapting quickly requires tools and experience.</p>
-
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Working together for outcomes and incomes.</p>
 </div>
 <div class="split-image">
 <img src="../../images/the-team-in-the-office_web.jpg" alt="The party gathers — business as usual meets the quest" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;We become what we behold. We shape our tools and then our tools shape us.&quot; — Marshall McLuhan</blockquote></div>
+<aside class="speaker-notes">Business as usual can feel more like an epic quest into Mordor than a<br>stock photo of smiling people around a laptop.<br>One second we are planning a cheery offsite, the next it is very dark<br>and we might be eaten by a grue.<br>Whether good news or bad, adapting quickly requires tools and experience.<br>&gt; &quot;We become what we behold. We shape our tools and then our tools shape us.&quot;<br>&gt; — Marshall McLuhan</aside>
 <span class="slide-footer">1</span>
 </section>
 
@@ -724,18 +723,30 @@
 </section>
 
     <!-- 04-trouble-comes-knocking.md -->
-    <section class="slide dark-slide" aria-label="Trouble Comes Knocking">
+    <section class="slide dark-slide" aria-label="Trouble Comes Knocking: the Setup">
 <div class="slide-content">
-<h2 class="reveal">Trouble Comes Knocking</h2>
+<h2 class="reveal">Trouble Comes Knocking: the Setup</h2>
 <p class="subtitle reveal">A plausible if confabulated situation</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing LARP events company.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">They run larpsy.gold (artisan marketplace) and larpsalot.party (events, registration, payments, game runner tools, community) — all built on OGL-licensed RPG content.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">They need to migrate off Hurokee (sunsetting PaaS), relaunch their sites, and eventually ship an iOS app.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Then CEO Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</p>
-
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">A Crisis is just an Opportunity (to use agents)</p>
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;The secret we should never let the gamerunners know is that they don&#x27;t need any rules.&quot; — Gary Gygax</blockquote></div>
+<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run https://www.larpsy.gold (artisan marketplace) and https://larpsalot.party (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
 <span class="slide-footer">3</span>
+</section>
+
+    <!-- 04.1-what-do-we-know.md -->
+    <section class="slide content-slide" aria-label="What Do We Know About Our Quest?">
+<div class="slide-content">
+<h2 class="reveal">What Do We Know About Our Quest?</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Tasha has given us the following artifacts in a tarball:</p>
+<ul class="bullet-list">
+<li class="reveal">The buildpack — basically a Dockerfile</li>
+<li class="reveal">The repo access for their sites</li>
+<li class="reveal">A database dump</li>
+<li class="reveal">A file dump of the OGL content</li>
+</ul>
+<p class="subtitle reveal">The clock is ticking. Let&#x27;s see what we&#x27;re working with.</p>
+</div>
+<span class="slide-footer">6</span>
 </section>
 
     <!-- 05-the-mighty-fine-team.md -->
@@ -743,7 +754,7 @@
 <div class="slide-content">
 <h2 class="reveal">The Mighty Fine (Team)</h2>
 <p class="subtitle reveal">The other nondeterministic agents to orchestrate</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">This quest was already agentic — staffed with humans who will coordinate with digital agents for success.</p>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">This quest was already agentic — staffed with humans who now will coordinate with digital agents for success.</p>
 <ul class="bullet-list">
 <li class="reveal">BizOps &amp; Product: The Cleric and the Bard — keep the business healthy and singing</li>
 <li class="reveal">Product Engineering: Magic users of CAPEX — wizards, sorcerers, artificers, druids</li>
@@ -754,19 +765,17 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Any organization that designs a system will produce a design whose structure is a copy of the organization&#x27;s communication structure.&quot; — Melvin Conway</blockquote></div>
+<aside class="speaker-notes">The key is to coordinate our people and agents to avoid creating costs upon the human actor<br>- increasing complexity burden<br>- breaking communication patterns<br>- incurring pure tokens and dollar cost</aside>
 <span class="slide-footer">4</span>
 </section>
 
     <!-- 06-newest-party-member.md -->
-    <section class="slide dark-slide" aria-label="Our Newest Party Member">
+    <section class="slide dark-slide" aria-label="The Newest Party Member">
 <div class="slide-content">
-<h2 class="reveal">Our Newest Party Member</h2>
+<h2 class="reveal">The Newest Party Member</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Call them Clod, Gem, Dex, Cecily, or any combo thereof.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">They enter the tavern with great swagger — the hyped Agentic AI, rumored to be both ninja and rockstar who can do the laundry, walk the dog, and file the taxes.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Except sometimes the taxes end up in the washing machine with their lute, the dog ends up in the dryer, and the front door was left wide open all night.</p>
-<p class="subtitle reveal">But maybe we can make this work.</p>
+<p class="subtitle reveal">the team has some concerns</p>
 
 </div>
 <div class="split-image">
@@ -775,23 +784,8 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;I always like to emphasize how little we understand these systems — we don&#x27;t actually know what is happening inside.&quot; — Ellie Pavick</blockquote></div>
+<aside class="speaker-notes">Call them Clawd, Gem, Dex, Cecily, or any combo thereof.<br>Proceeded w/ hype  — Agentic AI, ready to<br>chew gum and take jobs, rumored to be both ninja and rockstar who can<br>do the laundry, walk the dog, and file the taxes.<br>Except sometimes the taxes end up in the washing machine with their<br>lute, the dog ends up in the dryer, and the front door was left wide<br>open all night.<br>_But maybe we can make this work._</aside>
 <span class="slide-footer">5</span>
-</section>
-
-    <!-- 07-what-do-we-know.md -->
-    <section class="slide content-slide" aria-label="What Do We Know About Our Quest?">
-<div class="slide-content">
-<h2 class="reveal">What Do We Know About Our Quest?</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Tasha has given us the following artifacts in a tarball:</p>
-<ul class="bullet-list">
-<li class="reveal">The Hurokee buildpack — basically a Dockerfile</li>
-<li class="reveal">The code for the 2 sites</li>
-<li class="reveal">A database dump</li>
-<li class="reveal">A file dump of the OGL content</li>
-</ul>
-<p class="subtitle reveal">The clock is ticking. Let&#x27;s see what we&#x27;re working with.</p>
-</div>
-<span class="slide-footer">6</span>
 </section>
 
     <!-- 08-how-do-you-want-to-do-this.md -->
@@ -807,15 +801,16 @@
 <span class="slide-footer">7</span>
 </section>
 
-    <!-- 09-spelljammer.md -->
-    <section class="slide dark-slide" aria-label="To Our Spelljammer!">
+    <!-- 09-join-the-fray.md -->
+    <section class="slide dark-slide" aria-label="Join the fray">
 <div class="slide-content">
-<h2 class="reveal">To Our Spelljammer!</h2>
+<h2 class="reveal">Join the fray</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![a d20, also a natural 20](img:shiny and metallic)</p>
 <p class="subtitle reveal">Demo: the OGL content crisis</p>
 <ul class="bullet-list">
 <li class="reveal">Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat — lose content or face legal action</li>
-<li class="reveal">Ranger Kael gets a database stood up</li>
-<li class="reveal">COO Mira Stonebridge drives the agent:</li>
+<li class="reveal">Ranger Kyle gets a database stood up</li>
+<li class="reveal">COO Mira Stonebridge drives the start up her coding agent</li>
 <li class="reveal">Search PDFs for names of places, magic items, characters, monsters</li>
 <li class="reveal">Cross-reference against L&amp;LL&#x27;s content database</li>
 <li class="reveal">Report the damage</li>
@@ -832,15 +827,10 @@
 <div class="slide-content">
 <h2 class="reveal">Skills in Action</h2>
 <p class="subtitle reveal">Demo: codifying problem solving on the fly</p>
-<ul class="bullet-list">
-<li class="reveal">Create a skill live to use &quot;say&quot; for audio notifications when tasks complete</li>
-<li class="reveal">Separate databases for each step — isolation as a feature</li>
-<li class="reveal">Skills compound: each one you build makes the next task faster</li>
-<li class="reveal">The agent learns your patterns; you learn its capabilities</li>
-</ul>
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Engage with the bigger picture... Are you not just getting a task done, but engaging with the broader universe of tasks you&#x27;re embedded in?&quot; — Matt Beane, The Skill Code</blockquote></div>
+<aside class="speaker-notes">- Create a skill live to use &quot;say&quot; for audio notifications when tasks complete<br>- Separate databases for each step — isolation as a feature<br>- Skills compound: each one you build makes the next task faster<br>- The agent learns your patterns; you learn its capabilities</aside>
 <span class="slide-footer">9</span>
 </section>
 
@@ -850,21 +840,14 @@
 <h2 class="reveal">Loot the Room</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">L&amp;LL is psyched. The team has landed more work — a database migration.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">But now we face more complex tasks, with greater peril. Time to step back and consider what frameworks we already apply to non-deterministic business processes.</p>
-<ul class="bullet-list">
-<li class="reveal">Cynefin: is this clear, complicated, complex, or chaotic?</li>
-<li class="reveal">OODA: observe, orient, decide, act — then loop</li>
-<li class="reveal">Orchestrate the agents AND the humans</li>
-</ul>
-
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Spoils to victor</p>
 </div>
 <div class="split-image">
 <img src="../../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg" alt="The party considers their next move" class="slide-image">
 </div>
 </div>
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
+<aside class="speaker-notes">L&amp;LL is psyched. The team has landed more work — a database migration.<br>But now we face more complex tasks, with greater peril. Time to step<br>back and consider what frameworks we already apply to<br>non-deterministic business processes.<br>- Cynefin: is this clear, complicated, complex, or chaotic?<br>- OODA: observe, orient, decide, act — then loop<br>- Orchestrate the agents AND the humans</aside>
 <span class="slide-footer">10</span>
 </section>
 
@@ -873,7 +856,7 @@
 <div class="slide-content">
 <h2 class="reveal">Great, But I Hired You For This Other Thing</h2>
 <p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">The job is not done — we need to migrate and update their websites.</p>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The OGL crisis is handled. Now the original contract: migrate off Hurokee, modernize the sites, prepare for mobile.</p>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The OGL crisis is handled. Now the original contract: migrate off Heroku, modernize the sites, prepare for mobile.</p>
 <p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">Time to level up our orchestration.</p>
 </div>
 <span class="slide-footer">11</span>
@@ -893,23 +876,17 @@
 </ul>
 
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot;</blockquote></div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; Somebody??  &quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
 <span class="slide-footer">12</span>
 </section>
 
     <!-- 14-jetpacks.md -->
-    <section class="slide content-slide" aria-label="Jetpacks All Around">
+    <section class="slide content-slide" aria-label="Jetpacks for everybody">
 <div class="slide-content">
-<h2 class="reveal">Jetpacks All Around</h2>
+<h2 class="reveal">Jetpacks for everybody</h2>
 <div class="split-layout reveal">
 <div class="split-text">
 <h2 class="reveal">The Future Is Legion</h2>
-<ul class="bullet-list">
-<li class="reveal">Agents are now a medium with their own message</li>
-<li class="reveal">Like organisms that take evolutionary leaps through symbiogenesis — acting as environments for other organisms</li>
-<li class="reveal">Specify a feature, use multiclaude to implement — built-in TDD, CI/CD</li>
-<li class="reveal">Model process with ralph-orchestrator: hats, loops, planner/builder/reviewer</li>
-</ul>
 
 </div>
 <div class="split-image">
@@ -918,6 +895,7 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;The medium is the message.&quot; — Marshall McLuhan</blockquote></div>
+<aside class="speaker-notes">- Agents are now a medium with their own message<br>- Like organisms that take evolutionary leaps through symbiogenesis — acting as environments for other organisms<br>- Specify a feature, use multiclaude to implement — built-in TDD, CI/CD<br>- Model process with ralph-orchestrator: hats, loops, planner/builder/reviewer</aside>
 <span class="slide-footer">13</span>
 </section>
 
@@ -928,13 +906,14 @@
 <div class="split-layout reveal">
 <div class="split-text">
 <ul class="bullet-list">
-<li class="reveal">Start with frameworks you already know (OODA, Cynefin)</li>
+<li class="reveal">Start with frameworks for people you already know. Check out (OODA, Cynefin)</li>
 <li class="reveal">Skills codify problem solving — build them as you go, they compound</li>
 <li class="reveal">Security and trust are enablers, not blockers — bake them in</li>
 <li class="reveal">Orchestrate the humans AND the agents — the party works together</li>
 <li class="reveal">The agent is part of the party, not a replacement for it</li>
-<li class="reveal">Underpromise, deliver — then iterate. The brownian ratchet is your friend.</li>
+<li class="reveal">Underpromise, deliver — then iterate. Don&#x27;t overdrive your</li>
 </ul>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">headlights. The brownian ratchet is your friend.</p>
 
 </div>
 <div class="split-image">
@@ -942,7 +921,7 @@
 </div>
 </div>
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;Most important advice in software: underpromise, deliver.&quot; — Tom Conrad</blockquote></div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Most important advice in software: underpromise, deliver.&quot; — maybe Tom Conrad</blockquote></div>
 <span class="slide-footer">14</span>
 </section>
 
