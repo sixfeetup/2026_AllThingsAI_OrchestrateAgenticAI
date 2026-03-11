@@ -5,10 +5,16 @@ DIST    := ../dist/deck.html
 BUILD   := build.py
 IMAGES  := ../images
 
+# Web-optimised JPEGs: 1400px wide, quality 80
+WEB_WIDTH := 1400
+WEB_QUAL  := 80
+PNG_SRCS  := $(wildcard $(IMAGES)/*.png)
+WEB_JPGS  := $(patsubst $(IMAGES)/%.png,$(IMAGES)/%_web.jpg,$(PNG_SRCS))
+
 # Pass --root to build.py when ROOT is set (e.g. make build ROOT=/some/path)
 BUILD_FLAGS := $(if $(ROOT),--root $(ROOT))
 
-.PHONY: build open clean reset-content watch list deploy serve
+.PHONY: build open clean reset-content watch list deploy serve web-images
 
 ## build — render content/*.md into output/deck.html + dist/deck.html
 build: $(OUTPUT)
@@ -54,6 +60,12 @@ serve: $(OUTPUT)
 watch:
 	@echo "Watching content/ for changes..."
 	fswatch -o content/ $(BUILD) | xargs -n1 -I{} make build
+
+## web-images — generate _web.jpg variants from source PNGs (1400px wide)
+web-images: $(WEB_JPGS)
+
+$(IMAGES)/%_web.jpg: $(IMAGES)/%.png
+	sips -s format jpeg -s formatOptions $(WEB_QUAL) --resampleWidth $(WEB_WIDTH) $< --out $@
 
 ## list — show slide order
 list:
