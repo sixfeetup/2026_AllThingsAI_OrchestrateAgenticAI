@@ -170,12 +170,16 @@ def validate_images(
             refs.append((m.group(1), f"line reference"))
 
         for raw_ref, source in refs:
-            # Refs use ../images/FILENAME — images live at REPO_ROOT/images/
+            # Refs use ../images/FILENAME — images live at presentation/images/
             # (the build rewrites src paths in output HTML, so ../images/ from
             # content/ doesn't resolve literally on disk).
             m_img = re.match(r"\.\./images/(.+)$", raw_ref)
             if m_img:
-                ref_path = (REPO_ROOT / "images" / m_img.group(1)).resolve()
+                pres_dir = REPO_ROOT / "presentation"
+                ref_path = (pres_dir / "images" / m_img.group(1)).resolve()
+                if not ref_path.exists():
+                    # Fallback to legacy repo-root images/ location
+                    ref_path = (REPO_ROOT / "images" / m_img.group(1)).resolve()
             else:
                 ref_path = (CONTENT_DIR / raw_ref).resolve()
 
