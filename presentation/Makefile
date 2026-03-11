@@ -3,7 +3,7 @@ CONTENT := $(sort $(wildcard content/*.md))
 OUTPUT  := output/deck.html
 DIST    := ../dist/deck.html
 BUILD   := build.py
-IMAGES  := ../images
+IMAGES  := images
 
 # Web-optimised JPEGs: 1400px wide, quality 80
 WEB_WIDTH := 1400

@@ -1,4 +1,4 @@
-# Presentation: The Agentic Quest
+# *Agent of Legends*: the orchestrators apprentice
 
 Slide deck for AllThings AI 2026. Content lives in markdown,
 built into a single HTML file.
@@ -31,10 +31,14 @@ footer: "05"                  # slide number shown bottom-right
 
 # Slide Title
 
-> "Blockquote text"
-
 - Bullet one
 - Bullet two
+
+> "Quote"
+
+???
+
+presenter notes
 
 :::grid
 :::card Card Title

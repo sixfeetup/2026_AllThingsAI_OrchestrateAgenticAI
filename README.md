@@ -52,3 +52,5 @@ The talk description/pitch:
 >   plus direct parallels for engineering workflows.  Walk away with an
 >   actionable playbook to make AI reliable, auditable, and ready for
 >   high-stakes enterprise use.
+
+https://super-tribble-8w5zrvy.pages.github.io/

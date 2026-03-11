@@ -3,7 +3,7 @@ type: content-slide
 image: ../images/kent-v-genie-1_web.jpg
 image_alt: Kent Beck wrestling the genie — taming the new power
 image_layout: split
-footer: "2"
+footer: "02"
 ---
 
 # Agents: Do I Need One?
