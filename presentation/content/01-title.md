@@ -2,10 +2,15 @@
 type: title-slide
 ---
 
-*Six Feet Up*
+*Agents of Legend*
 
-# Agents of Legend: The Orchestrator Dilemma
+# The Orchestrator Dilemma
 
 _Context, Checklists, and No-Miss Reviews_
 
-_Calvin Hendryx-Parker — AllThings AI, 2026_
+_Calvin Hendryx-Parker — Six Feet Up_
+
+_Built 2026-03-10_
+
+> “The secret we should never let the gamerunners know is that they don't need any rules.”
+> ― Gary Gygax

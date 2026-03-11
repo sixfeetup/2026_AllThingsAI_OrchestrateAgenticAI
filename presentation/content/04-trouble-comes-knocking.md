@@ -1,15 +1,19 @@
 ---
 type: dark-slide
-footer: "03"
+footer: "3"
 ---
 
-# Trouble Comes Knocking
+# Trouble Comes Knocking: the Setup
 
-> You are the COO of a crack consulting company. You just won a discovery contract with L&LL LLC (Lord and Lady LARPsalot) — a rapidly growing events company specializing in live action role playing.
+_A plausible if confabulated situation_
 
-- Online marketplace (larpsy.gold) + bitrotting events site (larpsalot.party)
-- Migration off Hurokee (sunsetting PaaS) and relaunch
-- Then your phone blows up: Hasbro changed the OGL
-- Tasha Tiamata needs to know ASAP what content must come down
+A Crisis is just an Opportunity (to use agents)
 
-_Time to get the party together._
+???
+You are the COO of a crack consulting company. You just won a discovery contract with L&LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.
+
+They run https://www.larpsy.gold (artisan marketplace) and https://larpsalot.party (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.
+
+They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on
+
+Then L&L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.
