@@ -8,7 +8,7 @@ footer: "5"
 
 # The Newest Party Member
 
-![@@metalbard description](@@img:agent-at-home-0)
+_Meet Ralph — warforged bard-warlock, eager to please, occasionally chaotic_
 
 _the team has some concerns_
 

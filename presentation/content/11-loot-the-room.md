@@ -10,8 +10,6 @@ footer: "10"
 
 Spoils to victor
 
-@@img: trunk full of loot
-
 
 
 ???

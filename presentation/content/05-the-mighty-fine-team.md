@@ -10,7 +10,6 @@ _The other nondeterministic agents to orchestrate_
 This quest was already agentic — staffed with humans who now will
 coordinate with digital agents for success.
 
-@@enumerate and create subslides for business & RPG w/ images
 - BizOps & Product: The Cleric and the Bard — keep the business healthy and singing
 - Product Engineering: Magic users of CAPEX — wizards, sorcerers, artificers, druids
 - Technical Operations (SRE, DevOps, Platform): OPEX bruisers — rangers, barbarians, fighters

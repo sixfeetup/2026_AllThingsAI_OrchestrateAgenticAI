@@ -10,7 +10,9 @@ footer: "13"
 
 ## The Future Is Legion
 
-@@img:
+- Multi-agent orchestration at scale
+- Skills as composable building blocks
+- Agents as a medium — with their own message
 
 > "The medium is the message."
 > — Marshall McLuhan
