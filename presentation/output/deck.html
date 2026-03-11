@@ -536,9 +536,22 @@
             color: var(--sfu-teal-deep);
         }
 
-        .dark-slide .quote {
+        .dark-slide .quote,
+        .title-slide .quote,
+        .divider-slide .quote {
             border-right-color: var(--sfu-teal-light);
             color: var(--sfu-ice);
+        }
+
+        .quote a {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: var(--sfu-teal);
+            text-underline-offset: 2px;
+        }
+
+        .quote a:hover {
+            color: var(--sfu-teal-light);
         }
 
         .quote-attribution {
@@ -979,35 +992,38 @@
          ═══════════════════════════════════════════ -->
 
     <!-- 01-title.md -->
-    <section class="slide title-slide" aria-label="The Orchestrator Dilemma">
+    <section class="slide title-slide" aria-label="*Agent of Legends*: the orchestrators apprentice">
 <div class="brand-mark decorative"></div>
 <div class="slide-content">
-<p class="tagline reveal">Agents of Legend</p>
-<h1 class="reveal">The Orchestrator Dilemma</h1>
-<p class="tagline reveal">Context, Checklists, and No-Miss Reviews</p>
-<p class="tagline reveal">Calvin Hendryx-Parker — Six Feet Up</p>
-<p class="tagline reveal">Built 2026-03-10</p>
+<h1 class="reveal">*Agent of Legends*: the orchestrators apprentice</h1>
+<p class="subtitle reveal">Context, Checklists, and No-Miss Reviews</p>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">A journey from useful to industrial.</p>
+<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<p class="subtitle reveal">Built 2026-03-11</p>
 
+<blockquote class="quote reveal">&quot;It will be like kubernetes, but for agents, I said.&quot; -- Steve Yegge, <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04" target="_blank" rel="noopener">&quot;Welcome to Gas Town&quot;</a></blockquote>
+<blockquote class="quote reveal">&quot;Actually, I am hoping we can get rid of orchestration all together&quot; -- Brian Grant talking about kubernetes,  to Whit Morriss, buffet,  Kubernetes launch party PDX 2015</blockquote>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">“The secret we should never let the gamerunners know is that they don&#x27;t need any rules.” ― Gary Gygax</blockquote></div>
-<aside class="speaker-notes">Welcome everyone. I&#x27;m Calvin Hendryx-Parker, co-founder of Six Feet Up.<br>Today we&#x27;re going on a quest — a D&amp;D-flavored journey through<br>agentic AI orchestration. If you&#x27;ve ever tried to get an AI agent<br>to do real work and watched it go sideways, this talk is for you.<br>We&#x27;ll use a fictional consulting scenario to explore real patterns:<br>context engineering, checklists, orchestration styles, and how to<br>make agents reliable enough for high-stakes work.<br>Two live demos. A playbook you can take home. Let&#x27;s roll.</aside>
+<aside class="speaker-notes">Hello Allthing AI<br>Orechestration<br>- evolving landscape<br>- orchestration is something humans do: managing teams, programming concurrency and parallelization, distributed computing, and now AI bots<br>- It is a step in creating more complex system that do bigger things<br>- Often it is because things are too fiddly to coordinate on there own. They require our input.<br>- Often the non-deterministic nature of a process makes it require<br>  orchestration, and therefore orchestration is non-deterministic.</aside>
 </section>
 
     <!-- 02-backstory-magic.md -->
-    <section class="slide dark-slide" aria-label="The Backstory Magic">
+    <section class="slide dark-slide" aria-label="The Practical Magic">
 <div class="slide-content">
-<h2 class="reveal">The Backstory Magic</h2>
+<h2 class="reveal">The Practical Magic</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Working together for outcomes and incomes.</p>
+<h3 class="reveal">We have things to get done</h3>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Practical applications. People and AI. Working together for outcomes and incomes.</p>
 </div>
 <div class="split-image">
 <img src="../../images/the-team-in-the-office_web.jpg" alt="The party gathers — business as usual meets the quest" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
-<aside class="speaker-notes">Business as usual can feel more like an epic quest into Mordor than a<br>stock photo of smiling people around a laptop.<br>One second we are planning a cheery offsite, the next it is very dark<br>and we might be eaten by a grue.<br>Whether good news or bad, adapting quickly requires tools and experience.<br>&gt; &quot;We become what we behold. We shape our tools and then our tools shape us.&quot;<br>&gt; — Marshall McLuhan</aside>
-<span class="slide-footer">1</span>
+<aside class="speaker-notes">- there is nothing that guarantees business as usual is at all usual.<br>  Business as usual can feel more like an epic quest into Mordor than<br>  a stock photo of smiling people around a laptop.<br>- One second we are planning a cheery offsite, the next it is very<br>  dark and we might be eaten by a grue.<br>- Whether good news or bad, adapting quickly requires tools and experience.<br>- We are going to explore orchestration through the lens of business<br>  problem and the metaphore of a fantasy table top game. This gives us<br>  an opportunity to explore how different roles are impacted by the<br>  use of AI agents and how they contribute and benefit as the human<br>  element of agent orchestration.</aside>
+<span class="slide-footer">0</span>
 </section>
 
     <!-- 03-do-i-need-one.md -->
@@ -1031,19 +1047,25 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;We&#x27;re in the &#x27;horseless carriage&#x27; stage of coding genies.&quot; — Kent Beck</blockquote></div>
-<aside class="speaker-notes">This is the slide for the skeptics in the room — and you should be skeptical.<br>Why: because the work we do is full of non-deterministic, multi-step tasks<br>that don&#x27;t reduce to a single API call. Review this contract. Plan this<br>migration. Audit this codebase. These are judgment-heavy workflows.<br>What: agents are LLM-driven workers that can plan a sequence of actions,<br>execute them with tools, and validate their own output. Not chatbots —<br>workers.<br>How: the magic is in skills (reusable prompt+tool bundles), context<br>engineering (giving the agent the right information at the right time),<br>and orchestration (coordinating multiple agents and humans).<br>When: start with one agent, one repetitive task, one tight feedback loop.<br>Don&#x27;t boil the ocean. Kent Beck&#x27;s quote nails it — we&#x27;re early. Treat<br>agents like a junior team member: trust but verify.</aside>
-<span class="slide-footer">2</span>
+<span class="slide-footer">1</span>
 </section>
 
     <!-- 04-trouble-comes-knocking.md -->
-    <section class="slide dark-slide" aria-label="Trouble Comes Knocking: the Setup">
+    <section class="slide dark-slide" aria-label="Trouble Comes Knocking: an example">
 <div class="slide-content">
-<h2 class="reveal">Trouble Comes Knocking: the Setup</h2>
+<h2 class="reveal">Trouble Comes Knocking: an example</h2>
+<div class="split-layout reveal">
+<div class="split-text">
 <p class="subtitle reveal">A plausible if confabulated situation</p>
 <p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">A Crisis is just an Opportunity (to use agents)</p>
 </div>
-<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run &lt;https://www.larpsy.gold&gt; (artisan marketplace) and &lt;https://larpsalot.party&gt; (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
-<span class="slide-footer">3</span>
+<div class="split-image">
+<img src="../../images/party-plans.jpg" alt="The party plans their approach" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+</div>
+</div>
+</div>
+<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run https://www.larpsy.gold (artisan marketplace) and https://larpsalot.party (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
+<span class="slide-footer">2</span>
 </section>
 
     <!-- 04.1-what-do-we-know.md -->
@@ -1059,8 +1081,7 @@
 </ul>
 <p class="subtitle reveal">The clock is ticking. Let&#x27;s see what we&#x27;re working with.</p>
 </div>
-<aside class="speaker-notes">This is the &quot;quest inventory&quot; moment — what tools and artifacts do we<br>actually have to work with?<br>Tasha has handed over a tarball. The buildpack tells us how the apps<br>are built and deployed. The repos give us the codebase. The database<br>dump is the state of the world. And the OGL content dump is the thing<br>that&#x27;s on fire right now.<br>Key point: before you throw agents at a problem, you need to understand<br>the artifacts. Context engineering starts here — what goes into the<br>agent&#x27;s context window, in what order, and with what framing.<br>Transition: now that we know what we&#x27;re working with, let&#x27;s talk about<br>how we actually approach it with agents.</aside>
-<span class="slide-footer">6</span>
+<span class="slide-footer">3</span>
 </section>
 
     <!-- 05-the-mighty-fine-team.md -->
@@ -1113,8 +1134,7 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;The medium is the message.&quot; — Marshall McLuhan</blockquote></div>
-<aside class="speaker-notes">Pause here. This is a Critical Role reference — the moment where the<br>DM asks the player &quot;how do you want to do this?&quot; after a killing blow.<br>We&#x27;ve introduced the scenario, the team, and the agent. Now the question<br>is: how do we actually put them together?<br>The audience should be thinking about their own teams right now. The<br>D&amp;D class metaphor is playful, but the point is real: agents are not<br>all the same, and neither are the humans coordinating with them. The<br>orchestration challenge is matching capabilities to tasks.<br>Transition: we&#x27;re about to jump into the first live demo. The team is<br>assembled. Time to roll for initiative.</aside>
-<span class="slide-footer">7</span>
+<span class="slide-footer">6</span>
 </section>
 
     <!-- 09-join-the-fray.md -->
@@ -1134,8 +1154,7 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Roll for initiative!&quot;</blockquote></div>
-<aside class="speaker-notes">DEMO TIME — the OGL content crisis.<br>Walk through the scenario out loud: L&amp;LL faces a dual existential threat.<br>If they keep OGL content, Hasbro may sue. If they pull it all blindly,<br>they gut their platform. We need to know exactly what&#x27;s affected.<br>Demo flow:<br>1. Sera and Finn (BizOps) frame the problem — the cleric and bard<br>   aren&#x27;t scared of the command line<br>2. Ranger Kyle stands up an isolated database for the analysis<br>3. COO Mira fires up the coding agent<br>4. Agent searches PDFs for protected names (places, items, characters)<br>5. Cross-references against L&amp;LL&#x27;s content database<br>6. Reports the damage — what percentage is at risk<br>7. Generates replacement names where needed<br>Key points to hit: isolation (separate DB), context engineering (targeted<br>PDF search, not &quot;review everything&quot;), and human-in-the-loop (Mira drives,<br>agent executes).<br>If demo hiccups: fall back to prebaked output in demo-assets/prebaked/.</aside>
-<span class="slide-footer">8</span>
+<span class="slide-footer">7</span>
 </section>
 
     <!-- 10-skills-in-action.md -->
@@ -1147,7 +1166,7 @@
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Engage with the bigger picture... Are you not just getting a task done, but engaging with the broader universe of tasks you&#x27;re embedded in?&quot; — Matt Beane, The Skill Code</blockquote></div>
 <aside class="speaker-notes">- Create a skill live to use &quot;say&quot; for audio notifications when tasks complete<br>- Separate databases for each step — isolation as a feature<br>- Skills compound: each one you build makes the next task faster<br>- The agent learns your patterns; you learn its capabilities</aside>
-<span class="slide-footer">9</span>
+<span class="slide-footer">8</span>
 </section>
 
     <!-- 11-loot-the-room.md -->
@@ -1164,6 +1183,32 @@
 </div>
 </div>
 <aside class="speaker-notes">L&amp;LL is psyched. The team has landed more work — a database migration.<br>But now we face more complex tasks, with greater peril. Time to step<br>back and consider what frameworks we already apply to<br>non-deterministic business processes.<br>- Cynefin: is this clear, complicated, complex, or chaotic?<br>- OODA: observe, orient, decide, act — then loop<br>- Orchestrate the agents AND the humans</aside>
+<span class="slide-footer">9</span>
+</section>
+
+    <!-- 11.5-eventual-consistency.md -->
+    <section class="slide content-slide" aria-label="The Brownian Ratchet">
+<div class="slide-content">
+<h2 class="reveal">The Brownian Ratchet</h2>
+<div class="split-layout reveal">
+<div class="split-text">
+<p class="subtitle reveal">Eventual consistency as a strategy</p>
+<ul class="bullet-list">
+<li class="reveal">Testing validity &gt; initial correctness</li>
+<li class="reveal">Each iteration catches what the last missed</li>
+<li class="reveal">Agent proposes → tests validate → agent fixes → loop</li>
+<li class="reveal">Like TDD, but the agent writes both sides</li>
+<li class="reveal">Converges because the ratchet only moves forward</li>
+</ul>
+
+</div>
+<div class="split-image">
+<img src="../../images/sorcerors-apprentice-grok.jpg" alt="The sorcerer&#x27;s apprentice — iteration as a feature" class="slide-image">
+</div>
+</div>
+</div>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Make it work, make it right, make it fast.&quot; — Kent Beck</blockquote></div>
+<aside class="speaker-notes">The key insight: we don&#x27;t need the agent to be right the first time.<br>We need it to be right eventually, with proof.<br>The brownian ratchet pattern:<br>1. Agent generates code/content<br>2. Automated checks run (tests, linting, type checking, security scans)<br>3. Failures feed back as context for the next attempt<br>4. Each pass fixes something — the ratchet clicks forward<br>5. When all checks pass, we have both the result AND the proof it works<br>This is not wishful thinking — it&#x27;s the same pattern CI/CD uses.<br>The difference is the agent closes the loop automatically.<br>Real example: multiclaude swarm generates 5 PRs, each with TDD.<br>3 pass immediately. 2 fail tests, get auto-fixed on retry.<br>All 5 land with green CI. That&#x27;s eventual consistency in practice.</aside>
 <span class="slide-footer">10</span>
 </section>
 
@@ -1218,9 +1263,9 @@
 <li class="reveal">Fire up speckit: create specs from findings, clarify, plan</li>
 </ul>
 
+<blockquote class="quote reveal">&quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote>
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; — DevSecOps proverb  &quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
-<aside class="speaker-notes">DEMO TIME — contract analysis and adversarial review.<br>This demo shows the full stack of agentic orchestration:<br>1. Ingest the consulting contract PDF — agent generates visual<br>   explainers and a review checklist automatically<br>2. Security as a first-class requirement: show the security skills<br>   (risk review, guardrails) that are baked into the workflow<br>3. Swarm with /c^2 — fan out to Codex and Gemini for adversarial<br>   review. Multiple models catch what a single model misses.<br>4. Show the visual explainers: project overlay, risk report, and<br>   adversarial findings side by side<br>5. Fire up speckit: turn findings into actionable specs, clarify<br>   ambiguities, generate a plan<br>Key points: this is multi-agent, multi-model orchestration. Security<br>isn&#x27;t an afterthought — it&#x27;s a skill the agent uses automatically.<br>The Gygax quote lands here: the trap isn&#x27;t the contract, it&#x27;s<br>skipping the review.<br>If demo hiccups: prebaked outputs in demo-assets/prebaked/ cover<br>contract-review-checklist and ogl-crisis-report.</aside>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; Somebody??</blockquote></div>
 <span class="slide-footer">12</span>
 </section>
 
@@ -1265,7 +1310,7 @@
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Plans are useless, but planning is indispensable.&quot; — Dwight D. Eisenhower</blockquote></div>
 <aside class="speaker-notes">This is your Monday morning starter kit. You don&#x27;t need to adopt everything at once.<br>Pick the workflow that causes the most pain, build one skill around it,<br>and let it compound from there. The playbook is also available as a<br>standalone page linked from the repo.</aside>
-<span class="slide-footer">15</span>
+<span class="slide-footer">14</span>
 </section>
 
     <!-- 15-closing.md -->
@@ -1291,8 +1336,7 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Most important advice in software: underpromise, deliver.&quot; — maybe Tom Conrad</blockquote></div>
-<aside class="speaker-notes">Bring it home. These are the six things to remember:<br>1. You already have frameworks for orchestrating nondeterministic work —<br>   OODA and Cynefin apply directly to agent orchestration.<br>2. Skills are the compound interest of agent work — every skill you<br>   build makes the next task faster and more reliable.<br>3. Security and trust are not overhead — they&#x27;re what let you go faster.<br>   Bake them in from the start.<br>4. Orchestrate everybody — agents and humans are both part of the party.<br>   Conway&#x27;s Law applies to agent teams too.<br>5. The agent is a party member, not a replacement. It augments the team.<br>6. Underpromise, deliver, iterate. The brownian ratchet pattern means<br>   you don&#x27;t need perfection on the first pass — you need convergence.<br>Callback to the journey: we started with a crisis, assembled a party,<br>ran two missions, and leveled up our orchestration along the way.<br>Pause. Let the closing image and quote land. Then transition to the<br>playbook slide or straight to questions.</aside>
-<span class="slide-footer">14</span>
+<span class="slide-footer">15</span>
 </section>
 
     <!-- 16-questions.md -->

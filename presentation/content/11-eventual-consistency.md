@@ -3,7 +3,7 @@ type: content-slide
 image: ../images/sorcerors-apprentice-grok.jpg
 image_alt: The sorcerer's apprentice — iteration as a feature
 image_layout: split
-footer: "12"
+footer: "11"
 ---
 
 # The Brownian Ratchet

@@ -1,6 +1,6 @@
 ---
 type: dark-slide
-footer: "8"
+footer: "08"
 ---
 
 # Join the fray
