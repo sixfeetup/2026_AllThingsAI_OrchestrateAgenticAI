@@ -5,9 +5,6 @@ footer: "8"
 
 # Join the fray
 
-![a d20, also a natural 20](img:shiny and metallic)
-
-
 _Demo: the OGL content crisis_
 
 - Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat — lose content or face legal action
