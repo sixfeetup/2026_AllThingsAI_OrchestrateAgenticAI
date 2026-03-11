@@ -3,7 +3,7 @@ type: content-slide
 image: ../images/kent-v-genie-2_web.jpg
 image_alt: From wrestling the wheel to flying the carpet — trust earned
 image_layout: split
-footer: "13"
+footer: "14"
 ---
 
 # Jetpacks for everybody
