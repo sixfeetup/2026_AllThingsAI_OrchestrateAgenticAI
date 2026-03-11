@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Execution Plan — Agents of Legend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   THEME: Paper & Ink
+   Warm cream, terracotta, sage, informal
+   ============================================ */
+:root {
+  /* Paper tones */
+  --paper:          #f5f0e8;
+  --paper-warm:     #f0e9dc;
+  --paper-dark:     #e8dfd0;
+  --ink:            #2c2416;
+  --ink-light:      #5a4e3c;
+  --ink-faint:      #8a7e6c;
+
+  /* Accents */
+  --terracotta:     #c4623a;
+  --terracotta-light: #d88a6a;
+  --terracotta-pale: #f0d4c4;
+  --sage:           #6b8f71;
+  --sage-light:     #8db592;
+  --sage-pale:      #d4e6d6;
+  --sage-dark:      #4a6b4f;
+  --ochre:          #c9a84c;
+  --ochre-pale:     #f0e4b8;
+  --slate:          #5c6b7a;
+
+  /* Risk colors */
+  --risk-low:       var(--sage);
+  --risk-low-bg:    var(--sage-pale);
+  --risk-med:       var(--ochre);
+  --risk-med-bg:    var(--ochre-pale);
+  --risk-high:      var(--terracotta);
+  --risk-high-bg:   var(--terracotta-pale);
+
+  /* Typography */
+  --font-body:  'IBM Plex Sans', -apple-system, sans-serif;
+  --font-mono:  'IBM Plex Mono', 'Menlo', monospace;
+
+  /* Spacing */
+  --sidebar-width: 220px;
+  --content-max:   900px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:          #1c1a16;
+    --paper-warm:     #242018;
+    --paper-dark:     #2c2820;
+    --ink:            #e8dfd0;
+    --ink-light:      #b8ad9c;
+    --ink-faint:      #7a7060;
+
+    --terracotta:     #d88a6a;
+    --terracotta-light: #e4a88a;
+    --terracotta-pale: #3a2820;
+    --sage:           #8db592;
+    --sage-light:     #a8d0ac;
+    --sage-pale:      #1e2e20;
+    --sage-dark:      #6b9b70;
+    --ochre:          #d4b860;
+    --ochre-pale:     #2e2a18;
+    --slate:          #8a9aaa;
+  }
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   LAYOUT: Sidebar + Main
+   ============================================ */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sticky sidebar TOC */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--paper-warm);
+  border-right: 1px solid var(--paper-dark);
+  overflow-y: auto;
+  padding: 2rem 1rem;
+  z-index: 100;
+}
+
+.sidebar-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--paper-dark);
+}
+
+.toc-list {
+  list-style: none;
+}
+
+.toc-list li {
+  margin-bottom: 0.15rem;
+}
+
+.toc-list a {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--ink-light);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s var(--ease);
+  border-left: 2px solid transparent;
+}
+
+.toc-list a:hover {
+  background: var(--paper-dark);
+  color: var(--ink);
+}
+
+.toc-list a.active {
+  background: var(--terracotta-pale);
+  color: var(--terracotta);
+  border-left-color: var(--terracotta);
+  font-weight: 500;
+}
+
+.toc-list .toc-section {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.75rem 0.6rem 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Main content */
+.main {
+  flex: 1;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 3rem 2.5rem 6rem;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+h1 .subtitle {
+  display: block;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--ink-faint);
+  margin-top: 0.3rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--terracotta);
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--paper-dark);
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: var(--ink-light);
+}
+
+strong { color: var(--ink); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--paper-dark);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  color: var(--terracotta);
+}
+
+/* ============================================
+   SECTION: Header
+   ============================================ */
+.header-block {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--terracotta-pale);
+}
+
+.header-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  background: var(--paper-warm);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border: 1px solid var(--paper-dark);
+}
+
+.meta-tag .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
+}
+
+/* ============================================
+   SECTION: Timeline
+   ============================================ */
+.timeline-container {
+  margin: 1.5rem 0 2rem;
+  background: var(--paper-warm);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--paper-dark);
+}
+
+.timeline-bar {
+  position: relative;
+  height: 56px;
+  background: var(--paper-dark);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.timeline-segment {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  cursor: default;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+
+.timeline-segment:last-child { border-right: none; }
+
+.timeline-segment .seg-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 4px;
+}
+
+.timeline-segment .seg-time {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.75);
+  margin-top: 2px;
+}
+
+.timeline-segment.talk    { background: var(--slate); }
+.timeline-segment.demo1   { background: var(--sage-dark); }
+.timeline-segment.demo2   { background: var(--terracotta); }
+.timeline-segment.demo3   { background: var(--ochre); opacity: 0.95; }
+.timeline-segment.closing { background: var(--ink-faint); }
+
+.timeline-segment:hover {
+  opacity: 0.85;
+  transform: scaleY(1.05);
+}
+
+.timeline-legend {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--ink-light);
+}
+
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-swatch.talk    { background: var(--slate); }
+.legend-swatch.demo1   { background: var(--sage-dark); }
+.legend-swatch.demo2   { background: var(--terracotta); }
+.legend-swatch.demo3   { background: var(--ochre); }
+.legend-swatch.closing { background: var(--ink-faint); }
+
+/* ============================================
+   SECTION: Risk Matrix
+   ============================================ */
+.risk-matrix {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--paper-dark);
+}
+
+.risk-matrix th {
+  background: var(--paper-warm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--paper-dark);
+}
+
+.risk-matrix td {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--paper-dark);
+  vertical-align: top;
+  color: var(--ink-light);
+}
+
+.risk-matrix tr:last-child td { border-bottom: none; }
+
+.risk-matrix .demo-name {
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.risk-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.risk-badge.low  { background: var(--risk-low-bg); color: var(--risk-low); }
+.risk-badge.med  { background: var(--risk-med-bg); color: var(--risk-med); }
+.risk-badge.high { background: var(--risk-high-bg); color: var(--risk-high); }
+
+/* ============================================
+   SECTION: Dependency Diagram
+   ============================================ */
+.dep-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+@media (max-width: 700px) {
+  .dep-grid { grid-template-columns: 1fr; }
+}
+
+.dep-card {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-dark);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.dep-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.dep-card-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dep-card-title .card-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.dep-card.demo1 .card-icon { background: var(--sage-dark); }
+.dep-card.demo2 .card-icon { background: var(--terracotta); }
+.dep-card.demo3 .card-icon { background: var(--ochre); }
+
+.dep-list {
+  list-style: none;
+}
+
+.dep-list li {
+  font-size: 0.8rem;
+  color: var(--ink-light);
+  padding: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px dotted var(--paper-dark);
+}
+
+.dep-list li:last-child { border-bottom: none; }
+
+.dep-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dep-tag.online  { background: var(--terracotta-pale); color: var(--terracotta); }
+.dep-tag.offline { background: var(--sage-pale); color: var(--sage); }
+
+/* ============================================
+   SECTION: Fallback Decision Tree
+   ============================================ */
+.fallback-tree {
+  margin: 1.5rem 0;
+}
+
+.tree-demo {
+  margin-bottom: 1.5rem;
+}
+
+.tree-demo-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tree-nodes {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.tree-nodes::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--paper-dark);
+}
+
+.tree-node {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  font-size: 0.82rem;
+}
+
+.tree-node::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--paper-dark);
+}
+
+.tree-node::after {
+  content: '';
+  position: absolute;
+  left: calc(-1.5rem - 4px);
+  top: calc(50% - 4px);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-faint);
+  background: var(--paper);
+}
+
+.tree-node.decision::after { border-color: var(--terracotta); background: var(--terracotta-pale); }
+.tree-node.action::after   { border-color: var(--sage); background: var(--sage-pale); }
+.tree-node.final::after    { border-color: var(--ochre); background: var(--ochre-pale); }
+
+.tree-node .node-label {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.tree-node .node-action {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.tree-node .arrow {
+  color: var(--terracotta);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  margin: 0 0.3rem;
+}
+
+/* ============================================
+   SECTION: Setup Checklist
+   ============================================ */
+.checklist {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.checklist li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 2rem;
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  border-bottom: 1px dotted var(--paper-dark);
+}
+
+.checklist li:last-child { border-bottom: none; }
+
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(50% - 7px);
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 3px;
+  background: var(--paper);
+}
+
+.checklist .check-heading {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-left: 0;
+  margin-top: 1rem;
+  border-bottom: none;
+}
+
+.checklist .check-heading::before { display: none; }
+
+/* ============================================
+   SECTION: Pre-bake vs Live Table
+   ============================================ */
+.strategy-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--paper-dark);
+}
+
+.strategy-table th {
+  background: var(--paper-warm);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--paper-dark);
+}
+
+.strategy-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--paper-dark);
+  color: var(--ink-light);
+}
+
+.strategy-table tr:last-child td { border-bottom: none; }
+
+.strat-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+}
+
+.strat-badge.prebake { background: var(--terracotta-pale); color: var(--terracotta); }
+.strat-badge.live    { background: var(--sage-pale); color: var(--sage); }
+.strat-badge.hybrid  { background: var(--ochre-pale); color: var(--ochre); }
+
+/* ============================================
+   ANIMATIONS (staggered)
+   ============================================ */
+.animate-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+.animate-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-in:nth-child(1) { transition-delay: 0.05s; }
+.animate-in:nth-child(2) { transition-delay: 0.1s; }
+.animate-in:nth-child(3) { transition-delay: 0.15s; }
+.animate-in:nth-child(4) { transition-delay: 0.2s; }
+.animate-in:nth-child(5) { transition-delay: 0.25s; }
+.animate-in:nth-child(6) { transition-delay: 0.3s; }
+.animate-in:nth-child(7) { transition-delay: 0.35s; }
+.animate-in:nth-child(8) { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================
+   INFO CALLOUT
+   ============================================ */
+.callout {
+  background: var(--paper-warm);
+  border-left: 3px solid var(--terracotta);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+  color: var(--ink-light);
+}
+
+.callout.sage { border-left-color: var(--sage); }
+
+.callout strong { color: var(--ink); }
+
+/* ============================================
+   MOBILE
+   ============================================ */
+@media (max-width: 800px) {
+  .sidebar {
+    display: none;
+  }
+  .main {
+    padding: 2rem 1.25rem 4rem;
+  }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.2rem; }
+  .dep-grid { grid-template-columns: 1fr; }
+  .timeline-segment .seg-label { font-size: 0.55rem; }
+}
+
+/* Mobile TOC toggle */
+.mobile-toc-toggle {
+  display: none;
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  color: #fff;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 800px) {
+  .mobile-toc-toggle { display: flex; align-items: center; justify-content: center; }
+  .sidebar.mobile-open {
+    display: block;
+    position: fixed;
+    left: 0; top: 0;
+    width: 260px;
+    height: 100vh;
+    z-index: 150;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ════════════════════════════════════════════
+     SIDEBAR TOC
+     ════════════════════════════════════════════ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">Demo Plan</div>
+  <ul class="toc-list">
+    <li><a href="#overview" class="active">Overview</a></li>
+    <li class="toc-section">Timeline</li>
+    <li><a href="#timeline">30-Min Timeline</a></li>
+    <li class="toc-section">Risk</li>
+    <li><a href="#risk-matrix">Risk Matrix</a></li>
+    <li><a href="#prebake">Pre-bake Strategy</a></li>
+    <li class="toc-section">Demos</li>
+    <li><a href="#demo1">Demo 1: OGL Crisis</a></li>
+    <li><a href="#demo2">Demo 2: Contract Review</a></li>
+    <li><a href="#demo3">Demo 3: Jetpacks</a></li>
+    <li class="toc-section">Dependencies</li>
+    <li><a href="#dependencies">Dependency Map</a></li>
+    <li><a href="#network">Network Analysis</a></li>
+    <li class="toc-section">Fallbacks</li>
+    <li><a href="#fallbacks">Decision Trees</a></li>
+    <li><a href="#everything-fails">Everything Fails</a></li>
+    <li class="toc-section">Prep</li>
+    <li><a href="#setup-checklist">Setup Checklist</a></li>
+    <li><a href="#rehearsal">Rehearsal Plan</a></li>
+  </ul>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     MAIN CONTENT
+     ════════════════════════════════════════════ -->
+<main class="main">
+
+<!-- Header -->
+<div class="header-block animate-in" id="overview">
+  <h1>
+    Demo Execution Plan
+    <span class="subtitle">Agents of Legend: The Orchestrator Dilemma</span>
+  </h1>
+  <div class="header-meta">
+    <span class="meta-tag"><span class="dot"></span> 30 min talk</span>
+    <span class="meta-tag"><span class="dot"></span> 3 live demos</span>
+    <span class="meta-tag"><span class="dot"></span> 16 min demo time</span>
+    <span class="meta-tag"><span class="dot"></span> All Things AI 2026</span>
+  </div>
+</div>
+
+<!-- ─── TIMELINE ─── -->
+<h2 id="timeline">30-Minute Timeline</h2>
+<p>The talk divides into narrative segments (slate) and live demo segments (colored). Demos consume just over half the total time.</p>
+
+<div class="timeline-container animate-in">
+  <div class="timeline-bar">
+    <!-- 8 min intro = 26.7% -->
+    <div class="timeline-segment talk" style="left:0%; width:26.7%;">
+      <span class="seg-label">Intro & Setup</span>
+      <span class="seg-time">8 min</span>
+    </div>
+    <!-- 6 min demo 1 = 20% -->
+    <div class="timeline-segment demo1" style="left:26.7%; width:20%;">
+      <span class="seg-label">Demo 1: OGL</span>
+      <span class="seg-time">6 min</span>
+    </div>
+    <!-- 3 min transition = 10% -->
+    <div class="timeline-segment talk" style="left:46.7%; width:10%;">
+      <span class="seg-label">Frameworks</span>
+      <span class="seg-time">3 min</span>
+    </div>
+    <!-- 6 min demo 2 = 20% -->
+    <div class="timeline-segment demo2" style="left:56.7%; width:20%;">
+      <span class="seg-label">Demo 2: Contract</span>
+      <span class="seg-time">6 min</span>
+    </div>
+    <!-- 4 min demo 3 = 13.3% -->
+    <div class="timeline-segment demo3" style="left:76.7%; width:13.3%;">
+      <span class="seg-label">Demo 3: Jetpacks</span>
+      <span class="seg-time">4 min</span>
+    </div>
+    <!-- 3 min closing = 10% -->
+    <div class="timeline-segment closing" style="left:90%; width:10%;">
+      <span class="seg-label">Close/Q&A</span>
+      <span class="seg-time">3 min</span>
+    </div>
+  </div>
+  <div class="timeline-legend">
+    <div class="legend-item"><div class="legend-swatch talk"></div> Narrative</div>
+    <div class="legend-item"><div class="legend-swatch demo1"></div> Demo 1: OGL Crisis</div>
+    <div class="legend-item"><div class="legend-swatch demo2"></div> Demo 2: Contract/Security</div>
+    <div class="legend-item"><div class="legend-swatch demo3"></div> Demo 3: Jetpacks</div>
+    <div class="legend-item"><div class="legend-swatch closing"></div> Closing</div>
+  </div>
+</div>
+
+<div class="callout animate-in">
+  <strong>Trigger discipline:</strong> If any demo step takes &gt;30 seconds with no visible output, cut to the fallback immediately. The audience remembers the story, not whether the API call was live.
+</div>
+
+<!-- ─── RISK MATRIX ─── -->
+<h2 id="risk-matrix">Risk Matrix</h2>
+<p>Each demo evaluated across five risk dimensions. Color indicates severity.</p>
+
+<table class="risk-matrix animate-in">
+  <thead>
+    <tr>
+      <th>Demo</th>
+      <th>Overall</th>
+      <th>API Dependency</th>
+      <th>Timing Risk</th>
+      <th>Tool Chain</th>
+      <th>Fallback Ready?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="demo-name">1. OGL Crisis</td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td><span class="risk-badge low">Low</span></td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td><span class="risk-badge low">Low</span></td>
+      <td><span class="risk-badge low">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="demo-name">2. Contract Review</td>
+      <td><span class="risk-badge high">High</span></td>
+      <td><span class="risk-badge high">High</span></td>
+      <td><span class="risk-badge high">High</span></td>
+      <td><span class="risk-badge high">High</span></td>
+      <td><span class="risk-badge med">Partial</span></td>
+    </tr>
+    <tr>
+      <td class="demo-name">3. Jetpacks</td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td><span class="risk-badge low">Yes</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout sage animate-in">
+  <strong>Why Demo 2 is high-risk:</strong> It chains 3 external APIs (Anthropic, OpenAI/Codex, Gemini), 4+ tools (/c^2, speckit, visual-explainer, security skills), and has the longest execution time. Pre-bake at least 50% of its outputs by design.
+</div>
+
+<!-- ─── PRE-BAKE STRATEGY ─── -->
+<h2 id="prebake">Pre-bake vs. Live Strategy</h2>
+<p>Not everything should be live. Pre-baking slow or risky steps makes the demo more reliable without losing the narrative impact.</p>
+
+<table class="strategy-table animate-in">
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Strategy</th>
+      <th>Rationale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PDF name extraction</td>
+      <td><span class="strat-badge prebake">Pre-bake</span></td>
+      <td>30-60s per PDF is too slow for stage</td>
+    </tr>
+    <tr>
+      <td>DB cross-reference query</td>
+      <td><span class="strat-badge hybrid">Hybrid</span></td>
+      <td>Pre-load DB, run query live (fast, dramatic)</td>
+    </tr>
+    <tr>
+      <td>Name generation</td>
+      <td><span class="strat-badge live">Live</span></td>
+      <td>Fast API call, impressive, low risk</td>
+    </tr>
+    <tr>
+      <td>Skill creation (/say)</td>
+      <td><span class="strat-badge live">Live</span></td>
+      <td>Quick paste-and-tweak, shows the concept</td>
+    </tr>
+    <tr>
+      <td>Contract ingest</td>
+      <td><span class="strat-badge live">Live</span></td>
+      <td>Fast, sets the scene for Demo 2</td>
+    </tr>
+    <tr>
+      <td>Visual explainers</td>
+      <td><span class="strat-badge prebake">Pre-bake</span></td>
+      <td>HTML generation too slow for live</td>
+    </tr>
+    <tr>
+      <td>Security report</td>
+      <td><span class="strat-badge hybrid">Hybrid</span></td>
+      <td>Try live, fallback to pre-baked</td>
+    </tr>
+    <tr>
+      <td>/c^2 swarm dispatch</td>
+      <td><span class="strat-badge hybrid">Hybrid</span></td>
+      <td>High risk, high reward &mdash; pre-bake ready</td>
+    </tr>
+    <tr>
+      <td>speckit output</td>
+      <td><span class="strat-badge prebake">Pre-bake</span></td>
+      <td>Too slow for 6-min window</td>
+    </tr>
+    <tr>
+      <td>multiclaude TDD</td>
+      <td><span class="strat-badge hybrid">Hybrid</span></td>
+      <td>Try live, recording as fallback</td>
+    </tr>
+    <tr>
+      <td>ralph-orchestrator</td>
+      <td><span class="strat-badge prebake">Pre-bake</span></td>
+      <td>Recording only &mdash; too complex for 4 min</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── DEMO 1 ─── -->
+<h2 id="demo1">Demo 1: OGL Content Crisis</h2>
+<h3>What the audience sees</h3>
+<p>The team uses an agent to search D&D PDFs for OGL-protected names, cross-references against L&LL's content database, reports damage, and generates replacement names. A skill is created on the fly to demonstrate how skills codify problem-solving.</p>
+
+<h3>Live sequence (6 min)</h3>
+<table class="strategy-table animate-in">
+  <thead><tr><th>Time</th><th>Action</th><th>What Audience Sees</th></tr></thead>
+  <tbody>
+    <tr><td><code>0:00</code></td><td>Set scene verbally</td><td>"Tasha's call just came in."</td></tr>
+    <tr><td><code>0:30</code></td><td>Open Claude Code, <code>ls</code> PDF archive</td><td>18 D&D PDFs on screen</td></tr>
+    <tr><td><code>1:00</code></td><td>Prompt: search PDFs for OGL names</td><td>Agent working, extracting entities</td></tr>
+    <tr><td><code>3:00</code></td><td>Show damage report</td><td>Names found, affected content count</td></tr>
+    <tr><td><code>3:30</code></td><td>Create /say skill on the fly</td><td>Skill file pasted and explained</td></tr>
+    <tr><td><code>4:30</code></td><td>Generate replacement names</td><td>Creative alternatives appear</td></tr>
+    <tr><td><code>5:30</code></td><td>Wrap and transition</td><td>"The OGL crisis is quantified."</td></tr>
+  </tbody>
+</table>
+
+<h3>Key risk</h3>
+<p>PDF parsing speed. The full 18-file corpus (~170MB) could take 30-60s per file. <strong>Mitigation:</strong> Pre-extract names, use 2-3 PDFs live, show cached full results.</p>
+
+<!-- ─── DEMO 2 ─── -->
+<h2 id="demo2">Demo 2: Contract/Security Review</h2>
+<h3>What the audience sees</h3>
+<p>Ingest a contract PDF, generate visual explainers and checklists, run security skills, dispatch a swarm of agents (/c^2) using Codex and Gemini for adversarial review, and fire up speckit for specs.</p>
+
+<h3>Live sequence (6 min)</h3>
+<table class="strategy-table animate-in">
+  <thead><tr><th>Time</th><th>Action</th><th>What Audience Sees</th></tr></thead>
+  <tbody>
+    <tr><td><code>0:00</code></td><td>Transition</td><td>"There's a trap in the contract."</td></tr>
+    <tr><td><code>0:30</code></td><td>Ingest contract PDF</td><td>Claude recognizes the document</td></tr>
+    <tr><td><code>1:00</code></td><td>Generate explainer + checklist</td><td>HTML output (or pre-baked)</td></tr>
+    <tr><td><code>2:00</code></td><td>Run security skills</td><td>Security report output</td></tr>
+    <tr><td><code>2:30</code></td><td>Launch /c^2 swarm</td><td>Codex + Gemini dispatched</td></tr>
+    <tr><td><code>3:30</code></td><td>Show visual explainer overlays</td><td>Pre-baked HTML if needed</td></tr>
+    <tr><td><code>4:30</code></td><td>Adversarial findings</td><td>Multi-model review results</td></tr>
+    <tr><td><code>5:00</code></td><td>speckit demo</td><td>Spec from findings</td></tr>
+    <tr><td><code>5:30</code></td><td>Show worktrees + PRs</td><td>Each agent on its own branch</td></tr>
+    <tr><td><code>6:00</code></td><td>Wrap</td><td>"Security baked in, not bolted on."</td></tr>
+  </tbody>
+</table>
+
+<h3>Key risk</h3>
+<p>Three external APIs chained together. Gemini and OpenAI quotas already hit during rehearsal. <strong>Mitigation:</strong> Pre-bake ALL visual explainer outputs. Consider making this demo 50% pre-baked by design.</p>
+
+<!-- ─── DEMO 3 ─── -->
+<h2 id="demo3">Demo 3: Jetpacks / Working Together</h2>
+<h3>What the audience sees</h3>
+<p>Specify a feature, launch multiclaude for TDD implementation, show ralph-orchestrator with hat-based loop-driven development. The shortest demo &mdash; focus on concept over terminal output.</p>
+
+<h3>Live sequence (4 min)</h3>
+<table class="strategy-table animate-in">
+  <thead><tr><th>Time</th><th>Action</th><th>What Audience Sees</th></tr></thead>
+  <tbody>
+    <tr><td><code>0:00</code></td><td>Show feature spec</td><td>Brief spec on screen</td></tr>
+    <tr><td><code>1:00</code></td><td>Launch multiclaude</td><td>TDD cycle: tests first, then impl</td></tr>
+    <tr><td><code>2:30</code></td><td>Switch to ralph-orchestrator</td><td>Hats prompt, loop iteration</td></tr>
+    <tr><td><code>3:30</code></td><td>Show output: tests pass, PR created</td><td>Clean implementation</td></tr>
+    <tr><td><code>4:00</code></td><td>Wrap</td><td>"The medium is the message."</td></tr>
+  </tbody>
+</table>
+
+<h3>Key risk</h3>
+<p>Tight time window (4 min). If multiclaude or ralph takes too long to produce visible output, the demo stalls. <strong>Mitigation:</strong> Pre-record both. The live attempt is a bonus; the recording is the plan.</p>
+
+<!-- ─── DEPENDENCIES ─── -->
+<h2 id="dependencies">Dependency Map</h2>
+<p>Each demo's dependencies, labeled by whether they require an internet connection.</p>
+
+<div class="dep-grid">
+  <div class="dep-card demo1 animate-in">
+    <div class="dep-card-title"><span class="card-icon">1</span> OGL Crisis</div>
+    <ul class="dep-list">
+      <li><span class="dep-tag online">online</span> Anthropic API</li>
+      <li><span class="dep-tag offline">local</span> D&D PDF Archive (18 files)</li>
+      <li><span class="dep-tag offline">local</span> SQLite Database</li>
+      <li><span class="dep-tag offline">local</span> Claude Code CLI</li>
+      <li><span class="dep-tag offline">local</span> /say skill file</li>
+    </ul>
+  </div>
+  <div class="dep-card demo2 animate-in">
+    <div class="dep-card-title"><span class="card-icon">2</span> Contract Review</div>
+    <ul class="dep-list">
+      <li><span class="dep-tag online">online</span> Anthropic API</li>
+      <li><span class="dep-tag online">online</span> OpenAI/Codex API</li>
+      <li><span class="dep-tag online">online</span> Gemini API</li>
+      <li><span class="dep-tag offline">local</span> /c^2 skill</li>
+      <li><span class="dep-tag offline">local</span> speckit</li>
+      <li><span class="dep-tag offline">local</span> visual-explainer</li>
+      <li><span class="dep-tag offline">local</span> Contract PDF</li>
+      <li><span class="dep-tag offline">local</span> Security skills</li>
+    </ul>
+  </div>
+  <div class="dep-card demo3 animate-in">
+    <div class="dep-card-title"><span class="card-icon">3</span> Jetpacks</div>
+    <ul class="dep-list">
+      <li><span class="dep-tag online">online</span> Anthropic API</li>
+      <li><span class="dep-tag offline">local</span> multiclaude</li>
+      <li><span class="dep-tag offline">local</span> ralph-orchestrator</li>
+      <li><span class="dep-tag offline">local</span> Feature spec</li>
+      <li><span class="dep-tag online">online</span> GitHub Actions CI</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ─── NETWORK ─── -->
+<h2 id="network">Network Analysis</h2>
+
+<table class="risk-matrix animate-in">
+  <thead>
+    <tr><th>Service</th><th>Required By</th><th>Risk</th><th>Mitigation</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="demo-name">Anthropic API</td>
+      <td>All demos</td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td>Pre-warm at venue; dedicated hotspot</td>
+    </tr>
+    <tr>
+      <td class="demo-name">OpenAI/Codex API</td>
+      <td>Demo 2 only</td>
+      <td><span class="risk-badge high">High</span></td>
+      <td>Pre-bake output; skip leg if down</td>
+    </tr>
+    <tr>
+      <td class="demo-name">Gemini API</td>
+      <td>Demo 2 only</td>
+      <td><span class="risk-badge high">High</span></td>
+      <td>Already hit limits; check quota AM-of</td>
+    </tr>
+    <tr>
+      <td class="demo-name">GitHub</td>
+      <td>Demo 3 (CI)</td>
+      <td><span class="risk-badge low">Low</span></td>
+      <td>Not critical for narrative</td>
+    </tr>
+    <tr>
+      <td class="demo-name">Venue WiFi</td>
+      <td>All</td>
+      <td><span class="risk-badge med">Medium</span></td>
+      <td>Test during setup; hotspot backup</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── FALLBACKS ─── -->
+<h2 id="fallbacks">Fallback Decision Trees</h2>
+
+<div class="fallback-tree">
+
+  <div class="tree-demo animate-in">
+    <div class="tree-demo-title"><span class="card-icon" style="background:var(--sage-dark);display:inline-flex;width:22px;height:22px;border-radius:4px;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700;">1</span> Demo 1: OGL Crisis</div>
+    <div class="tree-nodes">
+      <div class="tree-node decision"><span class="node-label">API timeout?</span> <span class="arrow">-></span> <span class="node-action">Switch to pre-baked ogl-report.md</span></div>
+      <div class="tree-node decision"><span class="node-label">PDF parsing slow?</span> <span class="arrow">-></span> <span class="node-action">Use 2-3 PDF subset</span></div>
+      <div class="tree-node decision"><span class="node-label">DB connection fails?</span> <span class="arrow">-></span> <span class="node-action">Use pre-loaded SQLite with results</span></div>
+      <div class="tree-node action"><span class="node-label">All API calls fail?</span> <span class="arrow">-></span> <span class="node-action">Play asciinema recording</span></div>
+      <div class="tree-node final"><span class="node-label">Recording also fails?</span> <span class="arrow">-></span> <span class="node-action">Narrate over pre-baked report screenshot</span></div>
+    </div>
+  </div>
+
+  <div class="tree-demo animate-in">
+    <div class="tree-demo-title"><span class="card-icon" style="background:var(--terracotta);display:inline-flex;width:22px;height:22px;border-radius:4px;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700;">2</span> Demo 2: Contract Review</div>
+    <div class="tree-nodes">
+      <div class="tree-node decision"><span class="node-label">Gemini quota hit?</span> <span class="arrow">-></span> <span class="node-action">Skip Gemini leg, show Codex + Claude</span></div>
+      <div class="tree-node decision"><span class="node-label">Codex API fails?</span> <span class="arrow">-></span> <span class="node-action">Skip Codex, show Claude + narrate</span></div>
+      <div class="tree-node decision"><span class="node-label">Both external APIs fail?</span> <span class="arrow">-></span> <span class="node-action">Claude-only adversarial + pre-baked multi-model output</span></div>
+      <div class="tree-node decision"><span class="node-label">/c^2 dispatch fails?</span> <span class="arrow">-></span> <span class="node-action">Run agents sequentially in single session</span></div>
+      <div class="tree-node action"><span class="node-label">Visual explainer fails?</span> <span class="arrow">-></span> <span class="node-action">Open pre-baked HTML files in browser</span></div>
+      <div class="tree-node final"><span class="node-label">Total failure?</span> <span class="arrow">-></span> <span class="node-action">Narrate over pre-baked HTML explainers + screenshots</span></div>
+    </div>
+  </div>
+
+  <div class="tree-demo animate-in">
+    <div class="tree-demo-title"><span class="card-icon" style="background:var(--ochre);display:inline-flex;width:22px;height:22px;border-radius:4px;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700;">3</span> Demo 3: Jetpacks</div>
+    <div class="tree-nodes">
+      <div class="tree-node decision"><span class="node-label">multiclaude daemon fails?</span> <span class="arrow">-></span> <span class="node-action">Show pre-recorded screen capture</span></div>
+      <div class="tree-node decision"><span class="node-label">ralph-orchestrator fails?</span> <span class="arrow">-></span> <span class="node-action">Show pre-recorded screen capture</span></div>
+      <div class="tree-node action"><span class="node-label">Tests fail unexpectedly?</span> <span class="arrow">-></span> <span class="node-action">"That's the point &mdash; the loop catches it." Show recording.</span></div>
+      <div class="tree-node final"><span class="node-label">Total failure?</span> <span class="arrow">-></span> <span class="node-action">Narrate over slides + recordings</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── EVERYTHING FAILS ─── -->
+<h2 id="everything-fails">The "Everything Fails" Plan</h2>
+
+<div class="callout animate-in">
+  <strong>The talk's thesis is about managing non-deterministic systems.</strong> A gracefully-handled failure IS the demo. Lean into the meta-narrative: "This is exactly why we pre-bake, use fallbacks, and plan for graceful degradation. This is the orchestrator's dilemma in action."
+</div>
+
+<table class="strategy-table animate-in">
+  <thead><tr><th>Priority</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td><code>1</code></td><td>Open pre-baked HTML visual explainers in browser tabs &mdash; these carry the narrative visually</td></tr>
+    <tr><td><code>2</code></td><td>Narrate the demo: "Here's what you would see when we run this..."</td></tr>
+    <tr><td><code>3</code></td><td>Show pre-baked output files (markdown reports, spec docs) as static content</td></tr>
+    <tr><td><code>4</code></td><td>Play pre-recorded screen captures for Demo 3 (asciinema or video)</td></tr>
+    <tr><td><code>5</code></td><td>Lean into the meta-narrative about managing failure in agentic systems</td></tr>
+  </tbody>
+</table>
+
+<!-- ─── SETUP CHECKLIST ─── -->
+<h2 id="setup-checklist">Setup Checklist</h2>
+
+<ul class="checklist">
+  <li class="check-heading">T-7 Days</li>
+  <li>Full run-through of all 3 demos; identify what's too slow or breaks</li>
+  <li>Create synthetic contract PDF (8-12 pages, realistic)</li>
+  <li>Write feature spec for Demo 3</li>
+
+  <li class="check-heading">T-3 Days</li>
+  <li>Create ALL pre-baked outputs (ogl-report.md, explainer HTMLs, security report, speckit output)</li>
+  <li>Record asciinema sessions for multiclaude and ralph-orchestrator</li>
+  <li>Tag the repo: <code>git tag demo-v1</code></li>
+  <li>Test /c^2 swarm dispatch end-to-end at least twice</li>
+
+  <li class="check-heading">T-1 Day</li>
+  <li>Full dress rehearsal with timer (strict 30-min cutoff)</li>
+  <li>Practice the fallback transitions explicitly</li>
+  <li>Verify all API keys are valid and quotas are sufficient</li>
+  <li>Check Gemini free-tier reset timing; prepare paid-tier backup key</li>
+
+  <li class="check-heading">T-2 Hours (at venue)</li>
+  <li>Connect to venue WiFi; test Anthropic, OpenAI, and Gemini API connectivity</li>
+  <li>If WiFi is unreliable, switch to dedicated hotspot</li>
+  <li>Open all pre-baked HTML files in hidden browser tabs</li>
+  <li>Open terminal: 18pt+ font, dark background</li>
+  <li><code>git checkout demo-v1</code> in the demo repo</li>
+  <li>Run a trivial Claude Code prompt to verify API key</li>
+
+  <li class="check-heading">T-1 Hour</li>
+  <li>Run Demo 1 end-to-end (abbreviated); time it; note issues</li>
+  <li>Run Demo 2 contract ingest + security report; verify output</li>
+  <li>Attempt Demo 2 swarm dispatch; if it works, note timing</li>
+  <li>Run Demo 3 multiclaude start (verify it launches, kill after 30s)</li>
+  <li>Verify all pre-baked fallback files open correctly</li>
+
+  <li class="check-heading">T-15 Minutes</li>
+  <li>Close Slack, email, all notifications OFF</li>
+  <li>Terminal full-screen, correct font size</li>
+  <li>Browser with pre-baked tabs behind terminal</li>
+  <li>Demo command cheat sheet on phone or second screen</li>
+  <li>Water bottle accessible</li>
+</ul>
+
+<!-- ─── REHEARSAL ─── -->
+<h2 id="rehearsal">Rehearsal Plan</h2>
+
+<table class="strategy-table animate-in">
+  <thead><tr><th>When</th><th>Focus</th><th>Goal</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>T-7</code></td>
+      <td>Full run-through</td>
+      <td>Identify what breaks, what's too slow, what's unclear</td>
+    </tr>
+    <tr>
+      <td><code>T-3</code></td>
+      <td>Pre-bake creation</td>
+      <td>All fallback outputs generated and saved to <code>demo-assets/prebaked/</code></td>
+    </tr>
+    <tr>
+      <td><code>T-1</code></td>
+      <td>Dress rehearsal</td>
+      <td>30-min timer, practice fallback transitions, refine patter</td>
+    </tr>
+    <tr>
+      <td><code>T-0 AM</code></td>
+      <td>Tech check</td>
+      <td>APIs, network, font size, pre-baked files accessible</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout sage animate-in" style="margin-top: 2rem;">
+  <strong>Demo assets already available:</strong> <code>demo-assets/DnD_Archive/</code> contains 18 D&D PDFs (~170MB). <code>demo-assets/dl.py</code> is the download script. Still needed: synthetic contract PDF, pre-baked outputs, feature spec, screen recordings.
+</div>
+
+</main>
+</div>
+
+<!-- Mobile TOC toggle -->
+<button class="mobile-toc-toggle" id="mobileTocToggle" aria-label="Toggle table of contents">&#9776;</button>
+
+<!-- ════════════════════════════════════════════
+     SCRIPTS
+     ════════════════════════════════════════════ -->
+<script>
+// Intersection Observer for staggered animations
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+})();
+
+// Active TOC tracking
+(function() {
+  const sections = document.querySelectorAll('h2[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '-80px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Also track the overview header
+  const overview = document.getElementById('overview');
+  if (overview) {
+    const overviewObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#overview');
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    overviewObs.observe(overview);
+  }
+})();
+
+// Mobile TOC toggle
+(function() {
+  const btn = document.getElementById('mobileTocToggle');
+  const sidebar = document.getElementById('sidebar');
+  if (btn && sidebar) {
+    btn.addEventListener('click', () => {
+      sidebar.classList.toggle('mobile-open');
+    });
+    // Close on link click
+    sidebar.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

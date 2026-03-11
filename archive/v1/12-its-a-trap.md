@@ -1,5 +1,8 @@
 ---
 type: dark-slide
+image: ../images/its-a-trap_web.svg
+image_alt: "It's a trap -- dungeon corridor full of hazards"
+image_layout: split
 footer: "11"
 ---
 

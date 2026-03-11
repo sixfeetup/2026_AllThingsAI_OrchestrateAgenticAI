@@ -1,4 +1,4 @@
-# Agents of Legend: the Orchestrator Dilemna
+# Agents of Legend: The Orchestrator Dilemma
 
 _Context, Checklists, and No-Miss Reviews_
 
@@ -12,207 +12,189 @@ _Context, Checklists, and No-Miss Reviews_
 
 # Outline
 
-## The backstory magic
+_Generated from slide content in `presentation/content/`. Slides are
+the source of truth._
 
-Business as usual can feel more like an epic quest into Mordor than a stock
-photo of smiling generic people gather around the warm light of a laptop on a
-board room table.
+## 01 — Title
 
-<buildout>
-![basic old business stock image](generate)
-<transition basic />
-![party in peril in the dungeon](generate)
-</buildout>
+*Six Feet Up*
 
-It is not uncommon to find ourselve operating in the worlds of best practice and
-then suddenly plunged into a novel world of... chaos. One second we are planning
-a cheery offsite, the next it is very dark and we might be eaten by a grue.
+**Agents of Legend: The Orchestrator Dilemma**
+_Context, Checklists, and No-Miss Reviews_
+_Calvin Hendryx-Parker -- AllThings AI, 2026_
 
-Whether it be good news or bad, adapting quickly to our situation requires tools
-and experience.
+## 02 — The Backstory Magic
 
-## Agents: Everybody says they are great, but do I need one?
+Business as usual can feel more like an epic quest into Mordor than
+a stock photo of smiling generic people around a laptop.
 
-<quick riff: essentially our talk introduction  on how why & why, what, how, when to start using agents>
+- One second you're planning a cheery offsite
+- The next it's very dark and you might be eaten by a grue
+- Adapting quickly requires tools and experience
 
-## Trouble comes knocking
+> "We become what we behold. We shape our tools and then our tools
+> shape us." -- Marshall McLuhan
 
-But let's start with a plausible if confabulated situation for our
-quest to illustrate some of the practical elements of orchestrating
-agents.
+![the-team-in-the-office_web.jpg](split layout, dark slide)
 
-Let's set the scene <improvise>
+## 03 — Agents: Do I Need One?
 
-> You are the COO of a crack consulting company.
->
-> You just won a contract for discovery
-> with L&LL LLC (Lord and Lady LARPsalot), a rapidly growing events
-> company that specialize in live action role playing events and
-> accessories.
->
-> They have an online marketplace for other artisans selling LARPing
-> accessories (larpsy.gold) and a bitrotting site for coordinating
-> events at larpsalot.party: registration, payments, game runner tools,
-> community management and lots of classic rpg content modified for live
-> action, licensed under the OGL.
->
-> They need to migrate off a cloud PaaS provider called Hurokee which is
-> sunsetting and do some improvements to their web property.  Once
-> relaunch their sites, they would like to launch a mobile app on IOS to
-> support their events and games.
->
-> You are just about to head home when your phone starts to blow up from
-> L&LL's CEO Tasha Tiamata.  Hasbro has just announced that they are
-> changing the OGL and Tash needs to know ASAP how much of the content
-> her event runners depend on may have to be taken down.
->
-> Can your team help her?  Time to get the party together.
+- What are agents, really?
+- Zombies, skeletons, familiars, djinnies, or demons?
+- Can we work with them? Can they work together?
+- When and how do you start?
 
-## the mighty fine (team)
+> "We're in the 'horseless carriage' stage of coding genies."
+> -- Kent Beck
 
-Meet the other nondeterministic agents to orchestrate
+![sorcerors-apprentice-grok.jpg](split layout)
 
-This quest was already agentic, staffed with important team members
-who will need to coordinate with your digital agents for
-success. Let's quickly our team, as our agent will both be augmenting
-what they do and occasionally representing them or facilitating
-communication
+## 04 — Trouble Comes Knocking
 
-<!-- deck-watch: processed — created 05-the-mighty-fine-team.md with team role cards -->
+Scenario setup: you are the COO of a consulting company. You just
+won a discovery contract with L&LL LLC (Lord and Lady LARPsalot).
 
-- Business Operations and Product Management{ The Cleric and the Bard: keep the business healthy and singing the song of the business.
-- Product Engineering: The Magic users of CAPEX, wizards, sorcerors, artificers, and druids
-- Technical Operations (SRE, Devops, DX, Platform Engineering,
-  Sysadmin & Ops): the OPEX bruisers who keep the roads and fortress
-  safe and jump into action when called or paged. Rangers, barbarians
-  and ... fighters
-- Security
-  - Red team: Rogues of all shades
-  - Blue team: Paladin, Warlock
+- Online marketplace (larpsy.gold), bitrotting events site
+  (larpsalot.party)
+- Need to migrate off Hurokee (sunsetting PaaS) and relaunch
+- Phone blows up: Hasbro changed the OGL
+- Tasha Tiamata needs to know what content must come down
 
-## our newest party member
+_Can your team help her? Time to get the party together._
 
-[@@img:totally metal warforge bard/warlock w/ flying V and about 25% of his body cover with modular synths and power tools]
+<improvise: set the scene, read the scenario aloud>
 
-Call them clod, gem, dex, cecily, the cursor, and many more or any combo thereof.
+## 05 — The Mighty Fine (Team)
 
-They enter the open office / tavern w/ great swagger,
-the hyped and famed Agentic AI who is rumored to have such
-promise, both a ninja and rockstar can do the
-laundry, walking the dog and filing the taxes.
+Grid of team role cards:
 
-Except sometimes the taxes end up in the washing machine w/ their lute
-and dog ends up in the dryer. And the front door was left wide open
-all night long.
+- **The Cleric & Bard** -- Business Ops & Product Management
+- **The Magic Users** -- Product Engineering (wizards, sorcerers,
+  artificers, druids of CAPEX)
+- **Rangers & Fighters** -- Technical Ops (SRE, DevOps, Platform)
+- **Rogues & Paladins** -- Security (red team rogues, blue team
+  paladins and warlocks)
 
-But maybe we can make this work
+![adventuring party around table](inline layout)
 
-## What do we know about our quest?
+## 06 — Our Newest Party Member
 
-Tasha has given us the following artifacts in a tarball
-- the hurokee buildpack. basically a dockerfile
-- the code for the 2 sites
-- a database dump
-- a file dump of the OGL content.
+The hyped Agentic AI enters the tavern with great swagger.
 
-## How do you want to do this? pt 1
+- Taxes end up in the washing machine
+- Dog ends up in the dryer
+- Front door left wide open all night
 
-_critical role tag phrase, vox machina or mighty nein image_
+_But maybe we can make this work._
 
-Winter is coming? things are changing? What are these agentic wonders? These
-agents, be they zombies, skeletons, familiars, djinnies or demons?  Can we work
-with them? can they work together? Are they soulless NPC or funhouse mirror
-reflections of ourselvf.  Consider.
+![ralph.jpg](split layout, dark slide)
 
-The team accepts the agent as part of the party.
+## 07 — What Do We Know About Our Quest?
 
-## Hark! there is work to be done! To our spelljammer!
+Tasha's artifacts in a tarball:
 
-![spelljammer with our team on board](images/spelljammer_web.jpg)
+- The Hurokee buildpack (basically a Dockerfile)
+- The code for 2 sites
+- A database dump
+- A file dump of the OGL content
 
-> Roll for initiative!
-> Casting Clarity of Thought Lvl {good enough}
-> Casting lv2 Locate Object
+> "The worthy GM never purposely kills players' PCs..."
+> -- Gary Gygax
 
-<demo starts here>
+## 08 — How Do You Want to Do This? (divider)
 
-The bizops and product team members understand L&LL is face a dual existential threat... they could large parts of the content they depend on, or worse, they could end up liable for misuse of conduct and face legal action.  The licensing changes mainly apply to use of names.
+Section divider I.
 
+_The team accepts the agent. Now what?_
 
-The command line does not scare our cleric Sera and bard Finn, and luckily a trusted ranger named Kael is there to help get a database set up to do this work.  They import L&LL's content db. They also load and transform the content from the pdfs.
+## 09 — To Our Spelljammer!
 
-They fire the agent and COO Mira Stonebridge drives. She knows she has to do the following:
-- search the pdf for all names of places, magic items, characters, and monsters. Load those and the raw text into the DB.
-- search all the content in the db dump for instance of names
-- report the damage
-- generate and substitute replacement names if damage is high
+> Roll for initiative! Casting Clarity of Thought. Casting Locate
+> Object.
 
-Notes on demo:
-  - Demonstrate how skills codify problem solving by creating a skill on the fly to use "say" to let you know when things are done.
-  - We will have separate db for each step.
-  - we could try doltgres and prompt injection on the load back
+- L&LL faces dual existential threat: lose content or face legal
+  action
+- The cleric and bard aren't scared of the command line
+- A trust ranger helps get a database set up
 
-## Loot the Room
+<demo: search PDFs for names, load into DB, report the damage,
+generate replacements>
 
-L&L is super psyched. The team has landed more work in the form of a database migration.
+![kent-v-genie-1_web.jpg](split layout, dark slide)
 
-But now our team faces more complex tasks, with greater peril.
+## 10 — Loot the Room
 
-we might step back to consider what is possible, plausible and sensible.  We might also
-consider what cognitive frameworks we already apply to non-deterministic
-business process we already manage everyday.
+L&LL is psyched. More work landed -- a database migration. Tasks are
+more complex now, with greater peril.
 
-{Intro Cynefin and OODA as ways to think about assessing agentic tools and their
-use, output, etc.}
+Grid cards:
 
-We need to orchestrate the actions of the agent(s) but we also need to
-orchestrate the actions of the human players.
+- **OODA Loop** -- Observe, Orient, Decide, Act. Every agentic
+  interaction is an OODA cycle. Who does which step?
+- **Cynefin** -- Match autonomy to complexity. Simple: automate.
+  Complicated: multi-agent. Complex: human-in-the-loop.
+  Chaotic: human takes the wheel.
 
-## Great, but I hired you for this other thing
+Key point: orchestrate agents AND human players. Frameworks we
+already use for non-deterministic business processes still apply.
 
-The job is not done, we need to migrate and update their websites.
+## 11 — Great, But I Hired You for This Other Thing (divider)
 
+Section divider II.
 
-## It's a TRAP!
+_The job is not done -- time to migrate and update._
 
-![Admiral Ackbar, Tal'Dorei style in a dungeon with traps](images/its-a-trap_web.jpg)
+## 12 — It's a TRAP!
 
-<demo>
+<demo: contract analysis, security, adversarial review>
 
-steps:
-- start claude et al in a "fresh" repo (sort of a lie/)
-- ingest the contract pdf
-  - use skills to generate visual explains, a central checklist, etc
-- Security is a requirement: use security skills to give you a report w/ a checklist
-- create a claude swarm w/ /bg & /c^2 skill to use codex and gemini to do an adversarial review of contract and security findings.
-- visual explainer of
-  - an overlay for the project (contract, existing art, work to do)
-  - risks for this repo
-  - adversarial review finding
-- fire up speckit to specify and use the dialectic to create a spec from our findings, clarify, create a plan.  Look at the constitution, other artifacts.
-  - show using  a claude swarm w/ /bg & /c^2 skill w/ worktrees, prs as part of the spec. begin converstation about feature oriented
+- Ingest the contract PDF -- generate visual explainers, checklists
+- Security as requirement: skills for reporting and guardrails
+- Swarm agents with /c^2 -- Codex and Gemini for adversarial review
+- Visual explainers: project overlay, risk report, adversarial
+  findings
+- Fire up speckit: specs from findings, clarify, plan
 
-## Jetpacks all around, the future is legion
+> "Security enables speed when baked in, not bolted on."
 
-Working together
+## 13 — Jetpacks All Around: The Future Is Legion
 
-<demo>
+- Agents are now a medium with their own message
+- Symbiogenesis: organisms that leap when they act as environments
+  for other organisms
+- Specify a feature, use multiclaude to implement -- built-in TDD,
+  CI/CD
+- Model process with ralph-orchestrator: hats, loops,
+  planner/builder/reviewer
 
-- interact w/ through agent
-  - talk about how similar to apps before them, agents are now a medium w/ their own message.
-  - talk about symbiogenisis, how in natural organism take evolutionary leaps when the start to act as environments for other organisms.
+> "The medium is the message." -- Marshall McLuhan
 
-- specify a feature, use multiclaude to implement. Talk about multiclaude's built in TDD. CI/CD workflow
-- implement something with ralph-orchestrator and Pdd. Talk about
-  modeling process with the hats prompt and loop driven development.
-- if want, gas town, talk about kim & yegge's book, and the future
+![kent-v-genie-2_web.jpg](split layout)
 
-## Closing thoughts
+## 14 — Closing Thoughts
 
-- Start with frameworks you already know (OODA, Cynefin) to assess what's po
-ssible, plausible, sensible
-- Skills codify problem solving — build them as you go, they compound
-- Security and trust are enablers, not blockers — bake them in
-- Orchestrate the humans AND the agents — the party works together
+- Start with frameworks you already know (OODA, Cynefin)
+- Skills codify problem solving -- build them as you go
+- Security and trust are enablers, not blockers
+- Orchestrate the humans AND the agents
 - The agent is part of the party, not a replacement for it
-- Underpromise, deliver — then iterate. The brownian ratchet is your friend.
+
+> "Most important advice in software: underpromise, deliver."
+> -- Tom Conrad
+
+![ralph-w-crabs.jpg](split layout, dark slide)
+
+## 15 — Questions
+
+_Thank You_
+
+_Calvin Hendryx-Parker -- Six Feet Up_
+
+_github.com/sixfeetup/agentic-quest_
+
+---
+
+# Unresolved @@ Directives
+
+No `@@` directives remain in the current slides. All previous `@@`
+placeholders have been resolved.

@@ -53,6 +53,18 @@ make clean    # remove output
 make watch    # auto-rebuild on changes (needs fswatch)
 ```
 
+## Explainer links
+
+Slides can link to self-contained visual explainer HTML pages. Use this
+syntax in the slide markdown body:
+
+```markdown
+[explainer: How Agents Coordinate](explainers/agent-coordination.html)
+```
+
+This renders as a styled pill/button that opens the explainer in a new
+tab. Place explainer HTML files in `presentation/explainers/`.
+
 ## Adding / reordering slides
 
 - Files sort lexicographically: `01-title.md`, `02-topic.md`, ...

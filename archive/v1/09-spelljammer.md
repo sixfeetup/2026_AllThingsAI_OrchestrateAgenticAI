@@ -1,7 +1,7 @@
 ---
 type: dark-slide
-image: ../images/kent-v-genie-1_web.jpg
-image_alt: Wrestling the coding genie for the steering wheel
+image: ../images/spelljammer_web.svg
+image_alt: The party boards the spelljammer
 image_layout: split
 footer: "08"
 ---

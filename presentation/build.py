@@ -291,6 +291,21 @@ def render_body(body: str, meta: dict) -> str:
             i += 1
             continue
 
+        # --- Explainer link: [explainer: Title](url) ---
+        explainer_match = re.match(
+            r"^\[explainer:\s*(.+?)\]\((.+?)\)\s*$", line.strip()
+        )
+        if explainer_match:
+            title = explainer_match.group(1)
+            url = explainer_match.group(2)
+            chunks.append(
+                f'<a class="explainer-link reveal" '
+                f'href="{escape(url)}" target="_blank">'
+                f"{escape(title)} \u2197</a>"
+            )
+            i += 1
+            continue
+
         # --- Plain paragraph ---
         if line.strip():
             para_lines = []
@@ -303,6 +318,7 @@ def render_body(body: str, meta: dict) -> str:
                 lines[i].startswith("*") and lines[i].endswith("*"),
                 lines[i].startswith("_") and lines[i].endswith("_"),
                 lines[i].startswith("—"),
+                re.match(r"^\[explainer:", lines[i].strip()),
             ]):
                 para_lines.append(lines[i].strip())
                 i += 1

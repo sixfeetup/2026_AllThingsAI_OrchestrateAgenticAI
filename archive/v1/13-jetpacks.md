@@ -10,10 +10,13 @@ footer: "12"
 
 ## The Future Is Legion
 
-- Agents are now a medium with their own message
-- Like organisms that take evolutionary leaps through symbiogenesis — acting as environments for other organisms
-- Specify a feature, use multiclaude to implement — built-in TDD, CI/CD
+- Agents are a medium with their own message
+- Specify a feature, multiclaude implements it — built-in TDD, CI/CD
 - Model process with ralph-orchestrator: hats, loops, planner/builder/reviewer
 
 > "The medium is the message."
 > — Marshall McLuhan
+
+???
+
+Like organisms that take evolutionary leaps through symbiogenesis — agents act as environments for other agents. The symbiogenesis metaphor is worth expanding on if the audience is tracking.
