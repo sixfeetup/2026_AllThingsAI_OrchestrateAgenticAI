@@ -28,7 +28,9 @@
       "Bash(ls:*)",
       "Bash(gh pr:*)",
       "Bash(echo === DIFFERS: $f ===:*)",
-      "WebFetch(domain:super-tribble-8w5zrvy.pages.github.io)"
+      "WebFetch(domain:super-tribble-8w5zrvy.pages.github.io)",
+      "Bash(grep:*)",
+      "Bash(multiclaude:*)"
     ]
   }
 }
