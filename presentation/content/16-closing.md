@@ -18,6 +18,7 @@ footer: "16"
 
 > "Most important advice in software: underpromise, deliver."
 > — maybe Tom Conrad
+<<<<<<< HEAD
 
 ???
 Bring it home. These are the six things to remember:
@@ -39,3 +40,5 @@ ran two missions, and leveled up our orchestration along the way.
 
 Pause. Let the closing image and quote land. Then transition to the
 playbook slide or straight to questions.
+=======
+>>>>>>> whitmo/tweaks

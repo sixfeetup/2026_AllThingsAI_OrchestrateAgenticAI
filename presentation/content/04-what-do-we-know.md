@@ -13,6 +13,7 @@ Tasha has given us the following artifacts in a tarball:
 - A file dump of the OGL content
 
 _The clock is ticking. Let's see what we're working with._
+<<<<<<< HEAD
 
 ???
 This is the "quest inventory" moment — what tools and artifacts do we
@@ -29,3 +30,5 @@ agent's context window, in what order, and with what framing.
 
 Transition: now that we know what we're working with, let's talk about
 how we actually approach it with agents.
+=======
+>>>>>>> whitmo/tweaks

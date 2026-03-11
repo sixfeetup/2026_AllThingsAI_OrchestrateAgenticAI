@@ -13,6 +13,7 @@ _The team accepts the agent as part of the party._
 
 > "The medium is the message."
 > — Marshall McLuhan
+<<<<<<< HEAD
 
 ???
 Pause here. This is a Critical Role reference — the moment where the
@@ -28,3 +29,5 @@ orchestration challenge is matching capabilities to tasks.
 
 Transition: we're about to jump into the first live demo. The team is
 assembled. Time to roll for initiative.
+=======
+>>>>>>> whitmo/tweaks

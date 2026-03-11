@@ -17,6 +17,7 @@ _Everybody says they are great, but..._
 
 > "We're in the 'horseless carriage' stage of coding genies."
 > — Kent Beck
+<<<<<<< HEAD
 
 ???
 This is the slide for the skeptics in the room — and you should be skeptical.
@@ -36,3 +37,5 @@ and orchestration (coordinating multiple agents and humans).
 When: start with one agent, one repetitive task, one tight feedback loop.
 Don't boil the ocean. Kent Beck's quote nails it — we're early. Treat
 agents like a junior team member: trust but verify.
+=======
+>>>>>>> whitmo/tweaks

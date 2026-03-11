@@ -5,6 +5,12 @@ footer: "08"
 
 # Join the fray
 
+<<<<<<< HEAD
+=======
+![a d20, also a natural 20](img:shiny and metallic)
+
+
+>>>>>>> whitmo/tweaks
 _Demo: the OGL content crisis_
 
 - Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat — lose content or face legal action
@@ -16,6 +22,7 @@ _Demo: the OGL content crisis_
 - Generate replacement names if damage is high
 
 > "Roll for initiative!"
+<<<<<<< HEAD
 
 ???
 DEMO TIME — the OGL content crisis.
@@ -40,3 +47,5 @@ PDF search, not "review everything"), and human-in-the-loop (Mira drives,
 agent executes).
 
 If demo hiccups: fall back to prebaked output in demo-assets/prebaked/.
+=======
+>>>>>>> whitmo/tweaks
