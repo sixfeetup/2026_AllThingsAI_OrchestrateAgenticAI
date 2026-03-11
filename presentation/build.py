@@ -279,16 +279,35 @@ def render_body(body: str, meta: dict) -> str:
 
         # --- Blockquote ---
         if line.startswith(">"):
-            quote_lines = []
+            # Collect all > lines, splitting into separate quotes on blank > lines
+            all_quote_lines: list[str] = []
             while i < len(lines) and lines[i].startswith(">"):
-                quote_lines.append(lines[i].lstrip("> ").strip())
+                all_quote_lines.append(lines[i].lstrip("> ").strip())
                 i += 1
-            quote_text = " ".join(quote_lines)
-            chunks.append(
-                f'<blockquote class="quote reveal">'
-                f"{escape(quote_text)}"
-                f"</blockquote>"
-            )
+            # Split into separate blockquotes on empty lines
+            quotes: list[list[str]] = [[]]
+            for ql in all_quote_lines:
+                if ql == "":
+                    if quotes[-1]:  # only split if current group is non-empty
+                        quotes.append([])
+                else:
+                    quotes[-1].append(ql)
+            for q_lines in quotes:
+                if not q_lines:
+                    continue
+                quote_text = " ".join(q_lines)
+                # Render markdown links: [text](url)
+                safe = escape(quote_text)
+                safe = re.sub(
+                    r'\[([^\]]+)\]\(([^)]+)\)',
+                    r'<a href="\2" target="_blank" rel="noopener">\1</a>',
+                    safe,
+                )
+                chunks.append(
+                    f'<blockquote class="quote reveal">'
+                    f"{safe}"
+                    f"</blockquote>"
+                )
             continue
 
         # --- Bullet list ---

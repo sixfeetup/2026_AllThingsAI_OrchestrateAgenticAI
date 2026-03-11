@@ -1,9 +1,12 @@
 ---
 type: dark-slide
-footer: "3"
+image: ../images/party-plans.jpg
+image_alt: The party plans their approach
+image_layout: split
+footer: "03"
 ---
 
-# Trouble Comes Knocking: the Setup
+# Trouble Comes Knocking: an example
 
 _A plausible if confabulated situation_
 

@@ -536,9 +536,22 @@
             color: var(--sfu-teal-deep);
         }
 
-        .dark-slide .quote {
+        .dark-slide .quote,
+        .title-slide .quote,
+        .divider-slide .quote {
             border-right-color: var(--sfu-teal-light);
             color: var(--sfu-ice);
+        }
+
+        .quote a {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: var(--sfu-teal);
+            text-underline-offset: 2px;
+        }
+
+        .quote a:hover {
+            color: var(--sfu-teal-light);
         }
 
         .quote-attribution {
@@ -688,326 +701,49 @@
         .nav-dot:hover {
             background: var(--sfu-teal-light);
         }
-
-        /* ===========================================
-           HELP MODAL
-           =========================================== */
-        .help-modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
-        }
-
-        .help-modal-backdrop.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .help-modal {
-            background: var(--sfu-charcoal);
-            border: 1px solid var(--sfu-teal-deep);
-            border-radius: 12px;
-            max-width: 700px;
-            width: 90vw;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: clamp(1.5rem, 3vw, 2.5rem);
-            position: relative;
-            transform: translateY(16px) scale(0.97);
-            transition: transform 0.25s var(--ease-out-expo);
-            color: var(--sfu-white);
-            font-family: var(--font-body);
-            scrollbar-width: thin;
-            scrollbar-color: var(--sfu-teal-deep) var(--sfu-charcoal);
-        }
-
-        .help-modal-backdrop.open .help-modal {
-            transform: translateY(0) scale(1);
-        }
-
-        .help-modal::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .help-modal::-webkit-scrollbar-track {
-            background: var(--sfu-charcoal);
-        }
-
-        .help-modal::-webkit-scrollbar-thumb {
-            background: var(--sfu-teal-deep);
-            border-radius: 3px;
-        }
-
-        .help-modal-close {
-            position: absolute;
-            top: clamp(0.75rem, 1.5vw, 1.25rem);
-            right: clamp(0.75rem, 1.5vw, 1.25rem);
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            color: var(--sfu-ice);
-            font-size: 1.25rem;
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s ease, border-color 0.2s ease;
-            line-height: 1;
-        }
-
-        .help-modal-close:hover,
-        .help-modal-close:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--sfu-teal-light);
-            outline: none;
-        }
-
-        .help-modal-section {
-            margin-bottom: 1.75rem;
-        }
-
-        .help-modal-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .help-modal-section h3 {
-            font-family: var(--font-display);
-            font-size: clamp(0.9rem, 1.5vw, 1.15rem);
-            color: var(--sfu-teal);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.4rem;
-            border-bottom: 1px solid rgba(42, 138, 154, 0.3);
-        }
-
-        /* Keyboard shortcuts grid */
-        .help-shortcuts {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 0.4rem 1.25rem;
-            align-items: center;
-        }
-
-        .help-shortcuts kbd {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 4px;
-            padding: 0.15rem 0.5rem;
-            font-family: var(--font-body);
-            font-size: var(--small-size);
-            font-weight: 500;
-            color: var(--sfu-ice);
-            min-width: 1.5rem;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .help-shortcuts .shortcut-desc {
-            font-size: var(--small-size);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* Resource links */
-        .help-resources {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .help-resources li a {
-            color: var(--sfu-teal-light);
-            text-decoration: none;
-            font-size: var(--small-size);
-            font-weight: 500;
-            transition: color 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .help-resources li a:hover,
-        .help-resources li a:focus {
-            color: var(--sfu-ice);
-            outline: none;
-        }
-
-        .help-resources li a::before {
-            content: '\2192';
-            color: var(--sfu-teal-deep);
-            font-size: 0.85em;
-        }
-
-        /* Quick jump list */
-        .help-quick-jump {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            max-height: 30vh;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--sfu-teal-deep) transparent;
-        }
-
-        .help-quick-jump li button {
-            background: none;
-            border: none;
-            color: var(--sfu-teal-light);
-            font-family: var(--font-body);
-            font-size: var(--small-size);
-            font-weight: 500;
-            cursor: pointer;
-            padding: 0.35rem 0.6rem;
-            border-radius: 4px;
-            text-align: left;
-            width: 100%;
-            transition: background 0.15s ease, color 0.15s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .help-quick-jump li button:hover,
-        .help-quick-jump li button:focus {
-            background: rgba(42, 138, 154, 0.2);
-            color: var(--sfu-ice);
-            outline: none;
-        }
-
-        .help-quick-jump li button .jump-index {
-            color: var(--sfu-gray);
-            font-size: 0.8em;
-            min-width: 1.5rem;
-        }
-
-        /* Help hint shown on first load */
-        .help-hint {
-            position: fixed;
-            bottom: clamp(1rem, 2vw, 1.5rem);
-            left: clamp(1rem, 2vw, 1.5rem);
-            background: rgba(42, 138, 154, 0.9);
-            color: var(--sfu-white);
-            font-family: var(--font-body);
-            font-size: var(--small-size);
-            font-weight: 500;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            z-index: 1001;
-            opacity: 0;
-            transform: translateY(8px);
-            animation: helpHintIn 0.5s ease 2s forwards, helpHintOut 0.5s ease 7s forwards;
-            pointer-events: none;
-        }
-
-        @keyframes helpHintIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes helpHintOut {
-            to { opacity: 0; transform: translateY(8px); }
-        }
     </style>
 </head>
 <body>
     <div class="progress-bar" id="progressBar"></div>
     <nav class="nav-dots" id="navDots"></nav>
 
-    <!-- Help Modal -->
-    <div class="help-modal-backdrop" id="helpModal" role="dialog" aria-modal="true" aria-label="Help and navigation">
-        <div class="help-modal">
-            <button class="help-modal-close" id="helpModalClose" aria-label="Close help dialog">&times;</button>
-
-            <div class="help-modal-section">
-                <h3>Keyboard Shortcuts</h3>
-                <div class="help-shortcuts">
-                    <kbd>&larr; &rarr; &uarr; &darr;</kbd>
-                    <span class="shortcut-desc">Navigate slides</span>
-
-                    <kbd>Space</kbd> / <kbd>PageDown</kbd>
-                    <span class="shortcut-desc">Next slide</span>
-
-                    <kbd>PageUp</kbd>
-                    <span class="shortcut-desc">Previous slide</span>
-
-                    <kbd>Home</kbd> / <kbd>End</kbd>
-                    <span class="shortcut-desc">First / last slide</span>
-
-                    <kbd>N</kbd>
-                    <span class="shortcut-desc">Toggle speaker notes</span>
-
-                    <kbd>?</kbd>
-                    <span class="shortcut-desc">This help dialog</span>
-                </div>
-            </div>
-
-            <div class="help-modal-section">
-                <h3>Presenter Resources</h3>
-                <ul class="help-resources">
-                    <li><a href="explainers/system-overview.html" target="_blank" rel="noopener">System Overview</a></li>
-                    <li><a href="explainers/playbook.html" target="_blank" rel="noopener">Playbook</a></li>
-                    <li><a href="explainers/checklist-progress.html" target="_blank" rel="noopener">Checklist Progress</a></li>
-                    <li><a href="explainers/demo-plan.html" target="_blank" rel="noopener">Demo Plan</a></li>
-                    <li><a href="demo-assets/" target="_blank" rel="noopener">Demo Assets</a></li>
-                </ul>
-            </div>
-
-            <div class="help-modal-section">
-                <h3>Quick Jump</h3>
-                <ul class="help-quick-jump" id="helpQuickJump">
-                    <!-- Populated dynamically -->
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="help-hint" aria-hidden="true">Press <kbd style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:3px;padding:0.1rem 0.35rem;font-size:0.9em;">?</kbd> for help</div>
-
     <!-- ═══════════════════════════════════════════
          SLIDE 1: Title
          ═══════════════════════════════════════════ -->
 
     <!-- 01-title.md -->
-    <section class="slide title-slide" aria-label="The Orchestrator Dilemma">
+    <section class="slide title-slide" aria-label="*Agent of Legends*: the orchestrators apprentice">
 <div class="brand-mark decorative"></div>
 <div class="slide-content">
-<p class="tagline reveal">Agents of Legend</p>
-<h1 class="reveal">The Orchestrator Dilemma</h1>
-<p class="tagline reveal">Context, Checklists, and No-Miss Reviews</p>
-<p class="tagline reveal">Calvin Hendryx-Parker — Six Feet Up</p>
-<p class="tagline reveal">Built 2026-03-10</p>
+<h1 class="reveal">*Agent of Legends*: the orchestrators apprentice</h1>
+<p class="subtitle reveal">Context, Checklists, and No-Miss Reviews</p>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">A journey from useful to industrial.</p>
+<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<p class="subtitle reveal">Built 2026-03-11</p>
 
+<blockquote class="quote reveal">&quot;It will be like kubernetes, but for agents, I said.&quot; -- Steve Yegge, <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04" target="_blank" rel="noopener">&quot;Welcome to Gas Town&quot;</a></blockquote>
+<blockquote class="quote reveal">&quot;Actually, I am hoping we can get rid of orchestration all together&quot; -- Brian Grant talking about kubernetes,  to Whit Morriss, buffet,  Kubernetes launch party PDX 2015</blockquote>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">“The secret we should never let the gamerunners know is that they don&#x27;t need any rules.” ― Gary Gygax</blockquote></div>
-<aside class="speaker-notes">Welcome everyone. I&#x27;m Calvin Hendryx-Parker, co-founder of Six Feet Up.<br>Today we&#x27;re going on a quest — a D&amp;D-flavored journey through<br>agentic AI orchestration. If you&#x27;ve ever tried to get an AI agent<br>to do real work and watched it go sideways, this talk is for you.<br>We&#x27;ll use a fictional consulting scenario to explore real patterns:<br>context engineering, checklists, orchestration styles, and how to<br>make agents reliable enough for high-stakes work.<br>Two live demos. A playbook you can take home. Let&#x27;s roll.</aside>
+<aside class="speaker-notes">Hello Allthing AI<br>Orechestration<br>- evolving landscape<br>- orchestration is something humans do: managing teams, programming concurrency and parallelization, distributed computing, and now AI bots<br>- It is a step in creating more complex system that do bigger things<br>- Often it is because things are too fiddly to coordinate on there own. They require our input.<br>- Often the non-deterministic nature of a process makes it require<br>  orchestration, and therefore orchestration is non-deterministic.</aside>
 </section>
 
     <!-- 02-backstory-magic.md -->
-    <section class="slide dark-slide" aria-label="The Backstory Magic">
+    <section class="slide dark-slide" aria-label="The Practical Magic">
 <div class="slide-content">
-<h2 class="reveal">The Backstory Magic</h2>
+<h2 class="reveal">The Practical Magic</h2>
 <div class="split-layout reveal">
 <div class="split-text">
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Working together for outcomes and incomes.</p>
+<h3 class="reveal">We have things to get done</h3>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Practical applications. People and AI. Working together for outcomes and incomes.</p>
 </div>
 <div class="split-image">
 <img src="../../images/the-team-in-the-office_web.jpg" alt="The party gathers — business as usual meets the quest" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
 </div>
 </div>
 </div>
-<aside class="speaker-notes">Business as usual can feel more like an epic quest into Mordor than a<br>stock photo of smiling people around a laptop.<br>One second we are planning a cheery offsite, the next it is very dark<br>and we might be eaten by a grue.<br>Whether good news or bad, adapting quickly requires tools and experience.<br>&gt; &quot;We become what we behold. We shape our tools and then our tools shape us.&quot;<br>&gt; — Marshall McLuhan</aside>
-<span class="slide-footer">1</span>
+<aside class="speaker-notes">- there is nothing that guarantees business as usual is at all usual.<br>  Business as usual can feel more like an epic quest into Mordor than<br>  a stock photo of smiling people around a laptop.<br>- One second we are planning a cheery offsite, the next it is very<br>  dark and we might be eaten by a grue.<br>- Whether good news or bad, adapting quickly requires tools and experience.<br>- We are going to explore orchestration through the lens of business<br>  problem and the metaphore of a fantasy table top game. This gives us<br>  an opportunity to explore how different roles are impacted by the<br>  use of AI agents and how they contribute and benefit as the human<br>  element of agent orchestration.</aside>
+<span class="slide-footer">0</span>
 </section>
 
     <!-- 03-do-i-need-one.md -->
@@ -1031,19 +767,25 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;We&#x27;re in the &#x27;horseless carriage&#x27; stage of coding genies.&quot; — Kent Beck</blockquote></div>
-<aside class="speaker-notes">This is the slide for the skeptics in the room — and you should be skeptical.<br>Why: because the work we do is full of non-deterministic, multi-step tasks<br>that don&#x27;t reduce to a single API call. Review this contract. Plan this<br>migration. Audit this codebase. These are judgment-heavy workflows.<br>What: agents are LLM-driven workers that can plan a sequence of actions,<br>execute them with tools, and validate their own output. Not chatbots —<br>workers.<br>How: the magic is in skills (reusable prompt+tool bundles), context<br>engineering (giving the agent the right information at the right time),<br>and orchestration (coordinating multiple agents and humans).<br>When: start with one agent, one repetitive task, one tight feedback loop.<br>Don&#x27;t boil the ocean. Kent Beck&#x27;s quote nails it — we&#x27;re early. Treat<br>agents like a junior team member: trust but verify.</aside>
-<span class="slide-footer">2</span>
+<span class="slide-footer">1</span>
 </section>
 
     <!-- 04-trouble-comes-knocking.md -->
-    <section class="slide dark-slide" aria-label="Trouble Comes Knocking: the Setup">
+    <section class="slide dark-slide" aria-label="Trouble Comes Knocking: an example">
 <div class="slide-content">
-<h2 class="reveal">Trouble Comes Knocking: the Setup</h2>
+<h2 class="reveal">Trouble Comes Knocking: an example</h2>
+<div class="split-layout reveal">
+<div class="split-text">
 <p class="subtitle reveal">A plausible if confabulated situation</p>
 <p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">A Crisis is just an Opportunity (to use agents)</p>
 </div>
-<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run &lt;https://www.larpsy.gold&gt; (artisan marketplace) and &lt;https://larpsalot.party&gt; (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
-<span class="slide-footer">3</span>
+<div class="split-image">
+<img src="../../images/party-plans.jpg" alt="The party plans their approach" class="slide-image" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+</div>
+</div>
+</div>
+<aside class="speaker-notes">You are the COO of a crack consulting company. You just won a discovery contract with L&amp;LL LLC (Lord and Lady LARPsalot) — a rapidly growing gaming events company.<br>They run https://www.larpsy.gold (artisan marketplace) and https://larpsalot.party (events, registration, payments, game runner tools, community) — all built on Open Gaming Licensed RPG content.<br>They need to migrate off Heroku Paas because it is sunsetting, relaunch their sites on a tight time table. If we can pull it off, we will be the top choice for more work: their new mobile gaming platform.  You and your team are busy preparing to start work on<br>Then L&amp;L CEO Lady Tasha Tiamata calls — Hasbro is changing the OGL. How much content may have to come down? Time to get the party together.</aside>
+<span class="slide-footer">2</span>
 </section>
 
     <!-- 04.1-what-do-we-know.md -->
@@ -1059,8 +801,7 @@
 </ul>
 <p class="subtitle reveal">The clock is ticking. Let&#x27;s see what we&#x27;re working with.</p>
 </div>
-<aside class="speaker-notes">This is the &quot;quest inventory&quot; moment — what tools and artifacts do we<br>actually have to work with?<br>Tasha has handed over a tarball. The buildpack tells us how the apps<br>are built and deployed. The repos give us the codebase. The database<br>dump is the state of the world. And the OGL content dump is the thing<br>that&#x27;s on fire right now.<br>Key point: before you throw agents at a problem, you need to understand<br>the artifacts. Context engineering starts here — what goes into the<br>agent&#x27;s context window, in what order, and with what framing.<br>Transition: now that we know what we&#x27;re working with, let&#x27;s talk about<br>how we actually approach it with agents.</aside>
-<span class="slide-footer">6</span>
+<span class="slide-footer">3</span>
 </section>
 
     <!-- 05-the-mighty-fine-team.md -->
@@ -1113,14 +854,14 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;The medium is the message.&quot; — Marshall McLuhan</blockquote></div>
-<aside class="speaker-notes">Pause here. This is a Critical Role reference — the moment where the<br>DM asks the player &quot;how do you want to do this?&quot; after a killing blow.<br>We&#x27;ve introduced the scenario, the team, and the agent. Now the question<br>is: how do we actually put them together?<br>The audience should be thinking about their own teams right now. The<br>D&amp;D class metaphor is playful, but the point is real: agents are not<br>all the same, and neither are the humans coordinating with them. The<br>orchestration challenge is matching capabilities to tasks.<br>Transition: we&#x27;re about to jump into the first live demo. The team is<br>assembled. Time to roll for initiative.</aside>
-<span class="slide-footer">7</span>
+<span class="slide-footer">6</span>
 </section>
 
     <!-- 09-join-the-fray.md -->
     <section class="slide dark-slide" aria-label="Join the fray">
 <div class="slide-content">
 <h2 class="reveal">Join the fray</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![a d20, also a natural 20](img:shiny and metallic)</p>
 <p class="subtitle reveal">Demo: the OGL content crisis</p>
 <ul class="bullet-list">
 <li class="reveal">Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat — lose content or face legal action</li>
@@ -1134,8 +875,7 @@
 
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Roll for initiative!&quot;</blockquote></div>
-<aside class="speaker-notes">DEMO TIME — the OGL content crisis.<br>Walk through the scenario out loud: L&amp;LL faces a dual existential threat.<br>If they keep OGL content, Hasbro may sue. If they pull it all blindly,<br>they gut their platform. We need to know exactly what&#x27;s affected.<br>Demo flow:<br>1. Sera and Finn (BizOps) frame the problem — the cleric and bard<br>   aren&#x27;t scared of the command line<br>2. Ranger Kyle stands up an isolated database for the analysis<br>3. COO Mira fires up the coding agent<br>4. Agent searches PDFs for protected names (places, items, characters)<br>5. Cross-references against L&amp;LL&#x27;s content database<br>6. Reports the damage — what percentage is at risk<br>7. Generates replacement names where needed<br>Key points to hit: isolation (separate DB), context engineering (targeted<br>PDF search, not &quot;review everything&quot;), and human-in-the-loop (Mira drives,<br>agent executes).<br>If demo hiccups: fall back to prebaked output in demo-assets/prebaked/.</aside>
-<span class="slide-footer">8</span>
+<span class="slide-footer">7</span>
 </section>
 
     <!-- 10-skills-in-action.md -->
@@ -1147,7 +887,7 @@
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Engage with the bigger picture... Are you not just getting a task done, but engaging with the broader universe of tasks you&#x27;re embedded in?&quot; — Matt Beane, The Skill Code</blockquote></div>
 <aside class="speaker-notes">- Create a skill live to use &quot;say&quot; for audio notifications when tasks complete<br>- Separate databases for each step — isolation as a feature<br>- Skills compound: each one you build makes the next task faster<br>- The agent learns your patterns; you learn its capabilities</aside>
-<span class="slide-footer">9</span>
+<span class="slide-footer">8</span>
 </section>
 
     <!-- 11-loot-the-room.md -->
@@ -1164,7 +904,7 @@
 </div>
 </div>
 <aside class="speaker-notes">L&amp;LL is psyched. The team has landed more work — a database migration.<br>But now we face more complex tasks, with greater peril. Time to step<br>back and consider what frameworks we already apply to<br>non-deterministic business processes.<br>- Cynefin: is this clear, complicated, complex, or chaotic?<br>- OODA: observe, orient, decide, act — then loop<br>- Orchestrate the agents AND the humans</aside>
-<span class="slide-footer">10</span>
+<span class="slide-footer">9</span>
 </section>
 
     <!-- 11.5-eventual-consistency.md -->
@@ -1190,7 +930,7 @@
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Make it work, make it right, make it fast.&quot; — Kent Beck</blockquote></div>
 <aside class="speaker-notes">The key insight: we don&#x27;t need the agent to be right the first time.<br>We need it to be right eventually, with proof.<br>The brownian ratchet pattern:<br>1. Agent generates code/content<br>2. Automated checks run (tests, linting, type checking, security scans)<br>3. Failures feed back as context for the next attempt<br>4. Each pass fixes something — the ratchet clicks forward<br>5. When all checks pass, we have both the result AND the proof it works<br>This is not wishful thinking — it&#x27;s the same pattern CI/CD uses.<br>The difference is the agent closes the loop automatically.<br>Real example: multiclaude swarm generates 5 PRs, each with TDD.<br>3 pass immediately. 2 fail tests, get auto-fixed on retry.<br>All 5 land with green CI. That&#x27;s eventual consistency in practice.</aside>
-<span class="slide-footer">12</span>
+<span class="slide-footer">10</span>
 </section>
 
     <!-- 12-more-work.md -->
@@ -1201,7 +941,6 @@
 <p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The OGL crisis is handled. Now the original contract: migrate off Heroku, modernize the sites, prepare for mobile.</p>
 <p class="subtitle reveal" style="color: rgba(255,255,255,0.7);">Time to level up our orchestration.</p>
 </div>
-<aside class="speaker-notes">Breather slide. The OGL crisis is handled — the audience has seen agents<br>do useful work with real artifacts.<br>But the original contract was about migrating off Heroku and modernizing<br>the sites. That work is more complex: infrastructure, code changes,<br>testing, deployment. The stakes are higher and the tasks are less<br>clear-cut.<br>This is the pivot from &quot;agents can help in a crisis&quot; to &quot;agents can<br>handle sustained engineering work.&quot; The orchestration needs to level up<br>from single-agent-with-human to multi-agent coordination.<br>Transition: and just when you think things are going well... it&#x27;s a trap.</aside>
 <span class="slide-footer">11</span>
 </section>
 
@@ -1218,9 +957,9 @@
 <li class="reveal">Fire up speckit: create specs from findings, clarify, plan</li>
 </ul>
 
+<blockquote class="quote reveal">&quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote>
 </div>
-<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; — DevSecOps proverb  &quot;The worthy GM never purposely kills players&#x27; PCs. He presents opportunities for the rash and unthinking players to do that all on their own.&quot; — Gary Gygax</blockquote></div>
-<aside class="speaker-notes">DEMO TIME — contract analysis and adversarial review.<br>This demo shows the full stack of agentic orchestration:<br>1. Ingest the consulting contract PDF — agent generates visual<br>   explainers and a review checklist automatically<br>2. Security as a first-class requirement: show the security skills<br>   (risk review, guardrails) that are baked into the workflow<br>3. Swarm with /c^2 — fan out to Codex and Gemini for adversarial<br>   review. Multiple models catch what a single model misses.<br>4. Show the visual explainers: project overlay, risk report, and<br>   adversarial findings side by side<br>5. Fire up speckit: turn findings into actionable specs, clarify<br>   ambiguities, generate a plan<br>Key points: this is multi-agent, multi-model orchestration. Security<br>isn&#x27;t an afterthought — it&#x27;s a skill the agent uses automatically.<br>The Gygax quote lands here: the trap isn&#x27;t the contract, it&#x27;s<br>skipping the review.<br>If demo hiccups: prebaked outputs in demo-assets/prebaked/ cover<br>contract-review-checklist and ogl-crisis-report.</aside>
+<div class="slide-quote"><blockquote class="quote reveal">&quot;Security enables speed when baked in, not bolted on.&quot; Somebody??</blockquote></div>
 <span class="slide-footer">12</span>
 </section>
 
@@ -1265,7 +1004,7 @@
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Plans are useless, but planning is indispensable.&quot; — Dwight D. Eisenhower</blockquote></div>
 <aside class="speaker-notes">This is your Monday morning starter kit. You don&#x27;t need to adopt everything at once.<br>Pick the workflow that causes the most pain, build one skill around it,<br>and let it compound from there. The playbook is also available as a<br>standalone page linked from the repo.</aside>
-<span class="slide-footer">15</span>
+<span class="slide-footer">14</span>
 </section>
 
     <!-- 15-closing.md -->
@@ -1291,8 +1030,7 @@
 </div>
 </div>
 <div class="slide-quote"><blockquote class="quote reveal">&quot;Most important advice in software: underpromise, deliver.&quot; — maybe Tom Conrad</blockquote></div>
-<aside class="speaker-notes">Bring it home. These are the six things to remember:<br>1. You already have frameworks for orchestrating nondeterministic work —<br>   OODA and Cynefin apply directly to agent orchestration.<br>2. Skills are the compound interest of agent work — every skill you<br>   build makes the next task faster and more reliable.<br>3. Security and trust are not overhead — they&#x27;re what let you go faster.<br>   Bake them in from the start.<br>4. Orchestrate everybody — agents and humans are both part of the party.<br>   Conway&#x27;s Law applies to agent teams too.<br>5. The agent is a party member, not a replacement. It augments the team.<br>6. Underpromise, deliver, iterate. The brownian ratchet pattern means<br>   you don&#x27;t need perfection on the first pass — you need convergence.<br>Callback to the journey: we started with a crisis, assembled a party,<br>ran two missions, and leveled up our orchestration along the way.<br>Pause. Let the closing image and quote land. Then transition to the<br>playbook slide or straight to questions.</aside>
-<span class="slide-footer">14</span>
+<span class="slide-footer">15</span>
 </section>
 
     <!-- 16-questions.md -->
@@ -1301,8 +1039,8 @@
 <div class="slide-content">
 <p class="tagline reveal">Thank You</p>
 <h1 class="reveal">Questions?</h1>
-<p class="tagline reveal">Calvin Hendryx-Parker — Six Feet Up</p>
-<p class="tagline reveal">github.com/sixfeetup/agentic-quest</p>
+<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<p class="subtitle reveal">github.com/sixfeetup/agentic-quest</p>
 </div>
 <aside class="speaker-notes">Presenter resources:<br>- [explainer: System Overview](explainers/system-overview.html) — repo structure, build pipeline, slide format<br>- [explainer: Playbook](explainers/playbook.html) — grab-and-go takeaway for attendees<br>- [explainer: Checklist Progress](explainers/checklist-progress.html) — talk readiness vs expectations<br>- [explainer: Demo Plan](explainers/demo-plan.html) — demo execution strategy and fallbacks<br>- Speaker notes: press N to toggle<br>- Demo assets: see demo-assets/ directory for prebaked safety nets</aside>
 </section>
@@ -1319,7 +1057,6 @@
                 this.setupTouchNav();
                 this.setupProgressBar();
                 this.setupNavDots();
-                this.setupHelpModal();
             }
 
             setupIntersectionObserver() {
@@ -1340,10 +1077,6 @@
 
             setupKeyboardNav() {
                 document.addEventListener('keydown', (e) => {
-                    // When help modal is open, only handle Escape and ?
-                    if (this.helpModalOpen && e.key !== 'Escape' && e.key !== '?' && e.key !== 'Tab') {
-                        return;
-                    }
                     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
                         e.preventDefault();
                         this.goToSlide(this.currentSlide + 1);
@@ -1357,17 +1090,7 @@
                         e.preventDefault();
                         this.goToSlide(this.slides.length - 1);
                     } else if (e.key === 'n' || e.key === 'N') {
-                        if (!this.helpModalOpen) {
-                            document.body.classList.toggle('show-notes');
-                        }
-                    } else if (e.key === '?') {
-                        e.preventDefault();
-                        this.toggleHelpModal();
-                    } else if (e.key === 'Escape') {
-                        if (this.helpModalOpen) {
-                            e.preventDefault();
-                            this.closeHelpModal();
-                        }
+                        document.body.classList.toggle('show-notes');
                     }
                 });
             }
@@ -1409,89 +1132,6 @@
                 this.dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === this.currentSlide);
                 });
-            }
-
-            setupHelpModal() {
-                this.helpModalOpen = false;
-                this.helpBackdrop = document.getElementById('helpModal');
-                this.helpCloseBtn = document.getElementById('helpModalClose');
-                this.helpQuickJump = document.getElementById('helpQuickJump');
-
-                // Populate Quick Jump list from slides
-                this.slides.forEach((slide, i) => {
-                    const label = slide.getAttribute('aria-label')
-                        || slide.querySelector('h1, h2')?.textContent?.trim()
-                        || `Slide ${i + 1}`;
-                    const li = document.createElement('li');
-                    const btn = document.createElement('button');
-                    btn.innerHTML = `<span class="jump-index">${i + 1}</span> ${label}`;
-                    btn.addEventListener('click', () => {
-                        this.closeHelpModal();
-                        this.goToSlide(i);
-                    });
-                    li.appendChild(btn);
-                    this.helpQuickJump.appendChild(li);
-                });
-
-                // Close button
-                this.helpCloseBtn.addEventListener('click', () => this.closeHelpModal());
-
-                // Backdrop click closes modal
-                this.helpBackdrop.addEventListener('click', (e) => {
-                    if (e.target === this.helpBackdrop) {
-                        this.closeHelpModal();
-                    }
-                });
-
-                // Focus trap: Tab cycles within the modal
-                this.helpBackdrop.addEventListener('keydown', (e) => {
-                    if (e.key !== 'Tab') return;
-                    const focusable = this.helpBackdrop.querySelectorAll(
-                        'button, a[href], [tabindex]:not([tabindex="-1"])'
-                    );
-                    if (focusable.length === 0) return;
-                    const first = focusable[0];
-                    const last = focusable[focusable.length - 1];
-                    if (e.shiftKey) {
-                        if (document.activeElement === first) {
-                            e.preventDefault();
-                            last.focus();
-                        }
-                    } else {
-                        if (document.activeElement === last) {
-                            e.preventDefault();
-                            first.focus();
-                        }
-                    }
-                });
-            }
-
-            toggleHelpModal() {
-                if (this.helpModalOpen) {
-                    this.closeHelpModal();
-                } else {
-                    this.openHelpModal();
-                }
-            }
-
-            openHelpModal() {
-                this.helpModalOpen = true;
-                this.helpBackdrop.classList.add('open');
-                // Store the element that had focus before opening
-                this._previousFocus = document.activeElement;
-                // Focus the close button
-                requestAnimationFrame(() => {
-                    this.helpCloseBtn.focus();
-                });
-            }
-
-            closeHelpModal() {
-                this.helpModalOpen = false;
-                this.helpBackdrop.classList.remove('open');
-                // Restore focus
-                if (this._previousFocus) {
-                    this._previousFocus.focus();
-                }
             }
 
             goToSlide(idx) {
