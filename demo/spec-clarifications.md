@@ -74,9 +74,17 @@ Examples:
 ### Database
 
 - The demo database is always Postgres.
+- PostgreSQL with pgvector is the preferred path when the demo needs RAG-style context management.
 - ETL and ingest steps should target Postgres, even if a prior exploratory path used another local store.
 - If we show population live, the next meaningful query should still point at a separately prepared, already loaded Postgres database.
 - The task runner should eventually support standing up or connecting to the demo Postgres instance reproducibly.
+- If we include a survivability segment, the preferred recovery story uses PostgreSQL WAL-backed recovery so we can show fast rollback with bounded data loss after a fabricated prompt-injection that drops tables.
+
+### Survivability Scenario
+
+- We want the option to fabricate a prompt injection that causes destructive database changes, such as dropping tables.
+- The recovery should be quick, credible, and framed around limited data loss rather than a perfect undo story.
+- WAL-based recovery, such as point-in-time recovery or an equivalent rollback path, is the preferred mechanism to demonstrate this.
 
 ### Vulnerable Buildpack Artifact
 
@@ -98,6 +106,13 @@ Candidate properties:
 - Local model usage is currently an optional enhancement, not the primary dependency.
 - It may become a stronger fallback if we find a coding model and agent path that are reliable enough.
 - If used, the local path should have cheat cards or constrained prompts so the operator burden stays low.
+
+### Initial PoC Integration Boundary
+
+- The initial PoC should target Notion, Google Cloud Storage, and an object-triggered event path in Google Cloud.
+- Infrastructure changes should be applied through OpenTofu executed in an isolated GCE project or account rather than against shared global access paths.
+- The design should explicitly minimize auth and authorization footguns, including the risk of locking ourselves out of reverting changes.
+- GitHub Actions is an acceptable CI/CD runner if that separation gives us a safer execution boundary than running directly against shared credentials.
 
 ## Questions To Resolve
 
