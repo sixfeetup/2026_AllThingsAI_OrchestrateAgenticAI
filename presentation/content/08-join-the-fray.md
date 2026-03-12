@@ -5,15 +5,13 @@ footer: "08"
 
 # Join the fray
 
-<<<<<<< HEAD
-=======
-![a d20, also a natural 20](img:shiny and metallic)
+![a d20, also a natural 20](@@img:shiny and metallic)
 
 
->>>>>>> whitmo/tweaks
 _Demo: the OGL content crisis_
 
-- Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat — lose content or face legal action
+- Sera (Cleric) and Finn (Bard) from BizOps understand the dual threat
+  — lose content or face legal action
 - Ranger Kyle gets a database stood up
 - COO Mira Stonebridge drives the start up her coding agent
 - Search PDFs for names of places, magic items, characters, monsters
@@ -21,11 +19,13 @@ _Demo: the OGL content crisis_
 - Report the damage
 - Generate replacement names if damage is high
 
-> "Roll for initiative!"
-<<<<<<< HEAD
+> "Roll for initiative..."
+
 
 ???
 DEMO TIME — the OGL content crisis.
+
+@@ update @@
 
 Walk through the scenario out loud: L&LL faces a dual existential threat.
 If they keep OGL content, Hasbro may sue. If they pull it all blindly,
@@ -47,5 +47,3 @@ PDF search, not "review everything"), and human-in-the-loop (Mira drives,
 agent executes).
 
 If demo hiccups: fall back to prebaked output in demo-assets/prebaked/.
-=======
->>>>>>> whitmo/tweaks
