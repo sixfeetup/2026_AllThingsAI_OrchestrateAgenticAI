@@ -20,6 +20,8 @@ This directory is the staging area for the runnable conference demo workspace.
 - Install vendored repo skills into Codex: `make install-vendored-skills`
 - Symlink vendored repo skills into Codex: `make link-vendored-skills`
 - Create short `sk-*` aliases for speckit skills: `make install-speckit-aliases`
+- Launch Codex for this repo with Ralph MCP enabled: `make codex-local`
+- Launch Codex in repo-local demo mode: `make codex-demo`
 
 ## Demo Shape
 
@@ -108,6 +110,7 @@ This directory will likely need:
 - [Canonical demo plan](./plan.md)
 - [Prior demo plan draft](./plan-v1.md)
 - [Spec clarifications](./spec-clarifications.md)
+- [Explainers plan](./explainers-plan.md)
 
 ### Repo-level planning and specs
 
@@ -135,3 +138,5 @@ This directory will likely need:
 
 - [Vendored skill installer](./scripts/install-vendored-skills.sh)
 - [Skill frontmatter repair helper](../agent/scripts/fix_skill_frontmatter.py)
+- [Repo-local Codex launcher with Ralph MCP](../agent/scripts/codex-local-ralph-mcp.sh)
+- [Repo-local Codex demo-mode launcher](../agent/scripts/codex-demo-mode.sh)

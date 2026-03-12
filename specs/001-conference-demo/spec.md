@@ -84,11 +84,13 @@ As the presenter, I need a clear run-of-show, preparation checklist, and time-bo
 - **FR-017**: The demo experience MUST identify which capabilities are required from external or local models and agents so the presenter can judge whether a local-only fallback is viable.
 - **FR-018**: The demo experience MUST organize demo materials so they can mature into a reusable, shareable demo workspace after the presentation.
 - **FR-019**: The demo experience MUST treat the vulnerable buildpack artifact as a single shareable `Dockerfile` specimen with an intentional, explainable issue suitable for live review.
+- **FR-020**: The demo experience MUST define the required visual explainers in a dedicated source-of-truth document so they can be built, rehearsed, and used as explicit fallback assets.
 
 ### Key Entities *(include if feature involves data)*
 
 - **Demo Segment**: A discrete live portion of the talk with a narrative purpose, time budget, operator flow, and fallback strategy.
 - **Prepared Artifact**: A pre-generated output, screenshot, recording, or document that can replace a live step while preserving the teaching outcome.
+- **Visual Explainer**: A prepared HTML artifact that makes a complex demo state, comparison, or workflow legible on stage and can also serve as fallback material.
 - **Prepared State**: A known-good artifact or environment snapshot that is loaded ahead of time so a later step can proceed deterministically even if an earlier live step was only demonstrated.
 - **Operator Flow**: The presenter's run-of-show for a segment, including setup, live actions, transition cues, and cutover decisions.
 - **Dependency Risk**: A failure mode tied to network access, external services, authentication, credentials, quotas, or model availability that can affect the live demo.
@@ -103,6 +105,7 @@ As the presenter, I need a clear run-of-show, preparation checklist, and time-bo
 - Demo assets will accumulate in a dedicated demo workspace that may later be shared publicly, so the structure should support reruns and handoff.
 - Some apparently live actions will be illustrative only; the subsequent step may intentionally run against a separately loaded, known-good state to reduce stage risk.
 - The "fake buildpack" used in the security/review demo is represented by a `Dockerfile` rather than a fuller platform artifact.
+- The demo workspace maintains a dedicated explainer plan that defines which visual explainers exist, where they are used, and what fallback role they play.
 
 ## Success Criteria *(mandatory)*
 

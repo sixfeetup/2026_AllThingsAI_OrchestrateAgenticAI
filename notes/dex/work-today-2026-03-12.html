@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Work Today Checklist</title>
+  <style>
+    :root {
+      --bg: #f3f6f8;
+      --paper: #ffffff;
+      --ink: #1a2b36;
+      --muted: #637684;
+      --line: #d4dde3;
+      --accent: #0c5e78;
+      --done: #1f7d53;
+      --todo: #8f5b11;
+      --radius: 18px;
+      --shadow: 0 14px 40px rgba(28, 54, 70, 0.10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(26,43,54,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(26,43,54,0.035) 1px, transparent 1px),
+        var(--bg);
+      background-size: 28px 28px, 28px 28px, auto;
+    }
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px;
+      display: grid;
+      gap: 20px;
+    }
+    .hero, .panel {
+      background: rgba(255,255,255,0.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero { padding: 26px; }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-family: "IBM Plex Serif", Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 0.95;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      color: var(--muted);
+      line-height: 1.55;
+      max-width: 72ch;
+    }
+    .meta {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: #fff;
+      font-size: 0.92rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .panel { padding: 22px; }
+    .panel h2 {
+      font-size: 1.18rem;
+      margin-bottom: 8px;
+    }
+    .panel p.sub {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .checklist {
+      display: grid;
+      gap: 10px;
+    }
+    .item {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.8);
+    }
+    .mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-top: 1px;
+    }
+    .done { background: rgba(31,125,83,0.12); color: var(--done); }
+    .todo { background: rgba(143,91,17,0.12); color: var(--todo); }
+    .links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .links a {
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.8);
+    }
+    .links a span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+    code {
+      font-family: "IBM Plex Mono", monospace;
+      background: rgba(16,36,51,0.06);
+      padding: 0.1rem 0.35rem;
+      border-radius: 7px;
+      font-size: 0.92em;
+    }
+    @media (max-width: 900px) {
+      .grid, .links { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Work Today</div>
+      <h1>Conference demo work, reduced to checklists.</h1>
+      <p>Today’s work turned the demo from notes into a planned workspace. The core results were: a formal conference demo spec and plan, a clarified <code>demo/</code> operating model, and repo-local Codex launchers with Ralph MCP wired in.</p>
+      <div class="meta">
+        <div class="chip">Date: March 12, 2026</div>
+        <div class="chip">Status: planning complete</div>
+        <div class="chip">Next: <code>speckit-tasks</code></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>Completed today</h2>
+        <p class="sub">The main planning and operator-facing decisions are now written down.</p>
+        <div class="checklist">
+          <div class="item"><div class="mark done">✓</div><div><strong>Canonical split is set.</strong><br><code>demo/plan.md</code> is the source of truth and <code>demo/README.md</code> is the fast stress-path runbook.</div></div>
+          <div class="item"><div class="mark done">✓</div><div><strong>Conference demo spec and plan exist.</strong><br>The feature now has spec-kit artifacts under <code>specs/001-conference-demo/</code>.</div></div>
+          <div class="item"><div class="mark done">✓</div><div><strong>Explainers are planned, not ad hoc.</strong><br><code>demo/explainers-plan.md</code> defines what to build and in what order.</div></div>
+          <div class="item"><div class="mark done">✓</div><div><strong>Data path is fixed.</strong><br>Postgres is the demo database, and predetermined-state cutovers are part of each segment.</div></div>
+          <div class="item"><div class="mark done">✓</div><div><strong>Security specimen is defined.</strong><br>The fake buildpack is explicitly a vulnerable <code>Dockerfile</code>.</div></div>
+          <div class="item"><div class="mark done">✓</div><div><strong>Repo-local Codex ergonomics exist.</strong><br>Launchers and Make targets now provide Ralph MCP without changing the global Codex MCP set.</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Still to build</h2>
+        <p class="sub">The next work is implementation, not more abstract planning.</p>
+        <div class="checklist">
+          <div class="item"><div class="mark todo">→</div><div><strong>Create <code>demo/Makefile</code>.</strong><br>Add stable entry points for setup, Postgres bootstrap, audit, and fallback opening.</div></div>
+          <div class="item"><div class="mark todo">→</div><div><strong>Add Postgres scaffolding.</strong><br>Create the local demo DB path and prepared-state loading flow.</div></div>
+          <div class="item"><div class="mark todo">→</div><div><strong>Add the vulnerable <code>Dockerfile</code>.</strong><br>Make Segment 2’s local audit path real.</div></div>
+          <div class="item"><div class="mark todo">→</div><div><strong>Build explainers.</strong><br>Start with Security Audit Findings, then Jetpacks, then the OGL fallback explainer.</div></div>
+          <div class="item"><div class="mark todo">→</div><div><strong>Add prepared fallback artifacts.</strong><br>Each segment needs a stage-safe asset that opens quickly.</div></div>
+          <div class="item"><div class="mark todo">→</div><div><strong>Run <code>speckit-tasks</code>.</strong><br>Turn the plan into ordered implementation work.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Core repo links</h2>
+      <p class="sub">These are the few documents that matter most right now.</p>
+      <div class="links">
+        <a href="../../demo/plan.md">demo/plan.md<span>canonical demo description</span></a>
+        <a href="../../demo/README.md">demo/README.md<span>stress-path operator guide</span></a>
+        <a href="../../demo/explainers-plan.md">demo/explainers-plan.md<span>visual explainer source of truth</span></a>
+        <a href="../../specs/001-conference-demo/plan.md">specs/001-conference-demo/plan.md<span>implementation plan</span></a>
+        <a href="../../specs/001-conference-demo/spec.md">specs/001-conference-demo/spec.md<span>feature specification</span></a>
+        <a href="../../checklist.md">checklist.md<span>talk delivery and demo checklist</span></a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

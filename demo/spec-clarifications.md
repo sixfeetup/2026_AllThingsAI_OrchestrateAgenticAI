@@ -16,6 +16,7 @@ Working draft for decisions that should feed back into the formal spec and plan.
 - The canonical demo plan inside the demo workspace lives at `./demo/plan.md`.
 - `./demo/README.md` should serve as the operator-facing index and link hub optimized for quick use under stress.
 - If higher-level repo documents reference the demo workspace, they should point readers to `./demo/plan.md` first.
+- Visual explainer definitions should live in `./demo/explainers-plan.md`, which acts as the source of truth for what explainers need to exist and why.
 
 ### 1. `./demo` scope
 
