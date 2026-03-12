@@ -32,6 +32,7 @@
 - `source_step`: the live or offline workflow that originally produced it
 - `trust_level`: whether it is stage-trusted for continuation
 - `refresh_path`: how to regenerate or reload it
+- `recovery_path`: how to restore it after destructive changes, if applicable
 
 **Relationships**:
 
@@ -88,6 +89,24 @@
 **Relationships**:
 
 - may affect one or more `DemoSegment`
+
+## RecoveryScenario
+
+**Purpose**: Represents a rehearsed failure-and-recovery path used to demonstrate survivability.
+
+**Fields**:
+
+- `name`: recovery scenario identifier
+- `destructive_event`: the fabricated failure, such as prompt-injection table drops
+- `recovery_mechanism`: WAL-backed recovery, point-in-time recovery, or equivalent
+- `data_loss_bound`: explicit statement of acceptable recovery loss
+- `operator_steps`: concise recovery sequence used during rehearsal or on stage
+
+**Relationships**:
+
+- belongs to one or more `DemoSegment`
+- depends on one or more `PreparedState`
+- may mitigate one or more `DependencyRisk`
 
 ## WorkspaceAsset
 

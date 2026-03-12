@@ -5,19 +5,19 @@
 
 ## Summary
 
-Create a runnable, rehearsal-friendly demo workspace rooted in `demo/` that supports the three-segment conference story with deterministic cutovers, Postgres-backed prepared state, a shareable vulnerable `Dockerfile` specimen, and a source-of-truth explainer plan. Implementation should prioritize operator speed under stress while keeping `demo/plan.md` as the canonical description and preserving fallback-first delivery.
+Create a runnable, rehearsal-friendly demo workspace rooted in `demo/` that supports the three-segment conference story with deterministic cutovers, Postgres-backed prepared state, pgvector-backed context management, a shareable vulnerable `Dockerfile` specimen, a survivability recovery scenario, and a source-of-truth explainer plan. Implementation should prioritize operator speed under stress while keeping `demo/plan.md` as the canonical description and preserving fallback-first delivery.
 
 ## Technical Context
 
 **Language/Version**: Shell scripts (`zsh`/POSIX bash compatible where practical), Python 3 via `uv` for helper automation, Markdown/HTML for runbooks and explainers  
-**Primary Dependencies**: `uv`, Codex CLI, Ralph CLI, Make, Postgres, repo-local markdown and HTML artifacts  
-**Storage**: PostgreSQL for demo state; filesystem for prepared artifacts, plans, explainers, and generated outputs  
+**Primary Dependencies**: `uv`, Codex CLI, Ralph CLI, Make, Postgres with pgvector, repo-local markdown and HTML artifacts  
+**Storage**: PostgreSQL for demo state, pgvector-backed retrieval context, WAL archives or equivalent recovery artifacts, and filesystem storage for prepared artifacts, plans, explainers, and generated outputs  
 **Testing**: Script smoke checks, Markdown/doc consistency checks, manual rehearsal validation, targeted command verification via `make`  
 **Target Platform**: macOS presenter machine with terminal access and local CLIs installed  
 **Project Type**: Demo workspace plus documentation/runbook tooling  
 **Performance Goals**: Operator can reach the next required artifact in under 10 seconds during rehearsal; fallback artifacts open in under 30 seconds after cutover  
-**Constraints**: Must tolerate partial network failure; must keep README scannable under stress; must prefer predetermined state after live proof steps; must remain publishable or sanitizable later  
-**Scale/Scope**: Three live demo segments, one canonical plan, one explainer source-of-truth, one Postgres-backed data path, one vulnerable Dockerfile specimen, a small set of launcher/install scripts
+**Constraints**: Must tolerate partial network failure; must keep README scannable under stress; must prefer predetermined state after live proof steps; must avoid auth/authz footguns; must remain publishable or sanitizable later  
+**Scale/Scope**: Three live demo segments, one canonical plan, one explainer source-of-truth, one Postgres-backed data path with pgvector support, one vulnerable Dockerfile specimen, one survivability recovery path, and a small set of launcher/install scripts
 
 ## Constitution Check
 
@@ -25,7 +25,7 @@ Create a runnable, rehearsal-friendly demo workspace rooted in `demo/` that supp
 
 - Narrative fit: Pass. The work directly strengthens the promised conference talk by turning the demo into a recoverable three-act runbook with visible evidence for the claims.
 - Slide-source alignment: Pass with sync obligations. `presentation/content/09-join-the-fray.md`, [presentation/content/13-its-a-trap.md](/Users/whit/work/2026-allthings-ai-presentation/.claude/worktrees/demo-init/presentation/content/13-its-a-trap.md), and [presentation/content/14-jetpacks.md](/Users/whit/work/2026-allthings-ai-presentation/.claude/worktrees/demo-init/presentation/content/14-jetpacks.md) remain the narrative source; derivative artifacts include [demo/plan.md](/Users/whit/work/2026-allthings-ai-presentation/.claude/worktrees/demo-init/demo/plan.md), [demo/README.md](/Users/whit/work/2026-allthings-ai-presentation/.claude/worktrees/demo-init/demo/README.md), [demo/explainers-plan.md](/Users/whit/work/2026-allthings-ai-presentation/.claude/worktrees/demo-init/demo/explainers-plan.md), and the feature spec artifacts.
-- Evidence trail: Pass. Evidence will live in `demo/plan.md`, `demo/README.md`, `demo/explainers-plan.md`, `presentation/explainers/`, Postgres loader/scaffold assets in `demo/`, the vulnerable `Dockerfile`, and spec-kit outputs in `specs/001-conference-demo/`.
+- Evidence trail: Pass. Evidence will live in `demo/plan.md`, `demo/README.md`, `demo/explainers-plan.md`, `presentation/explainers/`, Postgres/pgvector loader and recovery assets in `demo/`, the vulnerable `Dockerfile`, and spec-kit outputs in `specs/001-conference-demo/`.
 - Delivery safety: Pass. Each segment is planned around one live proof step followed by predetermined state, with explainers and prepared artifacts as explicit fallbacks.
 - Reproducibility: Pass with implementation work remaining. New assets must be generated from tracked scripts and Markdown plans under `demo/` with `Makefile` entry points for repeatability.
 
@@ -54,7 +54,7 @@ demo/
 ├── spec-clarifications.md
 ├── scripts/
 │   └── install-vendored-skills.sh
-├── postgres/                  # planned: local DB scaffold and seed loaders
+├── postgres/                  # planned: local DB scaffold, pgvector setup, WAL/recovery helpers
 ├── artifacts/                 # planned: prepared outputs and fallback files
 └── specimens/
     └── Dockerfile             # planned: vulnerable buildpack specimen
@@ -80,10 +80,11 @@ specs/001-conference-demo/
 Research findings are recorded in [research.md](/Users/whit/work/2026-allthings-ai-presentation/.claude/worktrees/demo-init/specs/001-conference-demo/research.md). The key decisions are:
 
 1. Treat `demo/plan.md` as the canonical demo description and `demo/README.md` as the stress-case operator document.
-2. Use Postgres as the single supported demo database and never rely on state produced by a live ingest step for the next consequential action.
+2. Use Postgres as the single supported demo database, prefer pgvector for retrieval-based context management, and never rely on state produced by a live ingest step for the next consequential action.
 3. Keep the security audit layered: deterministic local checks first, one primary model explanation second, optional adversarial review third.
-4. Define visual explainers in a dedicated source-of-truth file and build the highest-risk explainers first.
-5. Use repo-local Codex launcher wrappers instead of mutating global Codex MCP configuration for demo-specific behavior.
+4. Add a survivability path where destructive prompt-injection damage is recovered via PostgreSQL WAL-backed recovery with explicitly bounded data loss.
+5. Define visual explainers in a dedicated source-of-truth file and build the highest-risk explainers first.
+6. Use repo-local Codex launcher wrappers instead of mutating global Codex MCP configuration for demo-specific behavior.
 
 ## Phase 1: Design
 
@@ -106,9 +107,9 @@ The first-pass implementation and rehearsal workflow is documented in [quickstar
 1. Workspace foundations
    Create the `demo/` layout, task runner, Postgres scaffold, and canonical runbook structure.
 2. Segment 1 assets
-   Add ETL inputs, preloaded Postgres state, fallback reports, and a simple explainer/report path.
+   Add ETL inputs, preloaded Postgres/pgvector state, fallback reports, and a simple explainer/report path.
 3. Segment 2 assets
-   Add the vulnerable `Dockerfile`, deterministic security audit path, prepared findings, and high-priority explainers.
+   Add the vulnerable `Dockerfile`, deterministic security audit path, prepared findings, survivability recovery artifacts, and high-priority explainers.
 4. Segment 3 assets
    Add the bounded feature-spec demo inputs, predetermined repo/worktree payoff state, and orchestration explainers or recordings.
 5. Launch/runtime integration
@@ -119,10 +120,10 @@ The first-pass implementation and rehearsal workflow is documented in [quickstar
 ### Sequencing
 
 1. Build the `demo/` workspace and `Makefile`.
-2. Add Postgres scaffolding and seed/load conventions.
-3. Create the vulnerable `Dockerfile` specimen and deterministic audit path.
+2. Add Postgres scaffolding, pgvector setup, and seed/load conventions.
+3. Create the vulnerable `Dockerfile` specimen, deterministic audit path, and WAL-backed recovery path.
 4. Build the explainers defined in `demo/explainers-plan.md`, starting with Segment 2.
-5. Add prepared artifacts and recordings needed for cutovers.
+5. Add prepared artifacts and recordings needed for cutovers and survivability recovery.
 6. Rehearse and tighten the README/runbook based on actual operator friction.
 
 ## Post-Design Constitution Check

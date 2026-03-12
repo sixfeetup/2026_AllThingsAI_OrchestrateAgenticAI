@@ -5,6 +5,14 @@
 **Status**: Draft  
 **Input**: User description: "Spec out the conference demo for the Agents of Legend presentation, including the three live demo segments, operator flow, prep requirements, and fallback behavior."
 
+## Clarifications
+
+### Session 2026-03-12
+
+- Q: What initial PoC technology boundary should guide the demo workspace? → A: Target an initial PoC around Notion, Google Cloud Storage, an object-triggered GCP event path, and isolated OpenTofu execution inside a separate GCE project or account; prefer separation that limits auth footguns and lockout risk, with GitHub Actions as an acceptable CI/CD runner when that separation improves safety.
+- Q: What storage approach should support RAG-style context management in the demo workspace? → A: Use PostgreSQL with pgvector as the preferred RAG-capable context store so context management stays inside the demo's primary database path.
+- Q: How should the demo handle a fabricated prompt-injection that drops tables? → A: Include a survivability scenario where a fabricated prompt injection causes destructive database changes, then recover quickly with limited data loss using PostgreSQL WAL-backed point-in-time recovery or an equivalent WAL-based rollback path.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Deliver a credible live contract-review demo (Priority: P1)
@@ -60,6 +68,7 @@ As the presenter, I need a clear run-of-show, preparation checklist, and time-bo
 - The presenter must shorten the talk in real time because of schedule pressure and needs to know which demo elements are essential versus optional.
 - Multiple failures occur in the same segment, requiring a single fallback asset that preserves the learning objective without relying on additional live steps.
 - An attendee asks how the demo evidence maps to governance, auditability, or engineering practice, and the presenter needs visible outputs that support that claim.
+- A fabricated prompt-injection causes destructive database changes, and the demo must show a bounded, credible recovery path with limited data loss rather than a full manual rebuild.
 
 ## Requirements *(mandatory)*
 
@@ -85,6 +94,12 @@ As the presenter, I need a clear run-of-show, preparation checklist, and time-bo
 - **FR-018**: The demo experience MUST organize demo materials so they can mature into a reusable, shareable demo workspace after the presentation.
 - **FR-019**: The demo experience MUST treat the vulnerable buildpack artifact as a single shareable `Dockerfile` specimen with an intentional, explainable issue suitable for live review.
 - **FR-020**: The demo experience MUST define the required visual explainers in a dedicated source-of-truth document so they can be built, rehearsed, and used as explicit fallback assets.
+- **FR-021**: The demo experience MUST treat the initial proof-of-concept integration path as a bounded stack centered on Notion, Google Cloud Storage, an object-triggered Google Cloud event path, and isolated OpenTofu execution in a separate GCE project or account.
+- **FR-022**: The demo experience MUST minimize auth and authorization blast radius by favoring isolated infrastructure and execution boundaries over any setup that could accidentally mutate or lock out shared global access.
+- **FR-023**: The demo experience MUST allow GitHub-hosted CI/CD execution as an acceptable separation mechanism when it reduces credential risk or improves rollback safety.
+- **FR-024**: The demo experience MUST support RAG-style context management using PostgreSQL with pgvector as the preferred context store when vector retrieval is needed.
+- **FR-025**: The demo experience MUST support a survivability scenario in which a fabricated prompt injection causes destructive database changes and the operator demonstrates rapid recovery with explicitly bounded data loss.
+- **FR-026**: The demo experience MUST prefer PostgreSQL WAL-based recovery, such as point-in-time recovery or an equivalent WAL-backed rollback path, when demonstrating database recovery.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -106,6 +121,11 @@ As the presenter, I need a clear run-of-show, preparation checklist, and time-bo
 - Some apparently live actions will be illustrative only; the subsequent step may intentionally run against a separately loaded, known-good state to reduce stage risk.
 - The "fake buildpack" used in the security/review demo is represented by a `Dockerfile` rather than a fuller platform artifact.
 - The demo workspace maintains a dedicated explainer plan that defines which visual explainers exist, where they are used, and what fallback role they play.
+- The initial PoC should stay within a narrowly scoped cloud integration path built around Notion, Google Cloud object storage, object-triggered eventing, and isolated OpenTofu execution.
+- Infrastructure changes for the PoC should prefer separation mechanisms that reduce the risk of breaking or locking out shared global authentication and authorization.
+- GitHub Actions is an acceptable runner for parts of the PoC when that extra separation materially improves safety.
+- Context-management experiments that need retrieval should stay inside the Postgres path by preferring pgvector over a separate vector store.
+- The survivability demo should use PostgreSQL recovery primitives, with WAL-backed recovery preferred so the story is credible and data-loss bounds can be stated clearly.
 
 ## Success Criteria *(mandatory)*
 
@@ -118,3 +138,4 @@ As the presenter, I need a clear run-of-show, preparation checklist, and time-bo
 - **SC-005**: The final demo plan makes explicit links to the major promises in the talk materials, with no major promised theme left unsupported by a demo moment or prepared artifact.
 - **SC-006**: For every segment, rehearsal notes identify the predetermined state being used, the point at which live execution stops being trusted, and the exact state or artifact used after cutover.
 - **SC-007**: Reviewers can inspect the demo plan and find documented mitigations for all major external-service, credential, authentication, and connectivity risks without relying on tribal knowledge.
+- **SC-008**: The survivability scenario can be rehearsed end-to-end, including a destructive prompt-injection event and a WAL-backed recovery path, with a documented and believable bound on data loss.
