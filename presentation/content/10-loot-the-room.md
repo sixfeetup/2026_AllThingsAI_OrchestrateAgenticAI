@@ -1,7 +1,7 @@
 ---
 type: content-slide
-image: ../images/Gemini_Generated_Image_jchaztjchaztjcha_web.jpg
-image_alt: The party considers their next move
+image: ../images/party-plans.jpg
+image_alt: The party considers their next move`
 image_layout: split
 footer: "10"
 ---
@@ -11,6 +11,8 @@ footer: "10"
 Spoils to victor
 
 ???
+@@ update @@
+
 L&LL is psyched. The team has landed more work — a database migration.
 
 But now we face more complex tasks, with greater peril. Time to step

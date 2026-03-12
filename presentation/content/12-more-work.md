@@ -1,13 +1,10 @@
 ---
 type: divider-slide
 footer: "12"
+image: ../images/party-runnin.jpg
+image_alt: The party makes their next move`
 ---
 
-# Great, But I Hired You For This Other Thing
+# But there is more (to do)
 
-_The job is not done — we need to migrate and update their websites._
-
-The OGL crisis is handled. Now the original contract: migrate off
-Heroku, modernize the sites, prepare for mobile.
-
-_Time to level up our orchestration._
+???

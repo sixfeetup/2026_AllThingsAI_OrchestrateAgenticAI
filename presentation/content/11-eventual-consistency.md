@@ -21,6 +21,8 @@ _Eventual consistency as a strategy_
 
 ???
 
+@@ find a better image @@
+
 The key insight: we don't need the agent to be right the first time.
 We need it to be right eventually, with proof.
 
