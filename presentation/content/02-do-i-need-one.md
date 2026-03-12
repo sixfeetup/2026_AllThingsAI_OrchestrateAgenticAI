@@ -1,12 +1,13 @@
 ---
 type: content-slide
-image: ../images/kent-v-genie-1_web.jpg
-image_alt: Kent Beck wrestling the genie — taming the new power
-image_layout: split
 footer: "02"
 ---
 
-# Agents: Do I Need One?
+<!-- image: ../images/kent-v-genie-1_web.jpg -->
+<!-- image_alt: Kent Beck wrestling the genie — taming the new power -->
+<!-- image_layout: split -->
+
+# But what can an Agent do for me??
 
 _Everybody says they are great, but..._
 
