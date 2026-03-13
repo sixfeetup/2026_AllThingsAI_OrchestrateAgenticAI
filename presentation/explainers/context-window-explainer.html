@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inside the Context Window — How AI Coding Agents Think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ THEME — Blueprint: deep slate + gold ============ */
+  :root {
+    --font-body: 'Sora', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #0c1220;
+    --surface: #111827;
+    --surface2: #1a2332;
+    --surface-elevated: #1e293b;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-bright: rgba(255, 255, 255, 0.12);
+    --text: #e2e8f0;
+    --text-dim: #7a8ba0;
+
+    --gold: #d4a73a;
+    --gold-dim: rgba(212, 167, 58, 0.12);
+    --blue: #3b82f6;
+    --blue-dim: rgba(59, 130, 246, 0.12);
+    --teal: #14b8a6;
+    --teal-dim: rgba(20, 184, 166, 0.10);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245, 158, 11, 0.10);
+    --red: #ef4444;
+    --red-dim: rgba(239, 68, 68, 0.10);
+    --green: #22c55e;
+    --green-dim: rgba(34, 197, 94, 0.10);
+    --slate: #64748b;
+    --slate-dim: rgba(100, 116, 139, 0.10);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f0f2f5;
+      --surface: #ffffff;
+      --surface2: #f5f7fa;
+      --surface-elevated: #ffffff;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-bright: rgba(0, 0, 0, 0.14);
+      --text: #1e293b;
+      --text-dim: #64748b;
+
+      --gold: #b8860b;
+      --gold-dim: rgba(184, 134, 11, 0.08);
+      --blue: #2563eb;
+      --blue-dim: rgba(37, 99, 235, 0.08);
+      --teal: #0d9488;
+      --teal-dim: rgba(13, 148, 136, 0.07);
+      --amber: #d97706;
+      --amber-dim: rgba(217, 119, 6, 0.07);
+      --red: #dc2626;
+      --red-dim: rgba(220, 38, 38, 0.07);
+      --green: #16a34a;
+      --green-dim: rgba(22, 163, 74, 0.07);
+      --slate: #475569;
+      --slate-dim: rgba(71, 85, 105, 0.07);
+    }
+  }
+
+  /* ============ RESET ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 15% 5%, var(--blue-dim) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 95%, var(--gold-dim) 0%, transparent 40%);
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 40px;
+    min-height: 100vh;
+    /* Subtle grid background for blueprint feel */
+    background-size: 100% 100%, 100% 100%, 40px 40px;
+    background-blend-mode: normal;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ============ ANIMATION ============ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeScale {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes drawIn {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .animate {
+    animation: fadeUp 0.4s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.06s);
+  }
+  .animate-scale {
+    animation: fadeScale 0.35s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.06s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ============ LAYOUT — sidebar TOC + main ============ */
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 0 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .main { min-width: 0; }
+
+  /* ============ TOC ============ */
+  .toc {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    padding: 14px 0;
+    grid-row: 1 / -1;
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+  }
+  .toc::-webkit-scrollbar { width: 3px; }
+  .toc::-webkit-scrollbar-thumb { background: var(--surface-elevated); border-radius: 2px; }
+
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    padding: 0 0 10px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toc a {
+    display: block;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+    margin-bottom: 1px;
+  }
+  .toc a:hover { color: var(--text); background: var(--surface2); }
+  .toc a.active { color: var(--gold); border-left-color: var(--gold); }
+
+  /* ============ TYPOGRAPHY ============ */
+  h1 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 6px;
+    text-wrap: balance;
+    line-height: 1.1;
+  }
+  h1 span { color: var(--gold); }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 40px;
+    font-family: var(--font-mono);
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+
+  /* ============ SECTION HEADS ============ */
+  .sec-head {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--text-dim);
+    padding: 12px 0 6px;
+    margin-top: 48px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    scroll-margin-top: 20px;
+  }
+  .sec-head .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ============ CARDS ============ */
+  .ve-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .ve-card--hero {
+    background: var(--surface-elevated);
+    border-color: var(--border-bright);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    padding: 28px 32px;
+  }
+  .ve-card--recessed {
+    background: var(--surface2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .ve-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+  .ve-card p strong { color: var(--text); }
+
+  .ve-card code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* ============ LEAD PARAGRAPH ============ */
+  .lead {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text);
+    max-width: 720px;
+    margin-bottom: 32px;
+  }
+  .lead strong { color: var(--gold); font-weight: 600; }
+
+  /* ============ KPI ROW ============ */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  .kpi-card__value {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+  }
+  .kpi-card__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* ============ ANATOMY DIAGRAM — stacked bars ============ */
+  .ctx-anatomy {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-bright);
+    margin-bottom: 20px;
+  }
+
+  .ctx-layer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .ctx-layer:last-child { border-bottom: none; }
+  .ctx-layer:hover { background: var(--surface-elevated); }
+
+  .ctx-layer__bar {
+    height: 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: width 0.6s ease-out;
+  }
+
+  .ctx-layer__name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 160px;
+  }
+
+  .ctx-layer__size {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    margin-left: auto;
+  }
+
+  .ctx-layer__desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ============ COMPACTION FLOW ============ */
+  .compact-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .compact-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    text-align: center;
+  }
+
+  .compact-step__num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .compact-step__title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .compact-step__desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .compact-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 6px;
+    color: var(--text-dim);
+  }
+  .compact-arrow svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: var(--border-bright);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  /* ============ CACHE DIAGRAM ============ */
+  .cache-diagram {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .cache-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cache-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .cache-box--cached::before { background: var(--green); }
+  .cache-box--uncached::before { background: var(--amber); }
+
+  .cache-box__title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+  .cache-box--cached .cache-box__title { color: var(--green); }
+  .cache-box--uncached .cache-box__title { color: var(--amber); }
+
+  .cache-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 4px 0;
+    color: var(--text-dim);
+  }
+  .cache-item .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ============ NOISE DIAGRAM ============ */
+  .noise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .noise-box {
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .noise-box__title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+
+  .token-bar {
+    display: flex;
+    height: 28px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+  .token-bar__seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    transition: width 0.6s ease-out;
+  }
+
+  .token-bar__legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .token-bar__legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .token-bar__legend .swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* ============ DATA TABLE ============ */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .data-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .data-table th {
+    background: var(--surface2);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 2px solid var(--border-bright);
+    white-space: nowrap;
+  }
+  .data-table th.num { text-align: right; }
+
+  .data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .data-table td.num {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:nth-child(even) { background: var(--surface2); }
+  .data-table tbody tr {
+    transition: background 0.15s;
+    animation: fadeUp 0.3s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.03s);
+  }
+  .data-table tbody tr:hover { background: var(--gold-dim); }
+
+  .data-table code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .data-table small {
+    display: block;
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Size badges */
+  .size-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .size-badge--2m { background: var(--gold-dim); color: var(--gold); }
+  .size-badge--1m { background: var(--blue-dim); color: var(--blue); }
+  .size-badge--200k { background: var(--teal-dim); color: var(--teal); }
+  .size-badge--128k { background: var(--slate-dim); color: var(--slate); }
+
+  /* Provider badges */
+  .provider {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .provider--anthropic { background: var(--amber-dim); color: var(--amber); }
+  .provider--openai { background: var(--green-dim); color: var(--green); }
+  .provider--google { background: var(--blue-dim); color: var(--blue); }
+  .provider--xai { background: var(--red-dim); color: var(--red); }
+  .provider--mistral { background: var(--gold-dim); color: var(--gold); }
+  .provider--cohere { background: var(--teal-dim); color: var(--teal); }
+  .provider--meta { background: var(--blue-dim); color: var(--blue); }
+
+  /* Type badges */
+  .type-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--text-dim);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  /* ============ CALLOUT ============ */
+  .callout {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ============ STRATEGY LIST ============ */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .strategy-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  .strategy-item__title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .strategy-item__title .indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .strategy-item__desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .strategy-item code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ============ CONTEXT BAR VISUALIZATION ============ */
+  .ctx-bar-wrap {
+    margin-bottom: 24px;
+  }
+  .ctx-bar-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .ctx-bar-outer {
+    height: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+  }
+  .ctx-bar-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: width 0.8s ease-out;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* ============ FLOW ARROW ============ */
+  .flow-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 6px 0;
+  }
+  .flow-arrow svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--border-bright);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ============ COLLAPSIBLE ============ */
+  details.collapsible {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  details.collapsible summary {
+    padding: 14px 20px;
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  details.collapsible summary:hover { background: var(--surface-elevated); }
+  details.collapsible summary::-webkit-details-marker { display: none; }
+  details.collapsible summary::before {
+    content: '\25B8';
+    font-size: 11px;
+    color: var(--text-dim);
+    transition: transform 0.15s;
+  }
+  details.collapsible[open] summary::before { transform: rotate(90deg); }
+  details.collapsible .collapsible__body {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-dim);
+  }
+  details.collapsible .collapsible__body strong { color: var(--text); }
+  details.collapsible .collapsible__body code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1000px) {
+    .wrap { grid-template-columns: 1fr; padding-top: 0; }
+    body { padding-top: 0; }
+
+    .toc {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      max-height: none;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      margin: 0 -40px;
+      padding-left: 40px;
+      padding-right: 40px;
+      grid-row: auto;
+    }
+    .toc::-webkit-scrollbar { display: none; }
+    .toc-title { display: none; }
+    .toc a {
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-left: none;
+      border-bottom: 2px solid transparent;
+      border-radius: 4px 4px 0 0;
+      padding: 6px 10px;
+      font-size: 10px;
+    }
+    .toc a.active {
+      border-left: none;
+      border-bottom-color: var(--gold);
+      background: var(--surface);
+    }
+    .main { padding-top: 20px; }
+    .sec-head { scroll-margin-top: 52px; }
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 28px; }
+    .compact-flow { grid-template-columns: 1fr; gap: 8px; }
+    .compact-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .cache-diagram { grid-template-columns: 1fr; }
+    .noise-grid { grid-template-columns: 1fr; }
+    .strategy-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#s1">Anatomy</a>
+    <a href="#s2">Not Embeddings</a>
+    <a href="#s3">Compaction</a>
+    <a href="#s4">Prompt Cache</a>
+    <a href="#s5">Noise</a>
+    <a href="#s6">Strategies</a>
+    <a href="#s7">Model Comparison</a>
+  </nav>
+
+  <div class="main">
+
+    <h1 class="animate" style="--i:0">Inside the <span>Context Window</span></h1>
+    <p class="subtitle animate" style="--i:1">How AI coding agents see your code, conversation, and the world</p>
+
+    <p class="lead animate" style="--i:2">
+      Every turn of a coding agent session, the <strong>entire conversation</strong> is sent to the model as raw text tokens &mdash; system prompt, project instructions, every message, every tool output. There are no embeddings, no search index, no hidden memory. Understanding this architecture is key to working with agents effectively.
+    </p>
+
+    <!-- ======== S1: ANATOMY ======== -->
+    <div id="s1" class="sec-head animate" style="--i:3">
+      <span class="dot" style="background:var(--gold)"></span>
+      1 &mdash; Anatomy of the Context Window
+    </div>
+
+    <div class="ve-card ve-card--hero animate" style="--i:4">
+      <p>Each API call packs everything into a single token sequence. Here's what fills a typical 200K-token window during a Claude Code session:</p>
+    </div>
+
+    <div class="ctx-anatomy animate" style="--i:5">
+      <div class="ctx-layer" style="background: var(--gold-dim)">
+        <div class="ctx-layer__name" style="color:var(--gold)">System Prompt</div>
+        <div class="ctx-layer__bar" style="width: 60px; background: var(--gold)"></div>
+        <div class="ctx-layer__desc">Core behavioral instructions, tool definitions, security rules</div>
+        <div class="ctx-layer__size">~8K tokens</div>
+      </div>
+      <div class="ctx-layer" style="background: var(--blue-dim)">
+        <div class="ctx-layer__name" style="color:var(--blue)">CLAUDE.md</div>
+        <div class="ctx-layer__bar" style="width: 30px; background: var(--blue)"></div>
+        <div class="ctx-layer__desc">Project instructions, coding standards, build commands</div>
+        <div class="ctx-layer__size">~2-8K tokens</div>
+      </div>
+      <div class="ctx-layer" style="background: var(--teal-dim)">
+        <div class="ctx-layer__name" style="color:var(--teal)">Loaded Skills</div>
+        <div class="ctx-layer__bar" style="width: 20px; background: var(--teal)"></div>
+        <div class="ctx-layer__desc">Active skill prompts, MCP server instructions</div>
+        <div class="ctx-layer__size">~1-4K tokens</div>
+      </div>
+      <div class="ctx-layer" style="background: var(--amber-dim)">
+        <div class="ctx-layer__name" style="color:var(--amber)">Conversation</div>
+        <div class="ctx-layer__bar" style="width: 100px; background: var(--amber)"></div>
+        <div class="ctx-layer__desc">Your messages + Claude's responses, growing each turn</div>
+        <div class="ctx-layer__size">~10-50K tokens</div>
+      </div>
+      <div class="ctx-layer" style="background: var(--red-dim)">
+        <div class="ctx-layer__name" style="color:var(--red)">Tool Outputs</div>
+        <div class="ctx-layer__bar" style="width: 180px; background: var(--red)"></div>
+        <div class="ctx-layer__desc">File reads, bash output, search results &mdash; the biggest consumer</div>
+        <div class="ctx-layer__size">~50-150K tokens</div>
+      </div>
+    </div>
+
+    <div class="ctx-bar-wrap animate" style="--i:6">
+      <div class="ctx-bar-label">
+        <span>Typical usage breakdown after ~30 turns</span>
+        <span>200K window</span>
+      </div>
+      <div class="ctx-bar-outer">
+        <div class="ctx-bar-seg" style="width:5%;background:var(--gold);color:#0c1220">SYS</div>
+        <div class="ctx-bar-seg" style="width:3%;background:var(--blue);color:#0c1220">MD</div>
+        <div class="ctx-bar-seg" style="width:2%;background:var(--teal);color:#0c1220"></div>
+        <div class="ctx-bar-seg" style="width:25%;background:var(--amber);color:#0c1220">CONV</div>
+        <div class="ctx-bar-seg" style="width:50%;background:var(--red);color:#0c1220">TOOL OUTPUTS</div>
+        <div class="ctx-bar-seg" style="width:15%;background:var(--surface2);color:var(--text-dim)">FREE</div>
+      </div>
+      <div class="token-bar__legend" style="margin-top:8px">
+        <span><span class="swatch" style="background:var(--gold)"></span> System</span>
+        <span><span class="swatch" style="background:var(--blue)"></span> CLAUDE.md</span>
+        <span><span class="swatch" style="background:var(--teal)"></span> Skills</span>
+        <span><span class="swatch" style="background:var(--amber)"></span> Conversation</span>
+        <span><span class="swatch" style="background:var(--red)"></span> Tool outputs</span>
+        <span><span class="swatch" style="background:var(--surface2);border:1px solid var(--border)"></span> Free</span>
+      </div>
+    </div>
+
+    <!-- ======== S2: NOT EMBEDDINGS ======== -->
+    <div id="s2" class="sec-head animate" style="--i:7">
+      <span class="dot" style="background:var(--blue)"></span>
+      2 &mdash; Raw Tokens, Not Embeddings
+    </div>
+
+    <div class="ve-card animate" style="--i:8">
+      <p>
+        A common misconception: <strong>the context window is not a vector database.</strong> There's no embedding step, no approximate nearest-neighbor search, no retrieval layer. Every token in the window is seen by every attention head on every forward pass. The model processes the full sequence linearly.
+      </p>
+    </div>
+
+    <div class="noise-grid animate" style="--i:9">
+      <div class="noise-box" style="background:var(--green-dim);border-color:var(--green)">
+        <div class="noise-box__title" style="color:var(--green)">What this means (strengths)</div>
+        <ul style="list-style:none;font-size:12px;line-height:2;color:var(--text-dim)">
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--green)">+</span> Nothing is approximate &mdash; full fidelity</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--green)">+</span> Cross-references between distant messages work</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--green)">+</span> No indexing latency or stale cache</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--green)">+</span> Model sees exact code, not a summary</li>
+        </ul>
+      </div>
+      <div class="noise-box" style="background:var(--red-dim);border-color:var(--red)">
+        <div class="noise-box__title" style="color:var(--red)">What this means (constraints)</div>
+        <ul style="list-style:none;font-size:12px;line-height:2;color:var(--text-dim)">
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--red)">&minus;</span> Hard ceiling &mdash; window is fixed size</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--red)">&minus;</span> Junk tokens dilute attention on useful ones</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--red)">&minus;</span> Cost scales linearly with window usage</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--red)">&minus;</span> Old instructions can get lost after compaction</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout animate" style="--i:10">
+      <strong>Key insight:</strong> Because it's raw tokens, there's no &ldquo;search&rdquo; over context. Claude doesn't &ldquo;look up&rdquo; relevant parts &mdash; it sees <em>everything</em> simultaneously. A 500-line test output competes for attention with your critical instructions.
+    </div>
+
+    <!-- ======== S3: COMPACTION ======== -->
+    <div id="s3" class="sec-head animate" style="--i:11">
+      <span class="dot" style="background:var(--amber)"></span>
+      3 &mdash; Compaction (Lossy Summarization)
+    </div>
+
+    <div class="ve-card animate" style="--i:12">
+      <p>
+        When the context window fills up, Claude Code triggers <strong>compaction</strong> &mdash; using Claude itself to summarize the conversation into fewer tokens. This is <strong>lossy text compression</strong>, not semantic embedding. Information is permanently dropped.
+      </p>
+    </div>
+
+    <div class="compact-flow animate" style="--i:13">
+      <div class="compact-step">
+        <div class="compact-step__num">Phase 1</div>
+        <div class="compact-step__title">Drop Tool Outputs</div>
+        <div class="compact-step__desc">Old file reads, bash outputs, and search results are removed first &mdash; they're the biggest and least relevant</div>
+      </div>
+      <div class="compact-arrow">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg>
+      </div>
+      <div class="compact-step">
+        <div class="compact-step__num">Phase 2</div>
+        <div class="compact-step__title">Summarize History</div>
+        <div class="compact-step__desc">Claude summarizes the conversation into a shorter narrative, keeping key decisions and code changes</div>
+      </div>
+      <div class="compact-arrow">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg>
+      </div>
+      <div class="compact-step">
+        <div class="compact-step__num">Phase 3</div>
+        <div class="compact-step__title">Continue</div>
+        <div class="compact-step__desc">Session continues with compressed context &mdash; early instructions may be lost unless they're in CLAUDE.md</div>
+      </div>
+    </div>
+
+    <div class="callout animate" style="--i:14">
+      <strong>Manual control:</strong> Use <code>/compact</code> to trigger compaction yourself, optionally with focus instructions: <code>/compact focus on the API migration</code>. Add a <code>## Compact Instructions</code> section to your CLAUDE.md to control what survives auto-compaction.
+    </div>
+
+    <details class="collapsible animate" style="--i:15">
+      <summary>What's lost vs. preserved during compaction</summary>
+      <div class="collapsible__body">
+        <strong>Preserved:</strong> CLAUDE.md content (re-read each turn), recent tool outputs, key code changes, the current task state.<br><br>
+        <strong>Lost:</strong> Detailed early conversation, old file reads, nuanced instructions given verbally early in the session, intermediate reasoning. This is why <strong>durable instructions belong in CLAUDE.md</strong>, not in conversation.
+      </div>
+    </details>
+
+    <!-- ======== S4: PROMPT CACHE ======== -->
+    <div id="s4" class="sec-head animate" style="--i:16">
+      <span class="dot" style="background:var(--green)"></span>
+      4 &mdash; Prompt Caching (Billing Optimization)
+    </div>
+
+    <div class="ve-card animate" style="--i:17">
+      <p>
+        <strong>Prompt caching is not compression &mdash; it's a billing and latency optimization.</strong> Anthropic's API caches repeated token prefixes across turns. The content is identical; you just don't re-pay to process tokens the model has already seen.
+      </p>
+    </div>
+
+    <div class="cache-diagram animate" style="--i:18">
+      <div class="cache-box cache-box--cached">
+        <div class="cache-box__title">Cached (cheap per turn)</div>
+        <div class="cache-item"><span class="dot" style="background:var(--green)"></span> System prompt (~8K tokens)</div>
+        <div class="cache-item"><span class="dot" style="background:var(--green)"></span> CLAUDE.md instructions</div>
+        <div class="cache-item"><span class="dot" style="background:var(--green)"></span> Skill definitions</div>
+        <div class="cache-item"><span class="dot" style="background:var(--green)"></span> Early conversation (stable prefix)</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--green);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">90% cost reduction on cached tokens</div>
+      </div>
+      <div class="cache-box cache-box--uncached">
+        <div class="cache-box__title">Uncached (full price)</div>
+        <div class="cache-item"><span class="dot" style="background:var(--amber)"></span> Latest user message</div>
+        <div class="cache-item"><span class="dot" style="background:var(--amber)"></span> Latest tool outputs</div>
+        <div class="cache-item"><span class="dot" style="background:var(--amber)"></span> New conversation turns</div>
+        <div class="cache-item"><span class="dot" style="background:var(--amber)"></span> Claude's response (output tokens)</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--amber);margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">Full input + output token pricing</div>
+      </div>
+    </div>
+
+    <div class="callout animate" style="--i:19">
+      <strong>Important distinction:</strong> Caching doesn't change the content &mdash; every token is still present in the window. It just means the API doesn't re-compute attention over the stable prefix. The model still &ldquo;sees&rdquo; all cached tokens.
+    </div>
+
+    <!-- ======== S5: NOISE ======== -->
+    <div id="s5" class="sec-head animate" style="--i:20">
+      <span class="dot" style="background:var(--red)"></span>
+      5 &mdash; Why Noise Kills Performance
+    </div>
+
+    <div class="ve-card animate" style="--i:21">
+      <p>
+        Since the model processes all tokens with equal attention opportunity, <strong>noisy context directly competes with useful context.</strong> A 10,000-token test log sitting in the window is 10,000 tokens of distraction from your actual question.
+      </p>
+    </div>
+
+    <div class="noise-grid animate" style="--i:22">
+      <div class="noise-box" style="background:var(--surface)">
+        <div class="noise-box__title" style="color:var(--green)">Clean Context</div>
+        <div class="token-bar">
+          <div class="token-bar__seg" style="width:8%;background:var(--gold)"></div>
+          <div class="token-bar__seg" style="width:5%;background:var(--blue)"></div>
+          <div class="token-bar__seg" style="width:35%;background:var(--amber)">conversation</div>
+          <div class="token-bar__seg" style="width:20%;background:var(--teal)">relevant code</div>
+          <div class="token-bar__seg" style="width:32%;background:var(--surface2);color:var(--text-dim)">free</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6">High signal-to-noise. Model focuses attention on relevant code and your instructions. Responses are precise and on-task.</div>
+      </div>
+      <div class="noise-box" style="background:var(--surface)">
+        <div class="noise-box__title" style="color:var(--red)">Noisy Context</div>
+        <div class="token-bar">
+          <div class="token-bar__seg" style="width:5%;background:var(--gold)"></div>
+          <div class="token-bar__seg" style="width:3%;background:var(--blue)"></div>
+          <div class="token-bar__seg" style="width:15%;background:var(--amber)">conv</div>
+          <div class="token-bar__seg" style="width:10%;background:var(--teal)">code</div>
+          <div class="token-bar__seg" style="width:45%;background:var(--red);color:#0c1220">test logs + build output + file dumps</div>
+          <div class="token-bar__seg" style="width:22%;background:var(--surface2);color:var(--text-dim)"></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Low signal-to-noise. Attention spread across irrelevant output. Earlier instructions get &ldquo;buried.&rdquo; Forces earlier compaction.</div>
+      </div>
+    </div>
+
+    <!-- ======== S6: STRATEGIES ======== -->
+    <div id="s6" class="sec-head animate" style="--i:23">
+      <span class="dot" style="background:var(--teal)"></span>
+      6 &mdash; Noise Management Strategies
+    </div>
+
+    <div class="strategy-grid animate" style="--i:24">
+      <div class="strategy-item">
+        <div class="strategy-item__title">
+          <span class="indicator" style="background:var(--gold)"></span>
+          Delegate to subagents
+        </div>
+        <div class="strategy-item__desc">Run verbose operations (tests, builds, log analysis) in subagents. Their output stays in their context, not yours.</div>
+      </div>
+      <div class="strategy-item">
+        <div class="strategy-item__title">
+          <span class="indicator" style="background:var(--blue)"></span>
+          Compact Instructions in CLAUDE.md
+        </div>
+        <div class="strategy-item__desc">Add a <code>## Compact Instructions</code> section telling Claude what to always preserve during compaction.</div>
+      </div>
+      <div class="strategy-item">
+        <div class="strategy-item__title">
+          <span class="indicator" style="background:var(--teal)"></span>
+          Manual <code>/compact</code> with focus
+        </div>
+        <div class="strategy-item__desc">Run <code>/compact focus on X</code> to proactively compress before the window fills, preserving what matters most.</div>
+      </div>
+      <div class="strategy-item">
+        <div class="strategy-item__title">
+          <span class="indicator" style="background:var(--amber)"></span>
+          PreToolUse hooks
+        </div>
+        <div class="strategy-item__desc">Filter tool output before it enters context. Grep only errors from test logs, truncate long file reads.</div>
+      </div>
+      <div class="strategy-item">
+        <div class="strategy-item__title">
+          <span class="indicator" style="background:var(--green)"></span>
+          Use <code>/context</code> to audit
+        </div>
+        <div class="strategy-item__desc">Run <code>/context</code> to see what's consuming space. Identify MCP servers or tools adding overhead.</div>
+      </div>
+      <div class="strategy-item">
+        <div class="strategy-item__title">
+          <span class="indicator" style="background:var(--red)"></span>
+          Clear between tasks
+        </div>
+        <div class="strategy-item__desc">Use <code>/clear</code> between unrelated tasks. Name sessions with <code>/rename</code> first so you can <code>/resume</code> later.</div>
+      </div>
+    </div>
+
+    <!-- ======== S7: MODEL COMPARISON ======== -->
+    <div id="s7" class="sec-head animate" style="--i:25">
+      <span class="dot" style="background:var(--gold)"></span>
+      7 &mdash; Context Window Sizes (Early 2026)
+    </div>
+
+    <div class="kpi-row animate" style="--i:26">
+      <div class="kpi-card">
+        <div class="kpi-card__value" style="color:var(--gold)">2M</div>
+        <div class="kpi-card__label">Largest Window</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__value" style="color:var(--blue)">1M</div>
+        <div class="kpi-card__label">Most Common Large</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__value" style="color:var(--teal)">200K</div>
+        <div class="kpi-card__label">Claude Family</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__value" style="color:var(--slate)">128K</div>
+        <div class="kpi-card__label">Legacy Standard</div>
+      </div>
+    </div>
+
+    <div class="table-wrap animate" style="--i:27">
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Provider</th>
+              <th class="num">Context</th>
+              <th>Type</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="--i:1">
+              <td><strong>Gemini 1.5 Pro</strong></td>
+              <td><span class="provider provider--google">Google</span></td>
+              <td class="num"><span class="size-badge size-badge--2m">2M</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>Largest production window<small>Previous gen, still available</small></td>
+            </tr>
+            <tr style="--i:2">
+              <td><strong>Gemini 2.5 Pro</strong></td>
+              <td><span class="provider provider--google">Google</span></td>
+              <td class="num"><span class="size-badge size-badge--1m">1M</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>Current flagship<small>Thinking model with tool use</small></td>
+            </tr>
+            <tr style="--i:3">
+              <td><strong>Gemini 2.5 Flash</strong></td>
+              <td><span class="provider provider--google">Google</span></td>
+              <td class="num"><span class="size-badge size-badge--1m">1M</span></td>
+              <td><span class="type-badge">Fast</span></td>
+              <td>Speed-optimized<small>Same window as Pro</small></td>
+            </tr>
+            <tr style="--i:4">
+              <td><strong>GPT-5</strong></td>
+              <td><span class="provider provider--openai">OpenAI</span></td>
+              <td class="num"><span class="size-badge size-badge--1m">1M</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>Latest flagship<small>Unified reasoning + generation</small></td>
+            </tr>
+            <tr style="--i:5">
+              <td><strong>GPT-5.3-Codex</strong></td>
+              <td><span class="provider provider--openai">OpenAI</span></td>
+              <td class="num"><span class="size-badge size-badge--1m">1M</span></td>
+              <td><span class="type-badge">Code</span></td>
+              <td>Code-specialized<small>Powers Codex CLI</small></td>
+            </tr>
+            <tr style="--i:6">
+              <td><strong>GPT-4.1</strong></td>
+              <td><span class="provider provider--openai">OpenAI</span></td>
+              <td class="num"><span class="size-badge size-badge--1m">1M</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>Previous gen<small>Instruction-following focused</small></td>
+            </tr>
+            <tr style="--i:7">
+              <td><strong>Llama 4 Maverick</strong></td>
+              <td><span class="provider provider--meta">Meta</span></td>
+              <td class="num"><span class="size-badge size-badge--1m">1M</span></td>
+              <td><span class="type-badge">Open</span></td>
+              <td>Open source<small>MoE architecture, 128 experts</small></td>
+            </tr>
+            <tr style="--i:8">
+              <td><strong>Claude Opus 4.6</strong></td>
+              <td><span class="provider provider--anthropic">Anthropic</span></td>
+              <td class="num"><span class="size-badge size-badge--200k">200K</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>Current flagship<small>Deepest reasoning, powers Claude Code</small></td>
+            </tr>
+            <tr style="--i:9">
+              <td><strong>Claude Sonnet 4.6</strong></td>
+              <td><span class="provider provider--anthropic">Anthropic</span></td>
+              <td class="num"><span class="size-badge size-badge--200k">200K</span></td>
+              <td><span class="type-badge">Balanced</span></td>
+              <td>Speed/quality balance<small>Fast mode in Claude Code</small></td>
+            </tr>
+            <tr style="--i:10">
+              <td><strong>Claude Haiku 4.5</strong></td>
+              <td><span class="provider provider--anthropic">Anthropic</span></td>
+              <td class="num"><span class="size-badge size-badge--200k">200K</span></td>
+              <td><span class="type-badge">Fast</span></td>
+              <td>Fastest/cheapest<small>Used for subagents (Explore, Guide)</small></td>
+            </tr>
+            <tr style="--i:11">
+              <td><strong>o3</strong></td>
+              <td><span class="provider provider--openai">OpenAI</span></td>
+              <td class="num"><span class="size-badge size-badge--200k">200K</span></td>
+              <td><span class="type-badge">Reasoning</span></td>
+              <td>Chain-of-thought<small>Extended thinking for hard problems</small></td>
+            </tr>
+            <tr style="--i:12">
+              <td><strong>o4-mini</strong></td>
+              <td><span class="provider provider--openai">OpenAI</span></td>
+              <td class="num"><span class="size-badge size-badge--200k">200K</span></td>
+              <td><span class="type-badge">Reasoning</span></td>
+              <td>Efficient reasoning<small>Smaller, faster reasoning model</small></td>
+            </tr>
+            <tr style="--i:13">
+              <td><strong>GPT-4o</strong></td>
+              <td><span class="provider provider--openai">OpenAI</span></td>
+              <td class="num"><span class="size-badge size-badge--128k">128K</span></td>
+              <td><span class="type-badge">Multi</span></td>
+              <td>Multimodal<small>Vision + audio + text</small></td>
+            </tr>
+            <tr style="--i:14">
+              <td><strong>Grok-3</strong></td>
+              <td><span class="provider provider--xai">xAI</span></td>
+              <td class="num"><span class="size-badge size-badge--128k">128K</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>xAI flagship<small>Real-time data access</small></td>
+            </tr>
+            <tr style="--i:15">
+              <td><strong>Mistral Large</strong></td>
+              <td><span class="provider provider--mistral">Mistral</span></td>
+              <td class="num"><span class="size-badge size-badge--128k">128K</span></td>
+              <td><span class="type-badge">General</span></td>
+              <td>EU-hosted option<small>Strong multilingual support</small></td>
+            </tr>
+            <tr style="--i:16">
+              <td><strong>Command R+</strong></td>
+              <td><span class="provider provider--cohere">Cohere</span></td>
+              <td class="num"><span class="size-badge size-badge--128k">128K</span></td>
+              <td><span class="type-badge">RAG</span></td>
+              <td>RAG-optimized<small>Built-in grounded generation</small></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <details class="collapsible animate" style="--i:28">
+      <summary>Context window size vs. effective utilization</summary>
+      <div class="collapsible__body">
+        <strong>Bigger isn't always better.</strong> A 1M-token window can hold ~750K words or ~25,000 pages of code. But models still exhibit &ldquo;lost in the middle&rdquo; effects &mdash; information placed in the center of very long contexts is recalled less reliably than information at the beginning or end. Effective context management (putting important content at the boundaries, keeping the window clean) often matters more than raw window size.<br><br>
+        <strong>Cost implications:</strong> Input tokens are priced per-token. A full 1M-token context at GPT-5 pricing costs significantly more per turn than a focused 50K-token context. Prompt caching mitigates the stable prefix, but new tokens each turn are full price.
+      </div>
+    </details>
+
+    <div class="callout animate" style="--i:29" style="margin-top:12px">
+      <strong>The trend:</strong> Context windows have grown 100x in two years (8K &rarr; 2M), but the architecture hasn't changed &mdash; it's still raw tokens, full attention, and lossy compaction. The tooling around managing that window (CLAUDE.md, <code>/compact</code>, hooks, subagents) matters as much as the window size itself.
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /wrap -->
+
+<!-- ============ SCROLL SPY ============ -->
+<script>
+(function() {
+  const toc = document.getElementById('toc');
+  const links = toc.querySelectorAll('a');
+  const sections = [];
+
+  links.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const match = sections.find(s => s.el === entry.target);
+        if (match) {
+          match.link.classList.add('active');
+          if (window.innerWidth <= 1000) {
+            match.link.scrollIntoView({
+              behavior: 'smooth', block: 'nearest', inline: 'center'
+            });
+          }
+        }
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+
+  sections.forEach(s => observer.observe(s.el));
+
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', '#' + id);
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

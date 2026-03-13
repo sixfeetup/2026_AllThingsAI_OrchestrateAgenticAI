@@ -136,12 +136,19 @@ nondeterministic behavior of LLM driven software.  When we humans,
 also nondeterministic agents, interact directly, determinism gets
 harder.
 
+afaict, in the claude code agent, the context is saved as raw tokenized text
+and is not exposed by any api.
+
 The context buffer is a bit like an agents working memory & long term
 memory rolled into one.  If one talks directly to the LLM, it is
-possible to aggressively manage this using tools to bring in more
+possible to aggressively manage this "hand" to create more
 durable memories while scrubbing the context.
 
 otoh, we just need to get this information back to Safe Houses lawyer.
+
+- show [context management explainer](context-window-explainer.html):
+  has context windows sizes for all of the major models.  Also talks about ways to monitor context.
+- show /context
 
 # 05 Exo-context & skills
 
