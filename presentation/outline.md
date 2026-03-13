@@ -111,6 +111,9 @@ does not overlap with the source material Hasbro is relicensing.
 
 ???
 
+<demo>
+Show of borking the context
+</demo>
 Wouldn't it be nice if you could just dump all the things into Claude or chatgpt.
 
 One of the more frustrating things about LLMs and the agent that use
@@ -147,7 +150,9 @@ create another kind of memory: the agent skill.  Skills allow us to
 codify (save) things we know how to do and need to do in a form that
 the agent can do them for us, either explicitly or implicitly.
 
-For memory, we will utilize the reigning champion for remember, the database. We will use 2 different forms of member: sql and vector storage.
+For memory, we will utilize the reigning champion for remember, the
+database. We will use 2 different forms of member: sql and vector
+storage.
 
 The first is well known by LLMs who can write sql better than me.
 - introduce sqllite skill
@@ -155,7 +160,77 @@ The first is well known by LLMs who can write sql better than me.
 The second storages data in a way similar to the LLM, as embeddings
 - show off chroma
 
-To solver our problem we need to
+<demo>
+- show off definitions of each skill
+- make a query for each
+- load some small amount of data for each (list of adventures from hasbro)
+</demo>
 
-data steps
-- @@todo
+
+
+
+# 06 See a thing
+
+![1 agents](img)
+
+???
+
+<demo>
+
+Observe
+
+Explore the data, prototype how to make a match
+
+</demo>
+
+# 07 Plan a thing
+
+![2 agents](img)
+
+???
+
+<demo>
+
+Orient
+
+use claude to explore the space and suggest options:
+- dialectic with agent
+- create a skill that helps toward final goal
+- use a visualizer to understand problem
+
+</demo>
+
+# 08 Choose
+
+![3 agents](img)
+
+???
+
+<demo>
+
+Decide
+
+- adversarial review
+- create agents to do special parts of the job like reporter and ingester, supervisor
+- discuss how encapsulation can help w/ context bitrot as well other things like auditing
+- define an aceptance criterion
+
+</demo>
+
+# 09 Act
+
+![4 agents](img)
+
+???
+
+<demo>
+
+Act
+
+- work with claude to multiplex the action using agents and skills
+- discuss routing and handoffs
+- have claude report progress, have a final report (explainer?)
+
+</demo>
+
+# 10
