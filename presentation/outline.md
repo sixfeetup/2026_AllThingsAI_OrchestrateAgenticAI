@@ -1,11 +1,9 @@
-# 00 Title
+# Orchestrate Agentic AI
 ---
 type: title-slide
 ---
 
-## **Orchestrate Agentic AI**
-
-_Context, Checklists, and No-Miss Reviews_
+## Context, Checklists, and No-Miss Reviews
 
 _Calvin Hendryx-Parker — Six Feet Up_
 
@@ -26,7 +24,7 @@ Getting Things Done (.AI)
   - we will move, but not too fast
   - there will be resource available online after the talk
 
-## Where we are going
+# Where we are going
 
 ![Agentic horizon](img)
 
@@ -69,10 +67,9 @@ impact outcome, techniques for detail with context limits, [fill in
 the rest]
 
 
-# 04 the demo setup
+# It's a Setup
 
 Welcome to the offices _Safe House Games SF_.
-
 
 ???
 
@@ -198,7 +195,7 @@ We will do what we can reasonable to encourage deterministic behavior,
 but the clock is ticking.
 
 
-# 06 See a thing
+# 06 See
 
 ![1 agents](img)
 
@@ -212,7 +209,7 @@ Explore the data, prototype how to make a match
 
 </demo>
 
-# 07 Plan a thing
+# 07 Plan
 
 ![2 agents](img)
 
