@@ -131,6 +131,11 @@ explicitly in how you manage the context sent, but the limitation
 always means the model's response will become more and more impacted
 by history until it is cleaned.
 
+The difficulty of controlling context contributes to the
+nondeterministic behavior of LLM driven software.  When we humans,
+also nondeterministic agents, interact directly, determinism gets
+harder.
+
 The context buffer is a bit like an agents working memory & long term
 memory rolled into one.  If one talks directly to the LLM, it is
 possible to aggressively manage this using tools to bring in more
@@ -167,6 +172,23 @@ The second storages data in a way similar to the LLM, as embeddings
 </demo>
 
 
+# 06 The orchestration loop
+
+???
+
+Many of you will recognize the following pattern which is one
+operators tend to follow: observe, orient, decide, act. The OODA was
+formally define by USAF Colonel John Boyd in the early 70s.
+
+Unlike most formalized engineering process, it is designed for practical
+in the moment work.
+
+While claude code could do engineering for us, we are more in a making
+furniture with a chainsaw sort of situation.  The lawyers need to
+know, but we do know yet what the outcome will look like.
+
+We will do what we can reasonable to encourage deterministic behavior,
+but the clock is ticking.
 
 
 # 06 See a thing
@@ -233,4 +255,28 @@ Act
 
 </demo>
 
-# 10
+# 10 Live and let die another day
+
+![]()
+
+???
+
+Safe house is happy, their deal can move forward, their fans will be
+happy, they will hire us again.
+
+
+Talk about repo and playbook
+
+
+# 11 The Future is Agentic
+
+The Future is Agentic
+_But so was the past_
+
+???
+
+Closing remarks --
+- multi-agent workflow can model how we do things in an office as well as more low level processes
+- we can model and enforce engineer practice in ways we never could before and it is having interesting outcomes
+- software is cheaper which make operation more expensive
+- context buffers issue also occur between the ears and between people -- the struggle to keep down the noice is real.
