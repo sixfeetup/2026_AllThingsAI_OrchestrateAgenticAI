@@ -614,7 +614,7 @@
             display: none;
         }
 
-        body.show-notes .speaker-notes {
+        body.show-notes .slide.slide-current .speaker-notes {
             display: block;
             position: fixed;
             bottom: 0;
@@ -1120,6 +1120,9 @@
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('visible');
+                            // Track current slide for speaker notes
+                            this.slides.forEach(s => s.classList.remove('slide-current'));
+                            entry.target.classList.add('slide-current');
                             const idx = [...this.slides].indexOf(entry.target);
                             this.currentSlide = idx;
                             this.updateProgressBar();
