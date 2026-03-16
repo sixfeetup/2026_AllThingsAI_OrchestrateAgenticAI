@@ -33,7 +33,7 @@
       "Bash(multiclaude:*)",
       "Bash(do echo:*)"
     ]
-  }
+  },
 
   "skipDangerousModePermissionPrompt": true,
   "effortLevel": "high",
