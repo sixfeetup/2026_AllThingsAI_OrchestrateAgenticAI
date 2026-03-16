@@ -6,8 +6,8 @@
   - 30 pages -- PDF w/ some spooky hidden text about cupcakes
   - 7 ambiguous or problem clauses
     - contradictions
-	- impossible date
-	- Incorrect name (not SixFeetUp)
+	- impossible date (e.g. delivery date is in the past)
+	- Incorrect name (tbd)
 	- Ambiguous timeframe
 	- Ambiguous terms
 	- Ambiguous licensing
