@@ -29,3 +29,18 @@
 - [ ] Safety + containment: specific techniques for blast radius
 - [ ] Playbook artifact: repo, template, or checklist to take home
 - [ ] Practical > theoretical: attendees can replicate the approach
+
+## Demo-specific prep
+
+- [ ] Narrate chunking at Load step: why clause-level granularity
+      matters for retrieval quality
+- [ ] Explicit engineering parallels: criteria files = test specs,
+      adversarial agent = code review, audit trail = CI logs
+- [ ] Naive-review contrast: prebaked shallow review to compare
+      against structured agent output
+- [ ] Orchestration decision framework: when single agent vs pipeline
+      vs adversarial review (in playbook)
+- [ ] Show convergence: second adversarial pass where findings stabilize
+- [ ] Call out containment: uv sandboxing, scoped agent permissions,
+      local-only data stores
+- [ ] Playbook artifact: `assets/playbook.md` — attendee take-home

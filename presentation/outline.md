@@ -48,11 +48,16 @@ tradeoff and the opportunities that are unfolding in the space.
 
 ???
 
-Wikipedia has 3 definitions for "Orchestration": for music, for computers and for games.  In all three cases, you could make the argument orchestration is an act of managing complexity and the uncertainty it can create.
+Wikipedia has 3 definitions for "Orchestration": for music, for
+computers and for games.  In all three cases, you could make the
+argument orchestration is an act of managing complexity and the
+uncertainty it can create.
 
-We are going talk about managing agents to help manage the complexity incipient to working in the digital age.
+We are going talk about managing agents to help manage the complexity
+incipient to working in the digital age.
 
-We will start with the operator to agent relationship and then talk about what we can do with larger groups of agents.
+We will start with the operator to agent relationship and then talk
+about what we can do with larger groups of agents.
 
 
 # 03 Let's Get Real (sort of)
@@ -67,38 +72,11 @@ impact outcome, techniques for detail with context limits, [fill in
 the rest]
 
 
-# It's a Setup
+# This is a contracts, there are many like it
 
-Welcome to the offices _Safe House Games SF_.
+_but this could ruin your day_
 
-???
 
-Safe House is a young, fast growing, post pandemic company
-specializing in augmented reality live action role playing
-experiences, focussed on spycraft and lore.  They describe their
-flagship events as "capture the flag meets escape room across entire
-cities w/ a murder mystery evening thrown in".
-
-To their delight, Netflix is interested in licensing several campaigns
-to develop into a reality tv show.  To their lawyers dismay, the
-ownership of their IP is in an unknown situation as of this morning.
-
-Safe House, in their rapid growth, heavily used classic DnD modules
-and rules which, with the help of LLMs, transformed into the scripts
-and rules for their 007 style adventures. Originally licensed under
-the Open Gaming License, Hasbro has decided to rerelease some of these
-modules and relicense them under a commercial license.
-
-Netflix is on the fence, due to a corporate conflict w/ Hasbro around
-the GIJoe movies.  Safe House's lawyers say they can see a way forward
-if we can identify which storylines have been used and remove all
-titles and other identifying characteristic.
-
-We have the source material, the names of the module hasbro plans to
-relicense, and Safe House's script repository.
-
-We need to build proof that the source material Netflix wants to use
-does not overlap with the source material Hasbro is relicensing.
 
 
 # 04 So much text, so little context
@@ -146,6 +124,8 @@ otoh, we just need to get this information back to Safe Houses lawyer.
 - show [context management explainer](context-window-explainer.html):
   has context windows sizes for all of the major models.  Also talks about ways to monitor context.
 - show /context
+
+
 
 # 05 Exo-context & skills
 

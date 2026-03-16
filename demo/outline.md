@@ -31,10 +31,13 @@
   - eval skill
     - look at a criterion in md
 	- apply and report
+  - auditing skill
 
 Pollute the context window?
 
-## Start
+## Demo
+
+### Start
 
 - skills & agents check
   - talk about our roster
@@ -42,19 +45,32 @@ Pollute the context window?
     - loader
 	- searcher
 
+### Load
+
 - load in our contract
   - mv to preload, do some searches
+
+### Plan
 
 - Establish goals
   - talk about how determinism is important
   - talk about ambiguity in contracts
   - talk about how a good contract is a good spec and a good spec is how we get good performance out of agents
   - Talk about testing agent systems and evals
-  - Look at the contract eval skill
+
+### Eval
+
+_Look at the contract eval skill_
 
 - Eval the contract
   - edit the skill to find more things
   - do aversarily review using gemini and codex
-  - draft a response
 
-- Show how you can create a pipeline for data loading, eval and review and response.
+### Report
+
+Draft a response
+
+
+### Improve
+
+Show how you can create a pipeline for data loading, eval and review and response. Demonstrates wrouting and handoff.

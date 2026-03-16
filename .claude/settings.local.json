@@ -31,12 +31,10 @@
       "WebFetch(domain:super-tribble-8w5zrvy.pages.github.io)",
       "Bash(grep:*)",
       "Bash(multiclaude:*)",
-      "Bash(do echo:*)"
+      "Bash(do echo:*)",
+      "Bash(find:*)"
     ]
   },
-
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "high",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -49,5 +47,7 @@
         ]
       }
     ]
-  }
+  },
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true
 }

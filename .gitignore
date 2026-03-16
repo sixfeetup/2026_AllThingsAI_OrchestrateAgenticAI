@@ -4,6 +4,7 @@
 presentation/output/
 presentation/.watch-state
 demo-assets/DnD_Archive/
+demo/data/
 *__pycache__*
 /.claude/scheduled_tasks.lock
 /.DS_Store
