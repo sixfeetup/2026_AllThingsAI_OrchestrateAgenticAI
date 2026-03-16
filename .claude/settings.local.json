@@ -32,7 +32,10 @@
       "Bash(grep:*)",
       "Bash(multiclaude:*)",
       "Bash(do echo:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(chmod:*)",
+      "Bash(/Users/whit/work/2026-allthings-ai-presentation/.agents/bin/verify-demo.sh)",
+      "Bash(for mode:*)"
     ]
   },
   "hooks": {
