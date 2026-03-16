@@ -39,7 +39,41 @@ familiar.  We will use coding agents, and show you how you can use
 them in a business operations settings.  We discuss the pitfalls,
 tradeoff and the opportunities that are unfolding in the space.
 
+# 01 Cover
 
+# 02 Who Am I (About Calvin)
+
+# 03 Setting The Stage
+
+Big contract/RFP
+
+7 ambiguous or problem clauses
+  - contradictions
+	- impossible date (e.g. delivery date is in the past)
+	- Incorrect name (tbd)
+	- Ambiguous timeframe
+	- Ambiguous terms
+	- Ambiguous licensing
+	- Ambiguous staffing
+
+# 04 AI Tools
+
+- skills
+- vector database
+- sub agents
+
+# Demo
+
+# 05 Key Take-Aways
+
+1. Police your context
+2. Chunk your content
+3. Use agent-based skills to add determinism
+4. Use multi-step workflows
+
+# 06 Thank you!
+
+- QR code
 
 
 # 02 Orchestration
