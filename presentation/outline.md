@@ -139,9 +139,7 @@ We will run this in a sandbox to limit what our agent has access to on our local
 <!-- slide: 7 -->
 # 02 Orchestration
 
-<build in>![an orchestra](img) ![a data center](img) ![dice](img)</build>
-
-
+![Types of orchestration](images/orchestration-triptych.png)
 
 ::: notes
 
