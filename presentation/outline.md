@@ -11,15 +11,19 @@ _Calvin Hendryx-Parker — Six Feet Up_
 
 - introduce your self, whatever usual patter, etc
 
-# 01 Who am I, What is this about, who is it for
-
-
-
-
-Getting Things Done (.AI)
+# Who am I
 
 ???
-This talk is about helping you understand how you can use LLM
+I am Calvin
+
+
+# What is this about, who is it for
+
+(You) Getting Things Done (with .AI)
+
+???
+
+My mission today is to help you understand how you can use LLM
 agents to solve real problems you may encounter as a decision maker
 and operator navigating the dynamic and complex world of modern
 business.
@@ -40,270 +44,201 @@ We are going to a place where we can boil down some the noise so you
 can feel confident making use and building your own simple agent based
 systems.
 
+You will leave with access to all the tools we will use here today and
+knowledge about how to apply them to knowledge management problems you
+likely encounter on a regular basis.  How to take a new document and
+get focussed reconaisance on what you need to do next.
 
+The aim of these tools is to give you techniques more reliable
+experience when using an LLM w/ reasonable performance.  You have your
+own heuristics and procedures for getting the right results, the talk
+will show you how to codify that expertise so an LLM can repeatably
+execute it for you.
 
+# The root of the problem: seeking determinisn
 
-To do that, we are going to demo a fictious problem that might feel
-familiar.  We will use coding agents, and show you how you can use
-them in a business operations settings.  We discuss the pitfalls,
-tradeoff and the opportunities that are unfolding in the space.
+- quality input
+- constraint
+- dialectic
+- visibility
 
-# 01 Cover
+???
+If you work in risk & compliance, your job is often wading
+through ream of uncertainty to try to determine the best possible
+decision.
 
-# 02 Who Am I (About Calvin)
+Anything that can remove complexity and uncertainty safely provides
+value. There is something similar with using LLMs, which while they
+can manage large of amount of data quickly, they inherently are
+non-deterministic.
 
-# 03 Setting The Stage
+# The tool
 
-Big contract/RFP
+An agent
+- a context buffer
+- an llm connection
+- local tools: skills, subagents, mcp, hooks
+- local resources: flat files, dbs, scripts, sockets, etc
 
-7 ambiguous or problem clauses
-  - contradictions
-	- impossible date (e.g. delivery date is in the past)
-	- Incorrect name (tbd)
-	- Ambiguous timeframe
-	- Ambiguous terms
-	- Ambiguous licensing
-	- Ambiguous staffing
-
-# 04 AI Tools
-
-- skills
-- vector database
-- sub agents
-
-# Demo
-
-# 05 Key Take-Aways
-
-1. Police your context
-2. Chunk your content
-3. Use agent-based skills to add determinism
-4. Use multi-step workflows
-
-# 06 Thank you!
-
-- QR code
+???
+Our coding agent (claude) will be working in a basic sandbox that
+provides access to basic *nix tools.  It has a context buffer of about
+200k (can rougly the size of "Good To Great" by Jim Collins)
 
 
 # 02 Orchestration
 
-![an orchestra](img) ![a data center](img) ![dice](img)
-
-???
-
-Wikipedia has 3 definitions for "Orchestration": for music, for
-computers and for games.  In all three cases, you could make the
-argument orchestration is an act of managing complexity and the
-uncertainty it can create.
-
-We are going talk about managing agents to help manage the complexity
-incipient to working in the digital age.
-
-We will start with the operator to agent relationship and then talk
-about what we can do with larger groups of agents.
+<build in>![an orchestra](img) ![a data center](img) ![dice](img)</build>
 
 
-# 03 Let's Get Real (sort of)
 
 
 
 ???
 
-Let's dive in to made up problem that should illustrate some real
-tecniques you can use. We will explore how not managing context can
-impact outcome, techniques for detail with context limits, [fill in
-the rest]
+What does it mean Wikipedia has 3 definitions for
+"Orchestration": for music, for computers and for games.  In all three
+cases, you could make the argument orchestration is an act of using
+rules to coordinate and manage a group of actors to accomplish
+something meaningful.
+
+We are going to create a system of rules (skills and subagents) to constrain an increasing number of agents to give us information we can trust and use from a new and unfamilar contract.
 
 
-# This is a contracts, there are many like it
+# The problem
 
-_but this could ruin your day_
-
-
-
-
-# 04 So much text, so little context
-
-[table of info about modules pdfs: files size, token sizes, totals]
-[table of info about context windows: claude, chatgpt, gemini]
+Claude, a contract and me makes 3.
 
 ???
+
+We have received an RFP for an important bit of work. How do we
+figure out if this contract is right for us?
 
 <demo>
-Show of borking the context
-</demo>
-Wouldn't it be nice if you could just dump all the things into Claude or chatgpt.
-
-One of the more frustrating things about LLMs and the agent that use
-them is the constraint of the context buffer.  Since LLMs do not learn
-in our interactions, we must maintain state elsewhere.  The context
-buffer is the default place... as you chat it fills with everything
-you ask the model, every please and thank you and every reply.  Any
-digression become part of this state, as other mechanisms often hidden
-behind the user interface.
-
-Eventually nothing more can go in and in fact your prompt cannot be
-added to context to send to the model unless something gets removed.
-Different systems use different strategies, some give you way to
-explicitly in how you manage the context sent, but the limitation
-always means the model's response will become more and more impacted
-by history until it is cleaned.
-
-The difficulty of controlling context contributes to the
-nondeterministic behavior of LLM driven software.  When we humans,
-also nondeterministic agents, interact directly, determinism gets
-harder.
-
-afaict, in the claude code agent, the context is saved as raw tokenized text
-and is not exposed by any api.
-
-The context buffer is a bit like an agents working memory & long term
-memory rolled into one.  If one talks directly to the LLM, it is
-possible to aggressively manage this "hand" to create more
-durable memories while scrubbing the context.
-
-otoh, we just need to get this information back to Safe Houses lawyer.
-
-- show [context management explainer](context-window-explainer.html):
-  has context windows sizes for all of the major models.  Also talks about ways to monitor context.
-- show /context
-
-
-
-# 05 Exo-context & skills
-
-[brain picture](img)
-
-???
-
-We need an exocortex for our agent. It can do the remembering about
-all these text files while we explore the data. To do this we have
-create another kind of memory: the agent skill.  Skills allow us to
-codify (save) things we know how to do and need to do in a form that
-the agent can do them for us, either explicitly or implicitly.
-
-For memory, we will utilize the reigning champion for remember, the
-database. We will use 2 different forms of member: sql and vector
-storage.
-
-The first is well known by LLMs who can write sql better than me.
-- introduce sqllite skill
-
-The second storages data in a way similar to the LLM, as embeddings
-- show off chroma
-
-<demo>
-- show off definitions of each skill
-- make a query for each
-- load some small amount of data for each (list of adventures from hasbro)
+- introduce the contract
+- load into cowork
+- fail at doing some basic things
 </demo>
 
 
-# 06 The orchestration loop
+# OH NO
+
+> Those results were terrible!
 
 ???
+- all the reasons why context gets polluted
+- We need to make some constraints
 
-Many of you will recognize the following pattern which is one
-operators tend to follow: observe, orient, decide, act. The OODA was
-formally define by USAF Colonel John Boyd in the early 70s.
+# Control the Context
 
-Unlike most formalized engineering process, it is designed for practical
-in the moment work.
+Explicit memory management
 
-While claude code could do engineering for us, we are more in a making
-furniture with a chainsaw sort of situation.  The lawyers need to
-know, but we do know yet what the outcome will look like.
-
-We will do what we can reasonable to encourage deterministic behavior,
-but the clock is ticking.
-
-
-# 06 See
-
-![1 agents](img)
 
 ???
+- context is a wasteland that we have limited control over.
+- old school state management still works though. all hail the filesystem
+- We can use chromadb and sqlite to structure our document so the
+  agent can search and query it w/ impunity.
+
+# Memory & Skills Demo
+
+Skills, skills, skills
+
+???
+Introduce the concept of skills and why they are so good for quickly prototyping tasks and processes.
 
 <demo>
-
-Observe
-
-Explore the data, prototype how to make a match
-
+- open ../demo/.claude/skills/contract-loader
+- load the data
+- open ../demo/.claude/skills/contract-search
+- search the data
+- show how our context pollution does not impact the returns
 </demo>
 
-# 07 Plan
+# From search to assessment
 
-![2 agents](img)
 
 ???
+
+Search is great, but I have reviewed many RFPs, I have an idea about
+what I care about and would like to get a some automated recon before
+I have to dig into the doc myself.
+
+I want the LLM to give me feedback, but I want to be sure that
+feedback is useful, focussed, and actionable.
+
+To do this we are going to employ an idea from AI testing, the eval.
+When testing LLMs, we assume that our response are nondeterministic,
+so we must create a sort of bracketting of test questions and an
+assessment of answers.
+
+We will use an eval skill we have created where we give our skill a
+criterion file, the skill uses our memory in the dbs, and then returns
+answers.
 
 <demo>
-
-Orient
-
-use claude to explore the space and suggest options:
-- dialectic with agent
-- create a skill that helps toward final goal
-- use a visualizer to understand problem
-
+- show eval skill
+- run naive eval
+- run better eval
 </demo>
 
-# 08 Choose
+The questions constrain and focus the agent's return, our databases constrain the data acted upon.
 
-![3 agents](img)
+# More orchestration
+
+- ingest documents
+- output assessments
+
 
 ???
+We've gotten some good results, but what if have 3 proposals. 10 proposals?
+
+We have been orchestrating claude through our prompts, then our skills. What if claude drove more of this orchestration itself.
+
+First let's consider what would be helpful at scale?
 
 <demo>
-
-Decide
-
-- adversarial review
-- create agents to do special parts of the job like reporter and ingester, supervisor
-- discuss how encapsulation can help w/ context bitrot as well other things like auditing
-- define an aceptance criterion
-
+- Introduce subagents as a concept
+  - look at our agents
+    - data-investigator
+	- data-loader
+	- contract-eval
+	- response-drafter
+	- verification
+- create a workflow: ask claude about creating a workflow for docs in, assessments out
+  - talk about routing and handoff
+  - talk about adversarial verification as a way to limit mistakes before manual proofing
+  - show the system spinning up to analyze our doc, talk about concurrency/parallelism
 </demo>
 
-# 09 Act
 
-![4 agents](img)
+# Takehome
 
-???
-
-<demo>
-
-Act
-
-- work with claude to multiplex the action using agents and skills
-- discuss routing and handoffs
-- have claude report progress, have a final report (explainer?)
-
-</demo>
-
-# 10 Live and let die another day
-
-![]()
+[QR Code](download link)
 
 ???
+Talk about repo and playbook, how to install with claude code or cowork.
 
-Safe house is happy, their deal can move forward, their fans will be
-happy, they will hire us again.
+Talk about how these tools are cheap and easy to make with LLMs. Built for purpose software is now a reality. You can create skill and agents and arrange them to get real work done quickly w/ some care and patience.
+
+Increasing determinism is the key, by constraint, good inputs, and
+deploying the brownian ratchet of iterative critique and improvement.  These process apply to full software development as well. Testing, CI/CD, specification building, PR workflows, etc are just more formalized ways to create more determinism.
 
 
-Talk about repo and playbook
+# 11 Your Future [could be] Agentic
 
-
-# 11 The Future is Agentic
-
-The Future is Agentic
-_But so was the past_
+Gastown graphic
 
 ???
+We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.
 
+# /exit
+
+
+???
 Closing remarks --
-- multi-agent workflow can model how we do things in an office as well as more low level processes
-- we can model and enforce engineer practice in ways we never could before and it is having interesting outcomes
-- software is cheaper which make operation more expensive
-- context buffers issue also occur between the ears and between people -- the struggle to keep down the noice is real.
+- thank you for coming on this speedy ride through building an agent workflow
+- reinforce takeaways
+  - don't trust context, manage the data you want the agent to use explicitly
+  - use skills and agents to increase determinism so you get good results from the LLM
+  - use skills and agents to capture your workflows so you can automate more of your toil

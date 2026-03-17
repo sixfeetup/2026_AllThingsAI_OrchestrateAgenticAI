@@ -2,9 +2,21 @@
 
 ## Talk Description:
 
-Context Engineering Tactics: How to chunk documents and tasks, frame targeted prompts, and apply checklists so each sub-task has clear acceptance criteria and traceability.
-Agentic Workflow Strategies: How to turn a vague “review this” into a structured series of sub-jobs, including clause-level analysis, routing, and validation so nothing is silently skipped.
-No-Miss Review Demo: A live, clause-level walkthrough of an AI-driven contract review that shows task graphs, specialized agents, routing, and validation, plus direct parallels for engineering workflows.
+Context Engineering Tactics: How to chunk documents and tasks, frame
+targeted prompts, and apply checklists so each sub-task has clear
+acceptance criteria and traceability.
+
+Agentic Workflow Strategies: How to turn a vague “review this” into a structured series of
+sub-jobs,
+
+
+including clause-level analysis, routing, and validation so
+nothing is silently skipped.
+
+No-Miss Review Demo: A live,
+clause-level walkthrough of an AI-driven contract review that shows
+task graphs, specialized agents, routing, and validation, plus direct
+parallels for engineering workflows.
 
 ## Take-Aways:
 
