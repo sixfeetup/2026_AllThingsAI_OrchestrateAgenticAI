@@ -9,8 +9,9 @@
 
 Claude Code skills are **markdown instruction files** — they tell the
 agent *what to do*, not *how to do it* in code. The actual heavy lifting
-(PDF parsing, DB loading, vector search) lives in **Python scripts** in
-`.agents/bin/`. Skills reference these scripts via `uv run`.
+(document extraction, parsing, DB loading, vector search) lives in
+**Python scripts** in `.agents/bin/`. Skills reference these scripts
+via `uv run`.
 
 This separation means:
 - Skills are readable, editable, demo-friendly markdown
@@ -28,42 +29,42 @@ and can be built concurrently.
 
 **No dependencies. Pure Python. Can be tested independently.**
 
-#### 1.1 `contract-parse.py` — PDF → structured JSON
+#### 1.1 `contract-parse.py` — Document → structured JSON
 
 - **File:** `.agents/bin/contract-parse.py`
-- **Input:** path to PDF
+- **Input:** path to document (PDF, DOCX, DOC) or ZIP archive
 - **Output:** JSON array of clause objects (section_number, title, body,
-  page_start, page_end)
-- **Deps:** `pymupdf` (via `uv run --with pymupdf`)
-- **Approach:** Use PyMuPDF to extract text page-by-page. Split on
-  section heading patterns (`\d+\.\d+`). Assign flags heuristically
-  (keyword matching: "intellectual property" → `ip`, "termination" →
-  `termination`, etc.).
-- **Test:** Run against `assets/contracts/bigco-msa.pdf`, verify all
-  sections are captured, spot-check a few clause bodies.
+  source_file, page_start, page_end)
+- **Deps:** `pymupdf`, `python-docx`, `openpyxl` (via `uv run --with`)
+- **Approach:** Detect file type. For ZIPs, extract and process each
+  document. For PDFs, use PyMuPDF. For DOCX, use python-docx. For
+  spreadsheets, use openpyxl. Split on section heading patterns. Assign
+  flags heuristically (keyword matching).
+- **Test:** Run against `assets/1-RFP 20-020 - Original Documents.zip`,
+  verify all documents are captured, spot-check clause bodies.
 
 #### 1.2 `contract-load.py` — JSON → SQLite + ChromaDB
 
 - **File:** `.agents/bin/contract-load.py`
-- **Input:** JSON from parse step (or path to PDF — can call parse
+- **Input:** JSON from parse step (or path to archive — can call parse
   internally)
 - **Output:** populated `data/contracts.db` and `data/chroma/`
 - **Deps:** `chromadb`, `sentence-transformers` (via uv)
 - **Creates both tables:** `clauses` and `audit_log`
 - **Logs:** writes a `load` entry to `audit_log`
-- **Test:** Load the contract, query SQLite for clause count, verify
+- **Test:** Load the archive, query SQLite for clause count, verify
   ChromaDB collection exists.
 
 #### 1.3 `contract-search.py` — Query both stores
 
 - **File:** `.agents/bin/contract-search.py`
-- **Input:** query string, optional flags (--section, --flag, --full)
+- **Input:** query string, optional flags (--section, --flag, --source, --full)
 - **Output:** formatted table to stdout
 - **Approach:** Semantic search (ChromaDB top-k=10) + SQL LIKE search,
   merge and deduplicate by section_number, sort by score.
 - **Logs:** writes a `search` entry to `audit_log`
-- **Test:** Load contract, search "intellectual property", verify
-  sections 4.x appear in results.
+- **Test:** Load archive, search "submission requirements", verify
+  relevant sections appear in results.
 
 ### Phase 2: Content (markdown — no code deps)
 
@@ -71,21 +72,20 @@ and can be built concurrently.
 
 #### 2.1 `assets/criteria/ip-and-ownership.md`
 
-3 criteria (spec §2.5). Each criterion is a `##` heading with:
+3 criteria (spec 2.5). Each criterion is a `##` heading with:
 - What to look for
 - Why it matters
 - What a problematic clause looks like
 
 #### 2.2 `assets/criteria/general-red-flags.md`
 
-6 criteria (spec §2.5). Same format.
+6 criteria (spec 2.5). Same format.
 
 #### 2.3 `assets/prebaked/naive-review.md`
 
-Deliberately shallow contract review — what you'd get from a single
-generic LLM prompt like "review this contract for issues." Should:
-- Miss at least 3 of the 7 planted problems
-- Miss the cupcake easter egg entirely
+Deliberately shallow document review — what you'd get from a single
+generic LLM prompt like "review this document for issues." Should:
+- Miss cross-document contradictions
 - Use vague language ("seems fine", "may want to review")
 - Lack section references and evidence
 - Be ~1 page (vs the structured review's ~5 pages)
@@ -95,7 +95,7 @@ agent approach matters.
 
 #### 2.4 `assets/playbook.md`
 
-Attendee take-home. Sections (from spec §7):
+Attendee take-home. Sections (from spec 7):
 1. **Criteria File Template** — blank template + worked example
 2. **Agent Role Template** — blank template + worked example
 3. **Orchestration Patterns** — decision framework: when single agent
@@ -103,11 +103,11 @@ Attendee take-home. Sections (from spec §7):
 4. **Containment Checklist** — sandboxing (uv), scoped permissions,
    local-only data stores, audit trail
 5. **Engineering Parallels** — explicit mapping table:
-   - Criteria files ↔ test specs / acceptance criteria
-   - Adversarial agent ↔ code review / QA
-   - Audit trail ↔ CI logs / compliance records
-   - Pipeline handoffs ↔ CI/CD stages
-   - Data loader ↔ ETL / data pipeline
+   - Criteria files :: test specs / acceptance criteria
+   - Adversarial agent :: code review / QA
+   - Audit trail :: CI logs / compliance records
+   - Pipeline handoffs :: CI/CD stages
+   - Data loader :: ETL / data pipeline
 
 ### Phase 3: Skills (markdown)
 
@@ -121,14 +121,15 @@ invoke the underlying script and present results.
 - **File:** `demo/.claude/skills/contract-loader/skill.md`
 - **References:** `.agents/bin/contract-parse.py`,
   `.agents/bin/contract-load.py`
-- **Trigger:** `/load-contract`
-- **Key instruction:** run parse, then load, then report summary stats.
+- **Trigger:** `/load-document`
+- **Key instruction:** extract archive, parse each document by format,
+  load all into stores, then report summary stats.
 
 #### 3.2 `contract-search` skill
 
 - **File:** `demo/.claude/skills/contract-search/skill.md`
 - **References:** `.agents/bin/contract-search.py`
-- **Trigger:** `/search-contract`
+- **Trigger:** `/search-document`
 
 #### 3.3 `contract-eval` skill
 
@@ -136,15 +137,15 @@ invoke the underlying script and present results.
 - **This is LLM-heavy** — the agent reads criteria, uses search for
   evidence, then applies judgment.
 - **References:** search script, criteria files
-- **Trigger:** `/eval-contract`
-- **Key instruction:** iterate criteria headings, search for each, rate
-  severity, produce report.
+- **Trigger:** `/eval-document`
+- **Key instruction:** iterate criteria headings, search across all
+  loaded documents for each, rate severity, produce report.
 
 #### 3.4 `contract-audit` skill
 
 - **File:** `demo/.claude/skills/contract-audit/skill.md`
 - **References:** SQLite `audit_log` table (simple SQL query)
-- **Trigger:** `/audit-contract`
+- **Trigger:** `/audit-document`
 
 ### Phase 4: Agent Templates (markdown)
 
@@ -165,11 +166,12 @@ goals, available skills, output format, constraints.
 
 #### 5.1 Update `demo/Makefile`
 
-Add targets:
-- `load` — run contract-parse + contract-load against the PDF
+Targets:
+- `document` — verify the document archive exists
+- `load` — run contract-load against the archive
 - `search` — convenience wrapper for contract-search
-- `clean` — extend to also remove `data/` directory
-- `reset` — clean + contract (regenerate PDF + reload)
+- `clean` — remove `data/` directory
+- `reset` — clean + load
 
 #### 5.2 Add `data/` to `.gitignore`
 
@@ -229,9 +231,10 @@ Phase 5 (wiring)
    downloads ~400MB of model weights. Pre-download in Makefile or note
    in demo prep. Pre-baked `data/` directory as fallback.
 
-2. **PDF parsing quality** — generated PDF uses `fpdf2`. PyMuPDF should
-   handle it, but section splitting regex must match heading format in
-   `gen-contract.py`. Test early.
+2. **Multi-format parsing** — the archive contains PDFs, DOCX, legacy
+   DOC, XLSX, and XLS files. The parse script must handle each format
+   gracefully and fall back (e.g., skip DOC files if textract is
+   unavailable, with a warning).
 
 3. **Eval skill is the most complex** — only skill where LLM does
    substantive reasoning. Keep criteria files tight and specific.
@@ -243,3 +246,7 @@ Phase 5 (wiring)
 5. **Naive review must be believably bad** — it needs to look like a
    plausible LLM output, not a strawman. Miss things through lack of
    structure, not through being obviously dumb.
+
+6. **Filename with spaces** — the archive path contains spaces
+   (`1-RFP 20-020 - Original Documents.zip`). All Makefile targets
+   and skill commands must quote this path properly.

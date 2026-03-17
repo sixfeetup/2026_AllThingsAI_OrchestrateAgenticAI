@@ -1,7 +1,7 @@
 # Demo Agents & Skills — Specification
 
 **Goal:** Create a self-contained set of Claude Code skills and agent
-prompt-templates that drive the live demo: load a contract PDF, evaluate
+prompt-templates that drive the live demo: load a document archive, evaluate
 it against criteria, run adversarial review, and draft a response.
 
 All artifacts live under `demo/` and are designed to be used from a
@@ -14,17 +14,15 @@ Claude Code session rooted at the `demo/` directory (or its parent with
 
 | Artifact | Path | Notes |
 |---|---|---|
-| Contract PDF | `assets/contracts/bigco-msa.pdf` | 30-page fake MSA, 7 planted problems + cupcake easter egg |
-| Problem answer key | `assets/problem-clauses.md` | Ground truth for eval scoring |
+| Document archive | `assets/1-RFP 20-020 - Original Documents.zip` | Real government RFP package — 17 documents (3 PDFs, 4 DOCX, 3 DOC, 4 XLSX, 1 XLS) |
 | Prebaked review | `assets/prebaked/contract-review-checklist.md` | Example output to show if live generation is slow |
-| Contract generator | `assets/gen-contract.py` | `make contract` to regenerate PDF |
 
 ### Runtime Data Stores
 
 The demo uses two local stores, created at load time:
 
 - **SQLite** (`demo/data/contracts.db`) — structured clause data
-  (section number, title, body text, metadata flags)
+  (section number, title, body text, source file, metadata flags)
 - **ChromaDB** (`demo/data/chroma/`) — vector embeddings of clause text
   for semantic search
 
@@ -37,25 +35,28 @@ Both are ephemeral — `make clean` removes them.
 Skills are Claude Code skill files (`demo/.claude/skills/<name>/skill.md`).
 Each skill is a self-contained capability the agent can invoke.
 
-### 2.1 `contract-loader` — Parse, Schema, Load
+### 2.1 `contract-loader` — Extract, Parse, Schema, Load
 
-**Trigger:** `/load-contract <path-to-pdf>`
+**Trigger:** `/load-document <path-to-archive-or-pdf>`
 
 **What it does:**
-1. Parse the PDF into structured text (one record per clause/section).
-2. Apply a predefined schema:
+1. If the path is a ZIP archive, extract all documents to a temp directory.
+2. Parse each document by type (PDF via PyMuPDF, DOCX via python-docx,
+   XLSX/XLS via openpyxl, DOC via textract or fallback).
+3. Apply a predefined schema:
    - `section_number` (str) — e.g. "4.1", "12.10"
    - `section_title` (str)
    - `body` (str) — full clause text
+   - `source_file` (str) — original filename within the archive
    - `page_start` (int)
    - `page_end` (int)
    - `flags` (list[str]) — tags like `"ip"`, `"termination"`, `"staffing"`
-3. Create/replace SQLite table `clauses` in `data/contracts.db`.
-4. Create/replace ChromaDB collection `contract_clauses` with embeddings
+4. Create/replace SQLite table `clauses` in `data/contracts.db`.
+5. Create/replace ChromaDB collection `contract_clauses` with embeddings
    of each clause body (use default sentence-transformer model).
-5. Print summary: clause count, page count, any parse warnings.
+6. Print summary: document count, clause count, any parse warnings.
 
-**Dependencies:** `uv run --with pymupdf,chromadb,sentence-transformers`
+**Dependencies:** `uv run --with pymupdf,chromadb,sentence-transformers,python-docx,openpyxl`
 
 **Schema DDL (SQLite):**
 ```sql
@@ -64,6 +65,7 @@ CREATE TABLE IF NOT EXISTS clauses (
     section_number TEXT NOT NULL,
     section_title  TEXT,
     body           TEXT NOT NULL,
+    source_file    TEXT,
     page_start     INTEGER,
     page_end       INTEGER,
     flags          TEXT  -- JSON array
@@ -72,34 +74,39 @@ CREATE TABLE IF NOT EXISTS clauses (
 
 ### 2.2 `contract-search` — Search & Augment
 
-**Trigger:** `/search-contract <query>`
+**Trigger:** `/search-document <query>`
 
 **What it does:**
 1. Run semantic search against ChromaDB `contract_clauses` (top-k=10).
 2. Run keyword/SQL search against SQLite `clauses` for exact matches.
 3. Merge and deduplicate results, rank by combined score.
-4. Return results as a formatted table: section number, title, relevance
-   score, and a truncated snippet (first 200 chars of body).
+4. Return results as a formatted table: section number, source file, title,
+   relevance score, and a truncated snippet (first 200 chars of body).
+
+Results span all loaded documents in the archive.
 
 **Options:**
 - `--section <pattern>` — filter by section number glob (e.g. `4.*`)
 - `--flag <tag>` — filter by flag
+- `--source <filename>` — filter by source document
 - `--full` — show full body text instead of snippet
 
 ### 2.3 `contract-eval` — Evaluate Against Criteria
 
-**Trigger:** `/eval-contract [criteria-file]`
+**Trigger:** `/eval-document [criteria-file]`
 
 **What it does:**
-1. Load criteria from a markdown file (default: `assets/problem-clauses.md`
+1. Load criteria from a markdown file (default:
+   `assets/criteria/general-red-flags.md`
    or a custom criteria file). Each `## N. Title` heading is one criterion.
 2. For each criterion:
-   a. Use `contract-search` to find relevant clauses.
-   b. Assess whether the issue described exists in the loaded contract.
+   a. Use `contract-search` to find relevant clauses across all documents.
+   b. Assess whether the issue described exists in the loaded documents.
    c. Rate severity: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, `CLEAR`.
    d. Provide evidence (quote the clause text) and reasoning.
+   e. Note which source document(s) the finding comes from.
 3. Output a structured report in markdown:
-   - Summary table (criterion, severity, section refs)
+   - Summary table (criterion, severity, source files, section refs)
    - Detailed findings per criterion
    - Overall risk score (count of CRITICAL/HIGH/MEDIUM)
 
@@ -111,13 +118,13 @@ CREATE TABLE IF NOT EXISTS clauses (
 
 ### 2.4 `contract-audit` — Audit Trail & Provenance
 
-**Trigger:** `/audit-contract`
+**Trigger:** `/audit-document`
 
 **What it does:**
 1. Read the SQLite `audit_log` table (populated by other skills when they
    run).
 2. Display a chronological log of all actions taken:
-   - What was loaded, when, from which file
+   - What was loaded, when, from which archive/file
    - Searches performed and result counts
    - Eval runs: criteria used, findings, severity counts
    - Any manual edits or overrides
@@ -144,7 +151,7 @@ All other skills append to this table when they perform actions.
 Criteria files live in `assets/criteria/` and define what the eval
 skill looks for. Each file is a markdown document where every `##`
 heading is one criterion to evaluate. The eval skill iterates over
-them, searches the contract, and reports findings.
+them, searches the documents, and reports findings.
 
 Two criteria files ship with the demo:
 
@@ -191,19 +198,19 @@ context.
 
 **File:** `demo/.agents/contract-eval-agent.md`
 
-**Role:** Primary contract analyst. Methodically reviews each section
-of a loaded contract for legal, financial, and operational risks.
+**Role:** Primary document analyst. Methodically reviews each section
+across all loaded documents for legal, financial, and operational risks.
 
 **Behavior:**
-- Uses `contract-search` to navigate the contract
+- Uses `contract-search` to navigate the documents
 - Uses `contract-eval` to apply criteria
 - Produces a structured findings report
-- Tags each finding with severity and affected party
+- Tags each finding with severity, affected party, and source document
 - Does NOT suggest remediation (that's the response drafter's job)
 
 **Persona prompt key points:**
 - Act as an experienced contract analyst
-- Be thorough but concise — cite section numbers
+- Be thorough but concise — cite section numbers and source files
 - Flag anything unusual, even if not in the criteria file
 - Maintain a skeptical, detail-oriented posture
 
@@ -212,38 +219,37 @@ of a loaded contract for legal, financial, and operational risks.
 **File:** `demo/.agents/data-investigator-agent.md`
 
 **Role:** Exploratory analyst. Performs open-ended investigation of
-contract data, looking for patterns, anomalies, and relationships
-between clauses.
+document data, looking for patterns, anomalies, and cross-document
+contradictions.
 
 **Behavior:**
-- Uses `contract-search` with varied queries to explore the contract
-- Cross-references clauses to find contradictions (e.g. 4.1 vs 12.12)
-- Looks for hidden or buried provisions (e.g. auto-renewal in general
-  provisions, cupcake clause in force majeure)
+- Uses `contract-search` with varied queries to explore the documents
+- Cross-references clauses across documents to find contradictions
+- Looks for hidden or buried provisions
 - Reports findings as "leads" with confidence levels
 
 **Persona prompt key points:**
 - Act as a forensic investigator — follow the threads
-- Don't stop at the obvious; dig into boilerplate sections
+- Don't stop at the obvious; dig into boilerplate sections and attachments
 - Score confidence: `confirmed`, `likely`, `suspicious`, `speculative`
 
 ### 3.3 `data-loader-agent`
 
 **File:** `demo/.agents/data-loader-agent.md`
 
-**Role:** Data engineer. Handles ingestion of contract documents into
+**Role:** Data engineer. Handles ingestion of document archives into
 the local data stores.
 
 **Behavior:**
-- Uses `contract-loader` skill to parse and load PDFs
-- Validates loaded data (clause count, coverage, parse quality)
-- Reports any parsing issues (garbled text, missing sections, OCR errors)
+- Uses `contract-loader` skill to extract, parse, and load archives
+- Validates loaded data (document count, clause count, coverage, parse quality)
+- Reports any parsing issues (garbled text, missing sections, unsupported formats)
 - Can reload or patch data if issues are found
 
 **Persona prompt key points:**
 - Focus on data quality and completeness
-- Verify that all pages/sections were captured
-- Report statistics: total clauses, total pages, avg clause length
+- Verify that all documents in the archive were captured
+- Report statistics: total documents, total clauses, format breakdown
 
 ### 3.4 `verification-agent` (Adversarial Review)
 
@@ -258,29 +264,29 @@ or missing context.
 - For each finding, constructs a counter-argument:
   - Is this actually a problem, or standard industry practice?
   - Is the severity rating justified?
-  - Is there exculpatory context elsewhere in the contract?
+  - Is there exculpatory context elsewhere in the documents?
 - Uses `contract-search` to find supporting/contradicting clauses
 - Produces a "challenge report" with each finding either `upheld`,
   `downgraded`, or `dismissed`, with reasoning
 
 **Persona prompt key points:**
-- Act as opposing counsel defending the contract
+- Act as opposing counsel defending the document
 - Be rigorous but fair — don't dismiss legitimate issues
-- The goal is to stress-test findings, not to rubber-stamp the contract
+- The goal is to stress-test findings, not to rubber-stamp the documents
 
 ### 3.5 `response-drafter-agent`
 
 **File:** `demo/.agents/response-drafter-agent.md`
 
 **Role:** Business communicator. Takes verified findings and drafts a
-professional response (letter or memo) to the contract counterparty.
+professional response (letter or memo) based on the document review.
 
 **Behavior:**
 - Receives verified findings (post adversarial review)
 - Groups issues by severity and topic
 - Drafts a response document with:
   - Executive summary of concerns
-  - Detailed findings with specific clause references
+  - Detailed findings with specific clause and document references
   - Recommended changes / redline suggestions
   - Prioritization (must-fix vs. nice-to-have)
 - Tone: professional, constructive, firm on critical issues
@@ -288,9 +294,9 @@ professional response (letter or memo) to the contract counterparty.
 
 **Persona prompt key points:**
 - Write for a business audience, not a legal one
-- Be specific: quote clause numbers and text
+- Be specific: quote clause numbers, source documents, and text
 - Suggest concrete alternatives, not just "this is bad"
-- Maintain a collaborative tone — the goal is a better contract, not
+- Maintain a collaborative tone — the goal is a better outcome, not
   a confrontation
 
 ---
@@ -308,14 +314,14 @@ steps to talk about what just happened.
 | Step | Action | Talking Point |
 |---|---|---|
 | **1. Roster** | Show the skills and agents, explain what each does | Skills compound; agents are perspectives |
-| **2. Load** | Run `/load-contract assets/contracts/bigco-msa.pdf` manually | Data quality, schema design, determinism |
-| **3. Search** | Run `/search-contract "intellectual property"` and a few other queries | Semantic vs keyword search, augmentation |
-| **4. Eval (focused)** | Run `/eval-contract assets/criteria/ip-and-ownership.md` — just the IP criteria | Good specs = good performance |
-| **5. Eval (broad)** | Run `/eval-contract assets/criteria/general-red-flags.md` — broader scan | Criteria files are the "spec" for the agent |
+| **2. Load** | Run `/load-document "assets/1-RFP 20-020 - Original Documents.zip"` manually | Data quality, multi-format parsing, schema design, determinism |
+| **3. Search** | Run `/search-document "submission requirements"` and a few other queries | Semantic vs keyword search, cross-document retrieval |
+| **4. Eval (focused)** | Run `/eval-document assets/criteria/ip-and-ownership.md` — just the IP criteria | Good specs = good performance |
+| **5. Eval (broad)** | Run `/eval-document assets/criteria/general-red-flags.md` — broader scan | Criteria files are the "spec" for the agent |
 | **6. Edit & re-eval** | Live-edit a criteria file, re-run eval to show the difference | Iterating on specs, not on prompts |
 | **7. Adversarial** | Run verification agent against the findings (optionally with Gemini/Codex) | Testing agent systems, red teaming |
 | **8. Report** | Run response drafter on verified findings | Handoff between agents, final output |
-| **9. Audit** | Run `/audit-contract` to show the full trail | Provenance and trust |
+| **9. Audit** | Run `/audit-document` to show the full trail | Provenance and trust |
 
 ### Phase 2: Pipeline (Improve)
 
@@ -360,14 +366,12 @@ demo/
 │   ├── verification-agent.md
 │   └── response-drafter-agent.md
 ├── assets/
-│   ├── contracts/
-│   │   └── bigco-msa.pdf
+│   ├── 1-RFP 20-020 - Original Documents.zip   ← real RFP package (17 docs)
 │   ├── criteria/
 │   │   ├── ip-and-ownership.md        ← focused: IP assignment & licensing
-│   │   └── general-red-flags.md       ← broad: common contract red flags
-│   ├── gen-contract.py
+│   │   └── general-red-flags.md       ← broad: common document red flags
+│   ├── gen-contract.py                ← legacy: generates fake PDF for testing
 │   ├── playbook.md                    ← attendee take-home artifact
-│   ├── problem-clauses.md             ← answer key (not used as criteria)
 │   └── prebaked/
 │       ├── contract-review-checklist.md
 │       ├── naive-review.md            ← shallow single-prompt review for contrast
@@ -409,12 +413,12 @@ their own domain. Sections:
 3. **Orchestration Patterns** — when to use single agent, pipeline,
    or adversarial review
 4. **Containment Checklist** — sandboxing, permissions, local data
-5. **Engineering Parallels** — mapping contract review patterns to
+5. **Engineering Parallels** — mapping document review patterns to
    code review, test planning, incident response
 
 ### `assets/prebaked/naive-review.md` — Contrast Example
 
-A deliberately shallow contract review (what a single generic LLM
+A deliberately shallow document review (what a single generic LLM
 prompt produces) to contrast with the structured agent output. Used
 during the demo to show the difference between "ask ChatGPT" and a
 structured agentic approach.
@@ -427,8 +431,8 @@ structured agentic approach.
   in-process, local embeddings via sentence-transformers).
 - **All deps via uv** — no pip installs. Skills specify their deps in
   `uv run --with` invocations.
-- **Demo-safe** — no real contracts, no real data. The generated PDF is
-  obviously fake (L&LL LLC, cupcake clauses).
+- **Real documents** — the demo uses a real government RFP package.
+  No synthetic data or planted problems in the demo flow.
 - **Presentation pacing** — each skill should produce visible output
   within ~10 seconds. Pre-baked outputs exist as fallbacks in
   `assets/prebaked/`.
