@@ -11,20 +11,26 @@ _Calvin Hendryx-Parker — Six Feet Up_
 
 - introduce your self, whatever usual patter, etc
 
-# 01 What is this really about, who is it for
+# 01 Who am I, What is this about, who is it for
+
+
+
 
 Getting Things Done (.AI)
 
 ???
+This talk is about helping you understand how you can use LLM
+agents to solve real problems you may encounter as a decision maker
+and operator navigating the dynamic and complex world of modern
+business.
 
-- talk is for folks who have used AI in apps or the browser, but suspect that it could do more to solve their business problems
-- technically enthusiastic, are familar with the terminal, or have the patience and persistence to give it a try.
-- some words as a preamble and reassurance:
-  - it may be more technical than some of you are ready for, but if you understand the capability, you should be able to benefit
-  - we will move, but not too fast
-  - there will be resource available online after the talk
+If you
+- have used AI in apps or the browser, but suspect that you could do more or get better results
+- are technically enthusiastic, are familar with the terminal, or have the patience and persistence to give it a try.
+- think LLMs seem to have great promise, but fear the ramification of the uncertain results.
 
-# Where we are going
+
+# Where we are going (today)
 
 ![Agentic horizon](img)
 
@@ -33,6 +39,9 @@ Getting Things Done (.AI)
 We are going to a place where we can boil down some the noise so you
 can feel confident making use and building your own simple agent based
 systems.
+
+
+
 
 To do that, we are going to demo a fictious problem that might feel
 familiar.  We will use coding agents, and show you how you can use
