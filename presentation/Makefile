@@ -87,7 +87,7 @@ $(OUTPUT_REVEAL): outline.md $(BUILD_REVEAL)
 
 ## open-reveal — build Reveal.js deck and open in browser
 open-reveal: $(OUTPUT_REVEAL)
-	open "file://$(CURDIR)/$(OUTPUT_REVEAL)"
+	open "$(CURDIR)/$(OUTPUT_REVEAL)"
 
 ## open-presentation-reveal — alias for open-reveal
 open-presentation-reveal: open-reveal
