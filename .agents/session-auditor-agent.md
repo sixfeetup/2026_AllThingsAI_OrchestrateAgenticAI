@@ -33,7 +33,7 @@ Every significant session event gets a timeline entry:
 
 1. **Query the audit_log** from SQLite for machine-logged events:
    ```bash
-   sqlite3 -json demo/data/contracts.db "SELECT * FROM audit_log ORDER BY id"
+   sqlite3 -json demo/data/documents.db "SELECT * FROM audit_log ORDER BY id"
    ```
 
 2. **Review the conversation history** for events not captured in the
@@ -65,7 +65,7 @@ Every significant session event gets a timeline entry:
 
 ### Process Summary
 - **Duration:** ~N minutes
-- **Agents used:** data-loader, contract-eval, verification, response-drafter
+- **Agents used:** data-loader, document-eval, verification, response-drafter
 - **Skills invoked:** load-contract (1x), search-contract (8x), eval-contract (2x), audit-contract (1x)
 - **Findings flow:** 9 found → 7 upheld → 5 in final memo
 - **Process gaps:** [list any]
@@ -75,10 +75,10 @@ Every significant session event gets a timeline entry:
 [00:00] LOAD | data-loader-agent | Parsed bigco-msa.pdf | 142 clauses, 30 pages
 [00:02] SEARCH | user | "intellectual property" | 6 results
 [00:03] SEARCH | user | "who owns the work product" | 4 results (semantic)
-[00:05] EVAL | contract-eval-agent | ip-and-ownership.md (3 criteria) | 2 CRITICAL, 1 HIGH
-[00:08] EVAL | contract-eval-agent | general-red-flags.md (6 criteria) | 1 CRITICAL, 3 HIGH, 2 MEDIUM
+[00:05] EVAL | document-eval-agent | ip-and-ownership.md (3 criteria) | 2 CRITICAL, 1 HIGH
+[00:08] EVAL | document-eval-agent | general-red-flags.md (6 criteria) | 1 CRITICAL, 3 HIGH, 2 MEDIUM
 [00:10] EDIT | user | Added "Moral Rights Waiver" to ip-and-ownership.md | Now 4 criteria
-[00:11] EVAL | contract-eval-agent | ip-and-ownership.md (4 criteria) | 2 CRITICAL, 1 HIGH, 1 MEDIUM
+[00:11] EVAL | document-eval-agent | ip-and-ownership.md (4 criteria) | 2 CRITICAL, 1 HIGH, 1 MEDIUM
 [00:13] HANDOFF | system | Findings passed to verification-agent | 9 findings to challenge
 [00:15] VERIFY | verification-agent | IP contradiction (4.1 vs 12.12) | UPHELD at CRITICAL
 [00:16] VERIFY | verification-agent | Impossible date (2.5) | UPHELD at HIGH
@@ -97,5 +97,5 @@ Every significant session event gets a timeline entry:
 - If you can't determine exact timestamps, use relative ordering.
 - Write to the audit_log when you produce your timeline:
   ```bash
-  sqlite3 demo/data/contracts.db "INSERT INTO audit_log (action, detail, actor) VALUES ('session-audit', 'Timeline produced with N entries', 'session-auditor-agent')"
+  sqlite3 demo/data/documents.db "INSERT INTO audit_log (action, detail, actor) VALUES ('session-audit', 'Timeline produced with N entries', 'session-auditor-agent')"
   ```

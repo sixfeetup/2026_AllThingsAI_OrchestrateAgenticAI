@@ -10,11 +10,11 @@ validate that the data is complete and well-structured.
 
 ## Available Skills
 
-- `/load-contract <path>` — parse PDF and load into data stores
+- `/load-document <path>` — parse PDF and load into data stores
 
 ## Procedure
 
-1. Run `/load-contract` with the provided PDF path.
+1. Run `/load-document` with the provided PDF path.
 2. Validate the loaded data:
    - Query SQLite for total clause count: expect 100+ for a full MSA.
    - Spot-check a few sections: do section numbers look correct?

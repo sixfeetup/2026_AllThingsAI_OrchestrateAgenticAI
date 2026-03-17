@@ -41,7 +41,7 @@ These are ordered from most visually demonstrable to most subtle.
 ### 2.1 Verbose Tool Output Flooding
 
 **How:** Run many searches with `--full` flag, dumping entire clause
-bodies into context. Each `/search-contract` call with `--full` adds
+bodies into context. Each `/search-document` call with `--full` adds
 ~2-4K tokens of clause text. Do 15-20 searches and the context fills
 with redundant contract text.
 
@@ -54,21 +54,21 @@ a real user would do, but more of it. No fake content needed.
 
 ```
 # Sequence to fill context naturally:
-/search-contract "intellectual property" --full
-/search-contract "indemnification" --full
-/search-contract "termination" --full
-/search-contract "staffing" --full
-/search-contract "deliverables" --full
-/search-contract "liability" --full
-/search-contract "confidentiality" --full
-/search-contract "force majeure" --full
-/search-contract "payment terms" --full
-/search-contract "non-compete" --full
-/search-contract "assignment" --full
-/search-contract "governing law" --full
-/search-contract "dispute resolution" --full
-/search-contract "warranty" --full
-/search-contract "insurance" --full
+/search-document "intellectual property" --full
+/search-document "indemnification" --full
+/search-document "termination" --full
+/search-document "staffing" --full
+/search-document "deliverables" --full
+/search-document "liability" --full
+/search-document "confidentiality" --full
+/search-document "force majeure" --full
+/search-document "payment terms" --full
+/search-document "non-compete" --full
+/search-document "assignment" --full
+/search-document "governing law" --full
+/search-document "dispute resolution" --full
+/search-document "warranty" --full
+/search-document "insurance" --full
 ```
 
 ### 2.2 Multi-File Loading
@@ -84,7 +84,7 @@ perfect for this.
 ```
 
 The model now has a Monster Manual competing for attention with
-contract clauses.
+document clauses.
 
 ### 2.3 Task Switching / Context Fragmentation
 
@@ -160,7 +160,7 @@ Add to `.claude/settings.local.json`:
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "contract-search",
+        "matcher": "document-search",
         "hooks": [
           {
             "type": "command",

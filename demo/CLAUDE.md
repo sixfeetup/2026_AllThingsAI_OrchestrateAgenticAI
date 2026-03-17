@@ -1,4 +1,4 @@
-# Contract Review Demo
+# Document Review Demo
 
 This directory contains a document review pipeline demo for a conference talk
 on building agentic AI systems with Claude Code.
@@ -27,25 +27,25 @@ containing 17 documents (3 PDFs, 4 DOCX, 3 DOC, 4 XLSX, 1 XLS).
 
 | Skill | Trigger | What it does |
 |-------|---------|-------------|
-| contract-loader | `/load-document` | Extract zip, parse multi-format documents, load into SQLite + ChromaDB |
-| contract-search | `/search-document <query>` | Semantic + keyword search across all loaded documents |
-| contract-eval | `/eval-document [criteria]` | Evaluate against criteria file across full document package |
-| contract-audit | `/audit-document` | Show audit trail |
+| document-loader | `/load-document` | Extract zip, parse multi-format documents, load into SQLite + ChromaDB |
+| document-search | `/search-document <query>` | Semantic + keyword search across all loaded documents |
+| document-eval | `/eval-document [criteria]` | Evaluate against criteria file across full document package |
+| document-audit | `/audit-document` | Show audit trail |
 
 ## Available MCP Tools
 
-The `contract-review` MCP server exposes the same pipeline as tools:
-- `load_contract` — extract and load a document archive
-- `search_contract` — dual semantic + keyword search across all documents
-- `audit_contract` — view audit trail
-- `get_contract_stats` — clause counts and flag distribution
+The `document-review` MCP server exposes the same pipeline as tools:
+- `load_document` — extract and load a document archive
+- `search_document` — dual semantic + keyword search across all documents
+- `audit_document` — view audit trail
+- `get_document_stats` — clause counts and flag distribution
 - `list_criteria_files` / `read_criteria_file` — browse eval criteria
 
 ## Agent Templates
 
 Agent templates in `.agents/` define specialized roles:
 - **data-loader-agent** — ingestion, multi-format extraction, and data quality
-- **contract-eval-agent** — systematic cross-document analysis
+- **document-eval-agent** — systematic cross-document analysis
 - **data-investigator-agent** — exploratory forensic analysis
 - **verification-agent** — red team / adversarial review
 - **response-drafter-agent** — draft professional response memo
@@ -54,17 +54,17 @@ Agent templates in `.agents/` define specialized roles:
 
 For multi-agent review using Claude Desktop or cowork:
 
-1. **Load phase**: Use `load_contract` tool to ingest the document archive
-2. **Eval phase**: Apply criteria files via `search_contract` + LLM judgment
+1. **Load phase**: Use `load_document` tool to ingest the document archive
+2. **Eval phase**: Apply criteria files via `search_document` + LLM judgment
 3. **Verify phase**: Challenge findings with adversarial perspective
 4. **Draft phase**: Produce response memo from verified findings
-5. **Audit phase**: Review the full trail with `audit_contract`
+5. **Audit phase**: Review the full trail with `audit_document`
 
 Each phase can be handled by a different Claude instance or agent role.
 
 ## Data Stores
 
-- `data/contracts.db` — SQLite (clauses + audit_log tables)
+- `data/documents.db` — SQLite (clauses + audit_log tables)
 - `data/chroma/` — ChromaDB vector store
 - Both are ephemeral — `make clean` removes them
 

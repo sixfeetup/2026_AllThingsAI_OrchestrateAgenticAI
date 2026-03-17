@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Load parsed contract clauses into SQLite and ChromaDB.
+"""Load parsed document clauses into SQLite and ChromaDB.
 
 Usage:
-    uv run --with 'pymupdf,chromadb,sentence-transformers' contract-load.py <pdf-path> [--db <db-path>] [--chroma <chroma-dir>]
+    uv run --with 'pymupdf,python-docx,openpyxl,chromadb,sentence-transformers' document-load.py <path> [--db <db-path>] [--chroma <chroma-dir>]
 
-Calls contract-parse.py internally, then loads results into both stores.
+Accepts a single document (PDF/DOCX/XLSX) or a ZIP archive of documents.
+Calls document-parse.py internally, then loads results into both stores.
 """
 from __future__ import annotations
 
@@ -13,11 +14,12 @@ import json
 import sqlite3
 import subprocess
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-PARSER_SCRIPT = Path(__file__).resolve().parent / "contract-parse.py"
-DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "contracts.db"
+PARSER_SCRIPT = Path(__file__).resolve().parent / "document-parse.py"
+DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "documents.db"
 DEFAULT_CHROMA = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "chroma"
 
 
@@ -31,6 +33,7 @@ def init_db(db_path: Path) -> sqlite3.Connection:
             section_number TEXT NOT NULL,
             section_title  TEXT,
             body           TEXT NOT NULL,
+            source_file    TEXT,
             page_start     INTEGER,
             page_end       INTEGER,
             flags          TEXT
@@ -55,18 +58,32 @@ def load_sqlite(conn: sqlite3.Connection, clauses: list[dict], source: str):
     for i, c in enumerate(clauses, 1):
         conn.execute(
             "INSERT INTO clauses (id, section_number, section_title, body, "
-            "page_start, page_end, flags) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "source_file, page_start, page_end, flags) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (i, c["section_number"], c.get("section_title", ""),
-             c["body"], c["page_start"], c["page_end"],
+             c["body"], c.get("source_file", ""),
+             c["page_start"], c["page_end"],
              json.dumps(c.get("flags", []))),
         )
+
+    # Build format breakdown for audit log
+    source_files = set(c.get("source_file", "") for c in clauses)
+    source_files.discard("")
+    format_counts: Counter[str] = Counter()
+    for sf in source_files:
+        ext = Path(sf).suffix.lower()
+        format_counts[ext] += 1
+
     conn.execute(
         "INSERT INTO audit_log (action, detail, actor) VALUES (?, ?, ?)",
         ("load", json.dumps({
             "source": source,
             "clause_count": len(clauses),
+            "document_count": len(source_files),
+            "format_breakdown": dict(format_counts),
+            "source_files": sorted(source_files),
             "timestamp": datetime.now(timezone.utc).isoformat(),
-        }), "contract-load"),
+        }), "document-load"),
     )
     conn.commit()
 
@@ -80,12 +97,12 @@ def load_chroma(chroma_dir: Path, clauses: list[dict]):
 
     # Delete existing collection if present
     try:
-        client.delete_collection("contract_clauses")
+        client.delete_collection("document_clauses")
     except Exception:
         pass
 
     collection = client.create_collection(
-        name="contract_clauses",
+        name="document_clauses",
         metadata={"hnsw:space": "cosine"},
     )
 
@@ -103,6 +120,7 @@ def load_chroma(chroma_dir: Path, clauses: list[dict]):
         metadatas.append({
             "section_number": c["section_number"],
             "section_title": title,
+            "source_file": c.get("source_file", ""),
             "page_start": c["page_start"],
             "page_end": c["page_end"],
             "flags": json.dumps(c.get("flags", [])),
@@ -115,35 +133,40 @@ def load_chroma(chroma_dir: Path, clauses: list[dict]):
 
 def main():
     parser = argparse.ArgumentParser(description="Load contract into SQLite + ChromaDB")
-    parser.add_argument("pdf_path", help="Path to contract PDF")
+    parser.add_argument("input_path", help="Path to document file or ZIP archive")
     parser.add_argument("--db", default=str(DEFAULT_DB),
                         help=f"SQLite database path (default: {DEFAULT_DB})")
     parser.add_argument("--chroma", default=str(DEFAULT_CHROMA),
                         help=f"ChromaDB directory (default: {DEFAULT_CHROMA})")
     args = parser.parse_args()
 
-    pdf_path = Path(args.pdf_path)
-    if not pdf_path.exists():
-        print(f"Error: PDF not found: {pdf_path}", file=sys.stderr)
+    input_path = Path(args.input_path)
+    if not input_path.exists():
+        print(f"Error: file not found: {input_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Parse PDF
-    print(f"Parsing {pdf_path}...", file=sys.stderr)
+    # Parse document(s)
+    print(f"Parsing {input_path}...", file=sys.stderr)
     result = subprocess.run(
-        [sys.executable, str(PARSER_SCRIPT), str(pdf_path)],
+        [sys.executable, str(PARSER_SCRIPT), str(input_path)],
         capture_output=True, text=True,
     )
     if result.returncode != 0:
         print(f"Parse failed: {result.stderr}", file=sys.stderr)
         sys.exit(1)
+
+    # Print parser stderr (progress messages) to our stderr
+    if result.stderr:
+        print(result.stderr, file=sys.stderr, end="")
+
     clauses = json.loads(result.stdout)
-    print(f"  Parsed {len(clauses)} clauses", file=sys.stderr)
+    print(f"  Parsed {len(clauses)} clauses total", file=sys.stderr)
 
     # Load into SQLite
     db_path = Path(args.db)
     print(f"Loading into SQLite ({db_path})...", file=sys.stderr)
     conn = init_db(db_path)
-    load_sqlite(conn, clauses, str(pdf_path))
+    load_sqlite(conn, clauses, str(input_path))
     count = conn.execute("SELECT COUNT(*) FROM clauses").fetchone()[0]
     print(f"  {count} rows in clauses table", file=sys.stderr)
     conn.close()

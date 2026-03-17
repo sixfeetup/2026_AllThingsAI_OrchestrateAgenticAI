@@ -15,24 +15,24 @@ echo
 
 # --- Skills ---
 echo "Skills:"
-check_file "$DEMO/.claude/skills/contract-loader/skill.md"  "contract-loader skill"
-check_file "$DEMO/.claude/skills/contract-search/skill.md"  "contract-search skill"
-check_file "$DEMO/.claude/skills/contract-eval/skill.md"    "contract-eval skill"
-check_file "$DEMO/.claude/skills/contract-audit/skill.md"   "contract-audit skill"
+check_file "$DEMO/.claude/skills/document-loader/skill.md"  "document-loader skill"
+check_file "$DEMO/.claude/skills/document-search/skill.md"  "document-search skill"
+check_file "$DEMO/.claude/skills/document-eval/skill.md"    "document-eval skill"
+check_file "$DEMO/.claude/skills/document-audit/skill.md"   "document-audit skill"
 
 # --- Agents ---
 echo "Agents:"
 check_file "$DEMO/.agents/data-loader-agent.md"        "data-loader agent"
-check_file "$DEMO/.agents/contract-eval-agent.md"       "contract-eval agent"
+check_file "$DEMO/.agents/document-eval-agent.md"       "document-eval agent"
 check_file "$DEMO/.agents/data-investigator-agent.md"   "data-investigator agent"
 check_file "$DEMO/.agents/verification-agent.md"        "verification agent"
 check_file "$DEMO/.agents/response-drafter-agent.md"    "response-drafter agent"
 
 # --- Scripts ---
 echo "Scripts:"
-check_file "$REPO/.agents/bin/contract-parse.py"   "contract-parse script"
-check_file "$REPO/.agents/bin/contract-load.py"    "contract-load script"
-check_file "$REPO/.agents/bin/contract-search.py"  "contract-search script"
+check_file "$REPO/.agents/bin/document-parse.py"   "contract-parse script"
+check_file "$REPO/.agents/bin/document-load.py"    "document-load script"
+check_file "$REPO/.agents/bin/document-search.py"  "document-search script"
 check_file "$REPO/.agents/bin/test-parse.py"       "test-parse script"
 
 # --- Criteria ---
@@ -44,7 +44,7 @@ check_file "$DEMO/assets/criteria/general-red-flags.md"   "general-red-flags cri
 echo "Supporting materials:"
 check_file "$DEMO/assets/playbook.md"                          "playbook"
 check_file "$DEMO/assets/prebaked/naive-review.md"             "naive-review contrast"
-check_file "$DEMO/assets/prebaked/contract-review-checklist.md" "prebaked review checklist"
+check_file "$DEMO/assets/prebaked/document-review-checklist.md" "prebaked review checklist"
 check_file "$DEMO/assets/prebaked/skill-example.md"            "skill example"
 check_file "$DEMO/assets/problem-clauses.md"                   "problem clauses answer key"
 
@@ -56,12 +56,12 @@ check_file "$DEMO/Makefile"    "Makefile"
 
 # --- Contract PDF ---
 echo "Contract PDF:"
-check_file "$DEMO/assets/contracts/bigco-msa.pdf" "bigco-msa.pdf"
+check_file "$DEMO/assets/documents/bigco-msa.pdf" "bigco-msa.pdf"
 
 # --- Pipeline smoke test (only if PDF exists) ---
 echo
 echo "Pipeline smoke test:"
-if [[ -f "$DEMO/assets/contracts/bigco-msa.pdf" ]]; then
+if [[ -f "$DEMO/assets/documents/bigco-msa.pdf" ]]; then
     # Parser test
     if uv run --with pymupdf "$REPO/.agents/bin/test-parse.py" > /dev/null 2>&1; then
         ok "parser smoke test"
@@ -70,11 +70,11 @@ if [[ -f "$DEMO/assets/contracts/bigco-msa.pdf" ]]; then
     fi
 
     # Load test (into temp dir)
-    TMPDB="$(mktemp -d)/contracts.db"
+    TMPDB="$(mktemp -d)/documents.db"
     TMPCHROMA="$(mktemp -d)/chroma"
     if uv run --with 'pymupdf,chromadb,sentence-transformers' \
-        "$REPO/.agents/bin/contract-load.py" \
-        "$DEMO/assets/contracts/bigco-msa.pdf" \
+        "$REPO/.agents/bin/document-load.py" \
+        "$DEMO/assets/documents/bigco-msa.pdf" \
         --db "$TMPDB" --chroma "$TMPCHROMA" > /dev/null 2>&1; then
         ok "load pipeline"
     else
@@ -84,7 +84,7 @@ if [[ -f "$DEMO/assets/contracts/bigco-msa.pdf" ]]; then
     # Search test
     if [[ -f "$TMPDB" ]]; then
         if uv run --with 'chromadb,sentence-transformers' \
-            "$REPO/.agents/bin/contract-search.py" \
+            "$REPO/.agents/bin/document-search.py" \
             "intellectual property" \
             --db "$TMPDB" --chroma "$TMPCHROMA" \
             --top 3 > /dev/null 2>&1; then

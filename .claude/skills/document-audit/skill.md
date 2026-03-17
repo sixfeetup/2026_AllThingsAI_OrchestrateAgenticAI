@@ -1,17 +1,17 @@
-# contract-audit
+# document-audit
 
 Display the audit trail of all contract analysis actions.
 
 ## Triggers
 
-- `/audit-contract`
+- `/audit-document`
 - User asks to see the "audit trail", "history", or "what we've done"
 
 ## Instructions
 
 1. Query the audit log from SQLite:
    ```bash
-   sqlite3 -header -column demo/data/contracts.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
+   sqlite3 -header -column demo/data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
    ```
 
 2. Present the results as a chronological log:

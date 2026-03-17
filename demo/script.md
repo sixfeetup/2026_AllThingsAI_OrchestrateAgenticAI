@@ -32,7 +32,7 @@ make load
 make clean
 
 # 6. Verify prebaked fallback files exist
-ls assets/prebaked/contract-review-checklist.md
+ls assets/prebaked/document-review-checklist.md
 ls assets/prebaked/naive-review.md
 
 # 7. Verify criteria files exist
@@ -79,8 +79,8 @@ If anything stalls or breaks live, show the prebaked files:
 
 | Situation | Show instead |
 |---|---|
-| Loading is slow (>15s) | `make load-cached` to restore prebaked data, or show `assets/prebaked/contract-review-checklist.md` |
-| Eval is slow or incomplete | `assets/prebaked/contract-review-checklist.md` |
+| Loading is slow (>15s) | `make load-cached` to restore prebaked data, or show `assets/prebaked/document-review-checklist.md` |
+| Eval is slow or incomplete | `assets/prebaked/document-review-checklist.md` |
 | Need naive contrast | `assets/prebaked/naive-review.md` |
 | Bitrot demo inconclusive | Describe with the tables from `assets/prebaked/bitrot-research.md` section 4 |
 
@@ -169,7 +169,7 @@ Show me the skills in .claude/skills/ and agents in .agents/ — just list them 
 
 **What audience sees:** Parse/load output with document count, clause count, confirmation of both stores populated.
 
-**Fallback:** If loading takes >15 seconds, narrate what it's doing and show `assets/prebaked/contract-review-checklist.md` for the expected output shape. Or use `make load-cached` to restore prebaked data instantly.
+**Fallback:** If loading takes >15 seconds, narrate what it's doing and show `assets/prebaked/document-review-checklist.md` for the expected output shape. Or use `make load-cached` to restore prebaked data instantly.
 
 **Timing:** ~1:30 (including narration during load)
 
@@ -229,7 +229,7 @@ Then one more:
 
 **What audience sees:** Eval report with summary table showing severity ratings for 3 criteria, detailed findings with quoted evidence.
 
-**Fallback:** Show `assets/prebaked/contract-review-checklist.md` — the CRITICAL findings section covers IP issues.
+**Fallback:** Show `assets/prebaked/document-review-checklist.md` — the CRITICAL findings section covers IP issues.
 
 **Timing:** ~2 min (eval may take 15-30 seconds to run)
 
@@ -257,7 +257,7 @@ Then one more:
 
 **What audience sees:** Eval report with 6 criteria evaluated, findings spanning multiple documents.
 
-**Fallback:** Show `assets/prebaked/contract-review-checklist.md`.
+**Fallback:** Show `assets/prebaked/document-review-checklist.md`.
 
 **Timing:** ~1:30
 
@@ -341,7 +341,7 @@ upheld, downgraded, or dismissed.
 
 **What audience sees:** Verification report with verdict for each finding — upheld/downgraded/dismissed with reasoning.
 
-**Fallback:** Show the "Adversarial Analysis — Red Flags" section at the bottom of `assets/prebaked/contract-review-checklist.md`.
+**Fallback:** Show the "Adversarial Analysis — Red Flags" section at the bottom of `assets/prebaked/document-review-checklist.md`.
 
 **Timing:** ~2 min
 
@@ -410,7 +410,7 @@ changes, and maintain a collaborative tone.
   ```
 - "Each agent gets clean context scoped to its task. The orchestrator manages the meta-state. This is why agent swarms beat single long sessions"
 - **Orchestration decision framework:** "When do you use which pattern? Single agent for simple tasks. Pipeline for sequential stages. Adversarial review for high-stakes decisions. Swarm for independent subtasks. It's in the playbook"
-- Reference the complete prebaked output in `assets/prebaked/contract-review-checklist.md` for what the full pipeline produces
+- Reference the complete prebaked output in `assets/prebaked/document-review-checklist.md` for what the full pipeline produces
 
 **What audience sees:** Pipeline diagram slide with agent flow. Verbal walkthrough of how each stage hands off to the next.
 

@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-DB="demo/data/contracts.db"
+DB="demo/data/documents.db"
 
 # Bail if no DB yet (contract hasn't been loaded)
 [ -f "$DB" ] || exit 0

@@ -25,7 +25,7 @@
 - templates for skill
   - data loader
     - parse pdf
-	- create a schema for contract review
+	- create a schema for document review
 	- load into sqllite and chroma
   - data search and augment
   - eval skill

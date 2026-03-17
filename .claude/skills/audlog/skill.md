@@ -15,7 +15,7 @@ Session timeline — view or add entries to the audit trail.
 Query the audit log:
 
 ```bash
-sqlite3 -json demo/data/contracts.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
+sqlite3 -json demo/data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
 ```
 
 Parse JSON detail blobs and render as a table:
@@ -25,9 +25,9 @@ Parse JSON detail blobs and render as a table:
 
 | # | Time       | Action   | Actor            | Detail                              |
 |---|------------|----------|------------------|-------------------------------------|
-| 1 | 20:29:57   | LOAD     | contract-load    | bigco-msa.pdf -> 142 clauses        |
-| 2 | 20:30:50   | SEARCH   | contract-search  | "intellectual property" -> 10 hits   |
-| 3 | 20:30:56   | SEARCH   | contract-search  | "cupcakes" -> 3 hits                |
+| 1 | 20:29:57   | LOAD     | document-load    | bigco-msa.pdf -> 142 clauses        |
+| 2 | 20:30:50   | SEARCH   | document-search  | "intellectual property" -> 10 hits   |
+| 3 | 20:30:56   | SEARCH   | document-search  | "cupcakes" -> 3 hits                |
 
 _3 entries in audit trail._
 ```
@@ -54,7 +54,7 @@ Action categories: `load`, `search`, `eval`, `verify`, `draft`, `edit`,
 `handoff`, `decision`, `note`, `error`.
 
 ```bash
-sqlite3 demo/data/contracts.db "INSERT INTO audit_log (action, detail, actor) VALUES ('<action>', '<user message>', 'user')"
+sqlite3 demo/data/documents.db "INSERT INTO audit_log (action, detail, actor) VALUES ('<action>', '<user message>', 'user')"
 ```
 
 Confirm: "Logged: [action] — <message>"
@@ -70,4 +70,4 @@ Confirm: "Logged: [action] — <message>"
 
 ## Prerequisites
 
-- `demo/data/contracts.db` must exist (created by `/load-contract`)
+- `demo/data/documents.db` must exist (created by `/load-document`)

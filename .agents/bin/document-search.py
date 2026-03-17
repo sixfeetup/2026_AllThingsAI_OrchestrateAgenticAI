@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Search loaded contract clauses via semantic + keyword search.
+"""Search loaded document clauses via semantic + keyword search.
 
 Usage:
-    uv run --with 'chromadb,sentence-transformers' contract-search.py <query> [options]
+    uv run --with 'chromadb,sentence-transformers' document-search.py <query> [options]
 
 Options:
     --section PATTERN   Filter by section number (e.g. "4.*" or "12.*")
     --flag TAG          Filter by flag (e.g. "ip", "staffing")
+    --source FILENAME   Filter by source document filename
     --full              Show full body text instead of snippet
     --top N             Number of results (default: 10)
     --db PATH           SQLite database path
@@ -21,7 +22,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
-DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "contracts.db"
+DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "documents.db"
 DEFAULT_CHROMA = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "chroma"
 
 
@@ -31,7 +32,7 @@ def search_chroma(chroma_dir: Path, query: str, top_k: int) -> list[dict]:
 
     client = chromadb.PersistentClient(path=str(chroma_dir))
     try:
-        collection = client.get_collection("contract_clauses")
+        collection = client.get_collection("document_clauses")
     except Exception:
         return []
 
@@ -46,6 +47,7 @@ def search_chroma(chroma_dir: Path, query: str, top_k: int) -> list[dict]:
             "body": results["documents"][0][i],
             "score": 1.0 - (results["distances"][0][i] if results["distances"] else 0),
             "source": "semantic",
+            "source_file": meta.get("source_file", ""),
             "page_start": meta.get("page_start", 0),
             "page_end": meta.get("page_end", 0),
             "flags": json.loads(meta.get("flags", "[]")),
@@ -92,6 +94,7 @@ def search_sqlite(db_path: Path, query: str, top_k: int) -> list[dict]:
             "body": row["body"],
             "score": score,
             "source": "keyword",
+            "source_file": row["source_file"] or "",
             "page_start": row["page_start"],
             "page_end": row["page_end"],
             "flags": json.loads(row["flags"] or "[]"),
@@ -101,18 +104,18 @@ def search_sqlite(db_path: Path, query: str, top_k: int) -> list[dict]:
 
 def merge_results(semantic: list[dict], keyword: list[dict],
                   top_k: int) -> list[dict]:
-    """Merge and deduplicate results, keeping highest score per section."""
-    by_section: dict[str, dict] = {}
+    """Merge and deduplicate results, keeping highest score per section+source_file."""
+    by_key: dict[str, dict] = {}
 
     for hit in semantic + keyword:
-        sec = hit["section_number"]
-        if sec not in by_section or hit["score"] > by_section[sec]["score"]:
-            by_section[sec] = hit
-        elif sec in by_section and hit["source"] != by_section[sec]["source"]:
+        key = f"{hit['section_number']}:{hit.get('source_file', '')}"
+        if key not in by_key or hit["score"] > by_key[key]["score"]:
+            by_key[key] = hit
+        elif key in by_key and hit["source"] != by_key[key]["source"]:
             # Boost score when both sources agree
-            by_section[sec]["score"] = min(1.0, by_section[sec]["score"] + 0.1)
+            by_key[key]["score"] = min(1.0, by_key[key]["score"] + 0.1)
 
-    results = sorted(by_section.values(), key=lambda x: x["score"], reverse=True)
+    results = sorted(by_key.values(), key=lambda x: x["score"], reverse=True)
     return results[:top_k]
 
 
@@ -124,7 +127,7 @@ def log_search(db_path: Path, query: str, result_count: int):
     conn.execute(
         "INSERT INTO audit_log (action, detail, actor) VALUES (?, ?, ?)",
         ("search", json.dumps({"query": query, "results": result_count}),
-         "contract-search"),
+         "document-search"),
     )
     conn.commit()
     conn.close()
@@ -136,13 +139,14 @@ def format_table(results: list[dict], full: bool) -> str:
         return "No results found."
 
     lines = []
-    lines.append(f"{'Section':>10}  {'Score':>5}  {'Src':>4}  {'Flags':<20}  {'Title / Body'}")
-    lines.append("-" * 90)
+    lines.append(f"{'Section':>10}  {'Score':>5}  {'Src':>4}  {'Source File':<25}  {'Flags':<20}  {'Title / Body'}")
+    lines.append("-" * 110)
 
     for r in results:
         sec = r["section_number"]
         score = f"{r['score']:.2f}"
         src = r["source"][:4]
+        source_file = (r.get("source_file") or "")[:25]
         flags = ", ".join(r["flags"])[:20]
         if full:
             # Strip the "N.N\n" prefix that we prepended for embedding
@@ -157,16 +161,17 @@ def format_table(results: list[dict], full: bool) -> str:
                 body = body.split("\n", 1)[1]
             snippet = body[:200].replace("\n", " ")
             text = f"{title}: {snippet}" if title else snippet
-        lines.append(f"{sec:>10}  {score:>5}  {src:>4}  {flags:<20}  {text}")
+        lines.append(f"{sec:>10}  {score:>5}  {src:>4}  {source_file:<25}  {flags:<20}  {text}")
 
     return "\n".join(lines)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Search contract clauses")
+    parser = argparse.ArgumentParser(description="Search document clauses")
     parser.add_argument("query", help="Search query")
     parser.add_argument("--section", help="Filter by section pattern (e.g. '4.*')")
     parser.add_argument("--flag", help="Filter by flag (e.g. 'ip')")
+    parser.add_argument("--source", help="Filter by source document filename")
     parser.add_argument("--full", action="store_true", help="Show full body")
     parser.add_argument("--top", type=int, default=10, help="Number of results")
     parser.add_argument("--db", default=str(DEFAULT_DB))
@@ -188,6 +193,10 @@ def main():
                    if fnmatch.fnmatch(r["section_number"], args.section)]
     if args.flag:
         results = [r for r in results if args.flag in r["flags"]]
+    if args.source:
+        pattern = args.source.lower()
+        results = [r for r in results
+                   if pattern in (r.get("source_file") or "").lower()]
 
     # Log the search
     log_search(db_path, args.query, len(results))

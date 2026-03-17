@@ -291,11 +291,11 @@ this list before deploying an agent workflow on real data.
 
 ## 5. Engineering Parallels
 
-The patterns in agent-driven contract review map directly to practices
+The patterns in agent-driven document review map directly to practices
 software engineers already use. If you have built a CI/CD pipeline or
 written acceptance tests, you already know the underlying concepts.
 
-| Contract Review | Software Engineering |
+| Document Review | Software Engineering |
 |---|---|
 | Criteria files | Test specs / acceptance criteria |
 | Adversarial agent | Code review / QA |
@@ -333,7 +333,7 @@ industries, this traceability is not optional; it is a requirement.
 
 ### Pipeline handoffs → CI/CD stages
 
-A contract review pipeline (parse → analyze → report) mirrors a CI/CD
+A document review pipeline (parse → analyze → report) mirrors a CI/CD
 pipeline (build → test → deploy). Each stage has a defined input and
 output contract. If one stage fails, subsequent stages do not run. The
 handoff between stages is explicit and inspectable, which makes

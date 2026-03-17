@@ -29,9 +29,9 @@ and can be built concurrently.
 
 **No dependencies. Pure Python. Can be tested independently.**
 
-#### 1.1 `contract-parse.py` — Document → structured JSON
+#### 1.1 `document-parse.py` — Document → structured JSON
 
-- **File:** `.agents/bin/contract-parse.py`
+- **File:** `.agents/bin/document-parse.py`
 - **Input:** path to document (PDF, DOCX, DOC) or ZIP archive
 - **Output:** JSON array of clause objects (section_number, title, body,
   source_file, page_start, page_end)
@@ -43,21 +43,21 @@ and can be built concurrently.
 - **Test:** Run against `assets/1-RFP 20-020 - Original Documents.zip`,
   verify all documents are captured, spot-check clause bodies.
 
-#### 1.2 `contract-load.py` — JSON → SQLite + ChromaDB
+#### 1.2 `document-load.py` — JSON → SQLite + ChromaDB
 
-- **File:** `.agents/bin/contract-load.py`
+- **File:** `.agents/bin/document-load.py`
 - **Input:** JSON from parse step (or path to archive — can call parse
   internally)
-- **Output:** populated `data/contracts.db` and `data/chroma/`
+- **Output:** populated `data/documents.db` and `data/chroma/`
 - **Deps:** `chromadb`, `sentence-transformers` (via uv)
 - **Creates both tables:** `clauses` and `audit_log`
 - **Logs:** writes a `load` entry to `audit_log`
 - **Test:** Load the archive, query SQLite for clause count, verify
   ChromaDB collection exists.
 
-#### 1.3 `contract-search.py` — Query both stores
+#### 1.3 `document-search.py` — Query both stores
 
-- **File:** `.agents/bin/contract-search.py`
+- **File:** `.agents/bin/document-search.py`
 - **Input:** query string, optional flags (--section, --flag, --source, --full)
 - **Output:** formatted table to stdout
 - **Approach:** Semantic search (ChromaDB top-k=10) + SQL LIKE search,
@@ -116,24 +116,24 @@ Attendee take-home. Sections (from spec 7):
 Each skill is a `skill.md` file instructing the agent when/how to
 invoke the underlying script and present results.
 
-#### 3.1 `contract-loader` skill
+#### 3.1 `document-loader` skill
 
-- **File:** `demo/.claude/skills/contract-loader/skill.md`
-- **References:** `.agents/bin/contract-parse.py`,
-  `.agents/bin/contract-load.py`
+- **File:** `demo/.claude/skills/document-loader/skill.md`
+- **References:** `.agents/bin/document-parse.py`,
+  `.agents/bin/document-load.py`
 - **Trigger:** `/load-document`
 - **Key instruction:** extract archive, parse each document by format,
   load all into stores, then report summary stats.
 
-#### 3.2 `contract-search` skill
+#### 3.2 `document-search` skill
 
-- **File:** `demo/.claude/skills/contract-search/skill.md`
-- **References:** `.agents/bin/contract-search.py`
+- **File:** `demo/.claude/skills/document-search/skill.md`
+- **References:** `.agents/bin/document-search.py`
 - **Trigger:** `/search-document`
 
-#### 3.3 `contract-eval` skill
+#### 3.3 `document-eval` skill
 
-- **File:** `demo/.claude/skills/contract-eval/skill.md`
+- **File:** `demo/.claude/skills/document-eval/skill.md`
 - **This is LLM-heavy** — the agent reads criteria, uses search for
   evidence, then applies judgment.
 - **References:** search script, criteria files
@@ -141,9 +141,9 @@ invoke the underlying script and present results.
 - **Key instruction:** iterate criteria headings, search across all
   loaded documents for each, rate severity, produce report.
 
-#### 3.4 `contract-audit` skill
+#### 3.4 `document-audit` skill
 
-- **File:** `demo/.claude/skills/contract-audit/skill.md`
+- **File:** `demo/.claude/skills/document-audit/skill.md`
 - **References:** SQLite `audit_log` table (simple SQL query)
 - **Trigger:** `/audit-document`
 
@@ -155,7 +155,7 @@ All five agents in `demo/.agents/`. Each ~30-50 lines: persona,
 goals, available skills, output format, constraints.
 
 #### 4.1 `data-loader-agent.md`
-#### 4.2 `contract-eval-agent.md`
+#### 4.2 `document-eval-agent.md`
 #### 4.3 `data-investigator-agent.md`
 #### 4.4 `verification-agent.md`
 #### 4.5 `response-drafter-agent.md`
@@ -168,8 +168,8 @@ goals, available skills, output format, constraints.
 
 Targets:
 - `document` — verify the document archive exists
-- `load` — run contract-load against the archive
-- `search` — convenience wrapper for contract-search
+- `load` — run document-load against the archive
+- `search` — convenience wrapper for document-search
 - `clean` — remove `data/` directory
 - `reset` — clean + load
 

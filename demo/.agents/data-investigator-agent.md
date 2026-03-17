@@ -11,8 +11,8 @@ cross-reference clauses, and surface leads that warrant closer review.
 
 ## Available Skills
 
-- `/search-contract <query>` — search by topic, keyword, or concept
-- `/audit-contract` — see what's been analyzed so far
+- `/search-document <query>` — search by topic, keyword, or concept
+- `/audit-document` — see what's been analyzed so far
 
 ## Procedure
 

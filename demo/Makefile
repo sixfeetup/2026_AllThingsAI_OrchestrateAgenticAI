@@ -2,11 +2,11 @@ SHELL := /bin/zsh
 
 DOCUMENT_SOURCE := assets/1-RFP 20-020 - Original Documents.zip
 GEN_SCRIPT   := assets/gen-contract.py
-DB           := data/contracts.db
+DB           := data/documents.db
 CHROMA       := data/chroma
-PARSE_SCRIPT := ../.agents/bin/contract-parse.py
-LOAD_SCRIPT  := ../.agents/bin/contract-load.py
-SEARCH_SCRIPT := ../.agents/bin/contract-search.py
+PARSE_SCRIPT := ../.agents/bin/document-parse.py
+LOAD_SCRIPT  := ../.agents/bin/document-load.py
+SEARCH_SCRIPT := ../.agents/bin/document-search.py
 
 VENV := .venv
 MODEL_CACHE := .model-cache
@@ -39,7 +39,7 @@ search:
 
 ## test — run parser smoke tests
 test:
-	uv run --with pymupdf ../.agents/bin/test-parse.py
+	uv run --with 'pymupdf,python-docx,openpyxl,path' ../.agents/bin/test-parse.py
 
 ## clean — remove all generated artifacts
 clean:
@@ -104,14 +104,14 @@ data-cache-create: data-cache-empty data-cache-loaded
 data-cache-empty: $(VENV)/.installed
 	@mkdir -p $(DATA_CACHE)/empty
 	@echo "Creating empty database state..."
-	sqlite3 $(DATA_CACHE)/empty/contracts.db "CREATE TABLE IF NOT EXISTS clauses (id INTEGER PRIMARY KEY, section_number TEXT NOT NULL, section_title TEXT, body TEXT NOT NULL, source_file TEXT, page_start INTEGER, page_end INTEGER, flags TEXT); CREATE TABLE IF NOT EXISTS audit_log (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT NOT NULL DEFAULT (datetime('now')), action TEXT NOT NULL, detail TEXT, actor TEXT);"
+	sqlite3 $(DATA_CACHE)/empty/documents.db "CREATE TABLE IF NOT EXISTS clauses (id INTEGER PRIMARY KEY, section_number TEXT NOT NULL, section_title TEXT, body TEXT NOT NULL, source_file TEXT, page_start INTEGER, page_end INTEGER, flags TEXT); CREATE TABLE IF NOT EXISTS audit_log (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT NOT NULL DEFAULT (datetime('now')), action TEXT NOT NULL, detail TEXT, actor TEXT);"
 	@mkdir -p $(DATA_CACHE)/empty/chroma
 	SENTENCE_TRANSFORMERS_HOME=$(MODEL_CACHE)/sentence-transformers \
 	HF_HOME=$(MODEL_CACHE)/huggingface \
 	uv run python -c "\
 		import chromadb; \
 		client = chromadb.PersistentClient(path='$(DATA_CACHE)/empty/chroma'); \
-		client.create_collection('contract_clauses', metadata={'hnsw:space': 'cosine'}); \
+		client.create_collection('document_clauses', metadata={'hnsw:space': 'cosine'}); \
 		print('  Empty ChromaDB initialized')"
 
 ## data-cache-loaded — snapshot with documents fully loaded
@@ -121,7 +121,7 @@ data-cache-loaded: $(VENV)/.installed
 	rm -rf data
 	SENTENCE_TRANSFORMERS_HOME=$(MODEL_CACHE)/sentence-transformers \
 	HF_HOME=$(MODEL_CACHE)/huggingface \
-	uv run $(LOAD_SCRIPT) "$(DOCUMENT_SOURCE)" --db data/contracts.db --chroma data/chroma
+	uv run $(LOAD_SCRIPT) "$(DOCUMENT_SOURCE)" --db data/documents.db --chroma data/chroma
 	rm -rf $(DATA_CACHE)/loaded
 	cp -r data $(DATA_CACHE)/loaded
 	@echo "  Loaded data snapshot created"
@@ -159,7 +159,7 @@ preflight:
 		|| (echo "Claude API may not be responding — check auth and connectivity" && exit 0)
 	@echo "  Claude API responding"
 	@echo "Checking MCP server..."
-	@uv run python -c "import importlib.util; spec = importlib.util.spec_from_file_location('mcp', '../.agents/bin/contract-mcp-server.py'); print('  MCP server script loadable')" \
+	@uv run python -c "import importlib.util; spec = importlib.util.spec_from_file_location('mcp', '../.agents/bin/document-mcp-server.py'); print('  MCP server script loadable')" \
 		|| (echo "MCP server script has import errors" && exit 0)
 	@echo ""
 	@echo "Preflight passed. Ready for offline demo."

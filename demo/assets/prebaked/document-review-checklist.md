@@ -1,4 +1,4 @@
-# Contract Review Checklist -- L&LL Master Services Agreement
+# Document Review Checklist -- L&LL Master Services Agreement
 
 **Generated:** 2026-01-16
 **Reviewer:** Agentic Contract Analyzer v1

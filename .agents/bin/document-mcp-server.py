@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""MCP server exposing contract review tools over stdio.
+"""MCP server exposing document review tools over stdio.
 
 Usage:
-    uv run --with 'mcp,pymupdf,chromadb,sentence-transformers' contract-mcp-server.py
+    uv run --with 'mcp,pymupdf,python-docx,openpyxl,chromadb,sentence-transformers' document-mcp-server.py
 
 Exposes the contract pipeline (parse, load, search, audit) as MCP tools
 so Claude Desktop, Cowork, or any MCP client can drive the review workflow
@@ -20,15 +20,15 @@ from mcp.server.fastmcp import FastMCP
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEMO_DIR = SCRIPT_DIR.parent.parent / "demo"
-DEFAULT_DB = DEMO_DIR / "data" / "contracts.db"
+DEFAULT_DB = DEMO_DIR / "data" / "documents.db"
 DEFAULT_CHROMA = DEMO_DIR / "data" / "chroma"
-PARSE_SCRIPT = SCRIPT_DIR / "contract-parse.py"
-LOAD_SCRIPT = SCRIPT_DIR / "contract-load.py"
-SEARCH_SCRIPT = SCRIPT_DIR / "contract-search.py"
-DEFAULT_PDF = DEMO_DIR / "assets" / "contracts" / "bigco-msa.pdf"
+PARSE_SCRIPT = SCRIPT_DIR / "document-parse.py"
+LOAD_SCRIPT = SCRIPT_DIR / "document-load.py"
+SEARCH_SCRIPT = SCRIPT_DIR / "document-search.py"
+DEFAULT_DOCUMENT = DEMO_DIR / "assets" / "1-RFP 20-020 - Original Documents.zip"
 
 server = FastMCP(
-    "contract-review",
+    "document-review",
     instructions=(
         "Contract review pipeline tools. Use these to parse, load, search, "
         "and audit contract documents. Typical workflow: load a contract PDF, "
@@ -39,44 +39,45 @@ server = FastMCP(
 
 
 @server.tool()
-def load_contract(pdf_path: str = "") -> str:
-    """Parse a contract PDF and load clauses into SQLite + ChromaDB.
+def load_document(document_path: str = "") -> str:
+    """Parse a document (PDF, DOCX, XLSX, or ZIP archive) and load clauses into SQLite + ChromaDB.
 
     Args:
-        pdf_path: Path to the contract PDF. Defaults to the demo contract.
+        document_path: Path to the document file or ZIP archive. Defaults to the demo RFP archive.
     """
-    if not pdf_path:
-        pdf_path = str(DEFAULT_PDF)
-    pdf = Path(pdf_path)
-    if not pdf.exists():
-        return f"Error: PDF not found at {pdf_path}"
+    if not document_path:
+        document_path = str(DEFAULT_DOCUMENT)
+    doc = Path(document_path)
+    if not doc.exists():
+        return f"Error: document not found at {document_path}"
     result = subprocess.run(
-        [sys.executable, str(LOAD_SCRIPT), str(pdf),
+        [sys.executable, str(LOAD_SCRIPT), str(doc),
          "--db", str(DEFAULT_DB), "--chroma", str(DEFAULT_CHROMA)],
         capture_output=True, text=True,
     )
     output = result.stderr.strip()
     if result.returncode != 0:
-        return f"Error loading contract: {output}"
-    return f"Contract loaded successfully.\n\n{output}"
+        return f"Error loading document: {output}"
+    return f"Document loaded successfully.\n\n{output}"
 
 
 @server.tool()
-def search_contract(
+def search_document(
     query: str, section: str = "", flag: str = "",
-    full: bool = False, top: int = 10,
+    source: str = "", full: bool = False, top: int = 10,
 ) -> str:
-    """Search loaded contract clauses using semantic + keyword search.
+    """Search loaded document clauses using semantic + keyword search.
 
     Args:
         query: Search query (e.g. "intellectual property", "termination").
         section: Filter by section number pattern (e.g. "4.*").
         flag: Filter by topic flag (e.g. "ip", "payment").
+        source: Filter by source document filename (e.g. "RFP 20-020 Document.pdf").
         full: Show full clause body instead of snippet.
         top: Number of results to return.
     """
     if not DEFAULT_DB.exists():
-        return "Error: No contract loaded. Use load_contract first."
+        return "Error: No contract loaded. Use load_document first."
     cmd = [sys.executable, str(SEARCH_SCRIPT), query,
            "--db", str(DEFAULT_DB), "--chroma", str(DEFAULT_CHROMA),
            "--top", str(top), "--json"]
@@ -84,6 +85,8 @@ def search_contract(
         cmd.extend(["--section", section])
     if flag:
         cmd.extend(["--flag", flag])
+    if source:
+        cmd.extend(["--source", source])
     if full:
         cmd.append("--full")
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -100,15 +103,17 @@ def search_contract(
         sec = h["section_number"]
         title = h.get("section_title", "")
         score = h.get("score", 0)
+        source_file = h.get("source_file", "")
         body = h.get("body", "")
         snippet = body if full else body[:200].replace("\n", " ")
         label = f"{title}: {snippet}" if title else snippet
-        lines.append(f"  [{sec}] (score: {score:.2f}) {label}")
+        src_tag = f" [{source_file}]" if source_file else ""
+        lines.append(f"  [{sec}]{src_tag} (score: {score:.2f}) {label}")
     return "\n".join(lines)
 
 
 @server.tool()
-def audit_contract() -> str:
+def audit_document() -> str:
     """Display the audit trail of all contract analysis actions."""
     if not DEFAULT_DB.exists():
         return "Error: No contract loaded."
@@ -157,7 +162,7 @@ def list_criteria_files() -> str:
 
 
 @server.tool()
-def get_contract_stats() -> str:
+def get_document_stats() -> str:
     """Get summary statistics about the loaded contract."""
     if not DEFAULT_DB.exists():
         return "Error: No contract loaded."
@@ -177,7 +182,7 @@ def get_contract_stats() -> str:
         except (json.JSONDecodeError, TypeError):
             pass
     lines = [
-        "# Contract Statistics\n",
+        "# Document Statistics\n",
         f"- **Total clauses:** {total}",
         f"- **Pages:** {pages['mn']} to {pages['mx']}",
         "",

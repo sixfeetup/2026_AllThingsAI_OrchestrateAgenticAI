@@ -12,12 +12,12 @@ DEMO = os.path.join(ROOT, "demo")
 FILES = {}
 
 # --- 1. MCP server script ---
-FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.dedent('''\
+FILES[os.path.join(ROOT, ".agents/bin/document-mcp-server.py")] = textwrap.dedent('''\
     #!/usr/bin/env python3
-    """MCP server exposing contract review tools over stdio.
+    """MCP server exposing document review tools over stdio.
 
     Usage:
-        uv run --with 'mcp,pymupdf,chromadb,sentence-transformers' contract-mcp-server.py
+        uv run --with 'mcp,pymupdf,chromadb,sentence-transformers' document-mcp-server.py
 
     Exposes the contract pipeline (parse, load, search, audit) as MCP tools
     so Claude Desktop, Cowork, or any MCP client can drive the review workflow
@@ -35,15 +35,15 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
 
     SCRIPT_DIR = Path(__file__).resolve().parent
     DEMO_DIR = SCRIPT_DIR.parent.parent / "demo"
-    DEFAULT_DB = DEMO_DIR / "data" / "contracts.db"
+    DEFAULT_DB = DEMO_DIR / "data" / "documents.db"
     DEFAULT_CHROMA = DEMO_DIR / "data" / "chroma"
-    PARSE_SCRIPT = SCRIPT_DIR / "contract-parse.py"
-    LOAD_SCRIPT = SCRIPT_DIR / "contract-load.py"
-    SEARCH_SCRIPT = SCRIPT_DIR / "contract-search.py"
+    PARSE_SCRIPT = SCRIPT_DIR / "document-parse.py"
+    LOAD_SCRIPT = SCRIPT_DIR / "document-load.py"
+    SEARCH_SCRIPT = SCRIPT_DIR / "document-search.py"
     DEFAULT_PDF = DEMO_DIR / "assets" / "contracts" / "bigco-msa.pdf"
 
     server = FastMCP(
-        "contract-review",
+        "document-review",
         instructions=(
             "Contract review pipeline tools. Use these to parse, load, search, "
             "and audit contract documents. Typical workflow: load a contract PDF, "
@@ -54,7 +54,7 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
 
 
     @server.tool()
-    def load_contract(pdf_path: str = "") -> str:
+    def load_document(pdf_path: str = "") -> str:
         """Parse a contract PDF and load clauses into SQLite + ChromaDB.
 
         Args:
@@ -77,11 +77,11 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
 
 
     @server.tool()
-    def search_contract(
+    def search_document(
         query: str, section: str = "", flag: str = "",
         full: bool = False, top: int = 10,
     ) -> str:
-        """Search loaded contract clauses using semantic + keyword search.
+        """Search loaded document clauses using semantic + keyword search.
 
         Args:
             query: Search query (e.g. "intellectual property", "termination").
@@ -91,7 +91,7 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
             top: Number of results to return.
         """
         if not DEFAULT_DB.exists():
-            return "Error: No contract loaded. Use load_contract first."
+            return "Error: No contract loaded. Use load_document first."
         cmd = [sys.executable, str(SEARCH_SCRIPT), query,
                "--db", str(DEFAULT_DB), "--chroma", str(DEFAULT_CHROMA),
                "--top", str(top), "--json"]
@@ -123,7 +123,7 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
 
 
     @server.tool()
-    def audit_contract() -> str:
+    def audit_document() -> str:
         """Display the audit trail of all contract analysis actions."""
         if not DEFAULT_DB.exists():
             return "Error: No contract loaded."
@@ -172,7 +172,7 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
 
 
     @server.tool()
-    def get_contract_stats() -> str:
+    def get_document_stats() -> str:
         """Get summary statistics about the loaded contract."""
         if not DEFAULT_DB.exists():
             return "Error: No contract loaded."
@@ -192,7 +192,7 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
             except (json.JSONDecodeError, TypeError):
                 pass
         lines = [
-            "# Contract Statistics\\n",
+            "# Document Statistics\\n",
             f"- **Total clauses:** {total}",
             f"- **Pages:** {pages['mn']} to {pages['mx']}",
             "",
@@ -226,11 +226,11 @@ FILES[os.path.join(ROOT, ".agents/bin/contract-mcp-server.py")] = textwrap.deden
 FILES[os.path.join(DEMO, ".mcp.json")] = textwrap.dedent('''\
     {
       "mcpServers": {
-        "contract-review": {
+        "document-review": {
           "command": "uv",
           "args": [
             "run", "--with", "mcp,pymupdf,chromadb,sentence-transformers",
-            "../.agents/bin/contract-mcp-server.py"
+            "../.agents/bin/document-mcp-server.py"
           ]
         }
       }
@@ -239,9 +239,9 @@ FILES[os.path.join(DEMO, ".mcp.json")] = textwrap.dedent('''\
 
 # --- 3. Demo CLAUDE.md ---
 FILES[os.path.join(DEMO, "CLAUDE.md")] = textwrap.dedent('''\
-    # Contract Review Demo
+    # Document Review Demo
 
-    This directory contains a contract review pipeline demo for a conference talk
+    This directory contains a document review pipeline demo for a conference talk
     on building agentic AI systems with Claude Code.
 
     ## Quick Start
@@ -260,25 +260,25 @@ FILES[os.path.join(DEMO, "CLAUDE.md")] = textwrap.dedent('''\
 
     | Skill | Trigger | What it does |
     |-------|---------|-------------|
-    | contract-loader | `/load-contract` | Parse PDF, load into SQLite + ChromaDB |
-    | contract-search | `/search-contract <query>` | Semantic + keyword search |
-    | contract-eval | `/eval-contract [criteria]` | Evaluate against criteria file |
-    | contract-audit | `/audit-contract` | Show audit trail |
+    | document-loader | `/load-document` | Parse PDF, load into SQLite + ChromaDB |
+    | document-search | `/search-document <query>` | Semantic + keyword search |
+    | document-eval | `/eval-document [criteria]` | Evaluate against criteria file |
+    | document-audit | `/audit-document` | Show audit trail |
 
     ## Available MCP Tools
 
-    The `contract-review` MCP server exposes the same pipeline as tools:
-    - `load_contract` — parse and load a PDF
-    - `search_contract` — dual semantic + keyword search
-    - `audit_contract` — view audit trail
-    - `get_contract_stats` — clause counts and flag distribution
+    The `document-review` MCP server exposes the same pipeline as tools:
+    - `load_document` — parse and load a PDF
+    - `search_document` — dual semantic + keyword search
+    - `audit_document` — view audit trail
+    - `get_document_stats` — clause counts and flag distribution
     - `list_criteria_files` / `read_criteria_file` — browse eval criteria
 
     ## Agent Templates
 
     Agent templates in `.agents/` define specialized roles:
     - **data-loader-agent** — ingestion and data quality
-    - **contract-eval-agent** — systematic clause analysis
+    - **document-eval-agent** — systematic clause analysis
     - **data-investigator-agent** — exploratory forensic analysis
     - **verification-agent** — red team / adversarial review
     - **response-drafter-agent** — draft professional response memo
@@ -287,17 +287,17 @@ FILES[os.path.join(DEMO, "CLAUDE.md")] = textwrap.dedent('''\
 
     For multi-agent review using Claude Desktop or cowork:
 
-    1. **Load phase**: Use `load_contract` tool to ingest the PDF
-    2. **Eval phase**: Apply criteria files via `search_contract` + LLM judgment
+    1. **Load phase**: Use `load_document` tool to ingest the PDF
+    2. **Eval phase**: Apply criteria files via `search_document` + LLM judgment
     3. **Verify phase**: Challenge findings with adversarial perspective
     4. **Draft phase**: Produce response memo from verified findings
-    5. **Audit phase**: Review the full trail with `audit_contract`
+    5. **Audit phase**: Review the full trail with `audit_document`
 
     Each phase can be handled by a different Claude instance or agent role.
 
     ## Data Stores
 
-    - `data/contracts.db` — SQLite (clauses + audit_log tables)
+    - `data/documents.db` — SQLite (clauses + audit_log tables)
     - `data/chroma/` — ChromaDB vector store
     - Both are ephemeral — `make clean` removes them
 
@@ -310,18 +310,18 @@ FILES[os.path.join(DEMO, "CLAUDE.md")] = textwrap.dedent('''\
 
 # --- 4. Cowork review skill ---
 FILES[os.path.join(DEMO, ".claude/skills/cowork-review/skill.md")] = textwrap.dedent('''\
-    # Cowork Contract Review Pipeline
+    # Cowork Document Review Pipeline
 
     **Trigger:** `/cowork-review [pdf-path]`
 
-    Orchestrate a full multi-agent contract review. This skill coordinates
+    Orchestrate a full multi-agent document review. This skill coordinates
     the complete pipeline: load, evaluate, verify, and draft a response.
 
     ## Workflow
 
     ### Step 1: Load the Contract
-    Run the contract-loader skill (or MCP `load_contract` tool) on the PDF.
-    Default: `assets/contracts/bigco-msa.pdf`
+    Run the document-loader skill (or MCP `load_document` tool) on the PDF.
+    Default: `assets/documents/bigco-msa.pdf`
 
     Verify the load succeeded — check clause count (expect 100+) and page coverage.
 
@@ -355,7 +355,7 @@ FILES[os.path.join(DEMO, ".claude/skills/cowork-review/skill.md")] = textwrap.de
     - Tone: professional, constructive, firm on critical issues
 
     ### Step 6: Audit Trail
-    Run `/audit-contract` to display the full provenance trail.
+    Run `/audit-document` to display the full provenance trail.
 
     ## Output
     Save the final report to `data/review-report.md` with all sections:
@@ -378,5 +378,5 @@ for fp, content in FILES.items():
     print(f"  wrote {fp}")
 
 # Make MCP server executable
-os.chmod(os.path.join(ROOT, ".agents/bin/contract-mcp-server.py"), 0o755)
+os.chmod(os.path.join(ROOT, ".agents/bin/document-mcp-server.py"), 0o755)
 print("\nDone. 4 files created.")

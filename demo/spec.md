@@ -15,13 +15,13 @@ Claude Code session rooted at the `demo/` directory (or its parent with
 | Artifact | Path | Notes |
 |---|---|---|
 | Document archive | `assets/1-RFP 20-020 - Original Documents.zip` | Real government RFP package — 17 documents (3 PDFs, 4 DOCX, 3 DOC, 4 XLSX, 1 XLS) |
-| Prebaked review | `assets/prebaked/contract-review-checklist.md` | Example output to show if live generation is slow |
+| Prebaked review | `assets/prebaked/document-review-checklist.md` | Example output to show if live generation is slow |
 
 ### Runtime Data Stores
 
 The demo uses two local stores, created at load time:
 
-- **SQLite** (`demo/data/contracts.db`) — structured clause data
+- **SQLite** (`demo/data/documents.db`) — structured clause data
   (section number, title, body text, source file, metadata flags)
 - **ChromaDB** (`demo/data/chroma/`) — vector embeddings of clause text
   for semantic search
@@ -35,7 +35,7 @@ Both are ephemeral — `make clean` removes them.
 Skills are Claude Code skill files (`demo/.claude/skills/<name>/skill.md`).
 Each skill is a self-contained capability the agent can invoke.
 
-### 2.1 `contract-loader` — Extract, Parse, Schema, Load
+### 2.1 `document-loader` — Extract, Parse, Schema, Load
 
 **Trigger:** `/load-document <path-to-archive-or-pdf>`
 
@@ -51,8 +51,8 @@ Each skill is a self-contained capability the agent can invoke.
    - `page_start` (int)
    - `page_end` (int)
    - `flags` (list[str]) — tags like `"ip"`, `"termination"`, `"staffing"`
-4. Create/replace SQLite table `clauses` in `data/contracts.db`.
-5. Create/replace ChromaDB collection `contract_clauses` with embeddings
+4. Create/replace SQLite table `clauses` in `data/documents.db`.
+5. Create/replace ChromaDB collection `document_clauses` with embeddings
    of each clause body (use default sentence-transformer model).
 6. Print summary: document count, clause count, any parse warnings.
 
@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS clauses (
 );
 ```
 
-### 2.2 `contract-search` — Search & Augment
+### 2.2 `document-search` — Search & Augment
 
 **Trigger:** `/search-document <query>`
 
 **What it does:**
-1. Run semantic search against ChromaDB `contract_clauses` (top-k=10).
+1. Run semantic search against ChromaDB `document_clauses` (top-k=10).
 2. Run keyword/SQL search against SQLite `clauses` for exact matches.
 3. Merge and deduplicate results, rank by combined score.
 4. Return results as a formatted table: section number, source file, title,
@@ -91,7 +91,7 @@ Results span all loaded documents in the archive.
 - `--source <filename>` — filter by source document
 - `--full` — show full body text instead of snippet
 
-### 2.3 `contract-eval` — Evaluate Against Criteria
+### 2.3 `document-eval` — Evaluate Against Criteria
 
 **Trigger:** `/eval-document [criteria-file]`
 
@@ -100,7 +100,7 @@ Results span all loaded documents in the archive.
    `assets/criteria/general-red-flags.md`
    or a custom criteria file). Each `## N. Title` heading is one criterion.
 2. For each criterion:
-   a. Use `contract-search` to find relevant clauses across all documents.
+   a. Use `document-search` to find relevant clauses across all documents.
    b. Assess whether the issue described exists in the loaded documents.
    c. Rate severity: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, `CLEAR`.
    d. Provide evidence (quote the clause text) and reasoning.
@@ -116,7 +116,7 @@ Results span all loaded documents in the archive.
 - `--model <model>` — override model for eval (enables using Gemini/Codex
   for adversarial cross-check)
 
-### 2.4 `contract-audit` — Audit Trail & Provenance
+### 2.4 `document-audit` — Audit Trail & Provenance
 
 **Trigger:** `/audit-document`
 
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS audit_log (
     timestamp  TEXT NOT NULL DEFAULT (datetime('now')),
     action     TEXT NOT NULL,  -- 'load', 'search', 'eval', 'draft'
     detail     TEXT,           -- JSON blob with action-specific data
-    actor      TEXT            -- 'user', 'contract-eval', 'verifier', etc.
+    actor      TEXT            -- 'user', 'document-eval', 'verifier', etc.
 );
 ```
 
@@ -194,22 +194,22 @@ persona, goals, and tool access for each agent role. During the demo
 these are invoked via Claude Code's Agent tool or by setting system
 context.
 
-### 3.1 `contract-eval-agent`
+### 3.1 `document-eval-agent`
 
-**File:** `demo/.agents/contract-eval-agent.md`
+**File:** `demo/.agents/document-eval-agent.md`
 
 **Role:** Primary document analyst. Methodically reviews each section
 across all loaded documents for legal, financial, and operational risks.
 
 **Behavior:**
-- Uses `contract-search` to navigate the documents
-- Uses `contract-eval` to apply criteria
+- Uses `document-search` to navigate the documents
+- Uses `document-eval` to apply criteria
 - Produces a structured findings report
 - Tags each finding with severity, affected party, and source document
 - Does NOT suggest remediation (that's the response drafter's job)
 
 **Persona prompt key points:**
-- Act as an experienced contract analyst
+- Act as an experienced document analyst
 - Be thorough but concise — cite section numbers and source files
 - Flag anything unusual, even if not in the criteria file
 - Maintain a skeptical, detail-oriented posture
@@ -223,7 +223,7 @@ document data, looking for patterns, anomalies, and cross-document
 contradictions.
 
 **Behavior:**
-- Uses `contract-search` with varied queries to explore the documents
+- Uses `document-search` with varied queries to explore the documents
 - Cross-references clauses across documents to find contradictions
 - Looks for hidden or buried provisions
 - Reports findings as "leads" with confidence levels
@@ -241,7 +241,7 @@ contradictions.
 the local data stores.
 
 **Behavior:**
-- Uses `contract-loader` skill to extract, parse, and load archives
+- Uses `document-loader` skill to extract, parse, and load archives
 - Validates loaded data (document count, clause count, coverage, parse quality)
 - Reports any parsing issues (garbled text, missing sections, unsupported formats)
 - Can reload or patch data if issues are found
@@ -260,12 +260,12 @@ argues against them — looking for false positives, overstatements,
 or missing context.
 
 **Behavior:**
-- Receives findings from `contract-eval-agent`
+- Receives findings from `document-eval-agent`
 - For each finding, constructs a counter-argument:
   - Is this actually a problem, or standard industry practice?
   - Is the severity rating justified?
   - Is there exculpatory context elsewhere in the documents?
-- Uses `contract-search` to find supporting/contradicting clauses
+- Uses `document-search` to find supporting/contradicting clauses
 - Produces a "challenge report" with each finding either `upheld`,
   `downgraded`, or `dismissed`, with reasoning
 
@@ -290,7 +290,7 @@ professional response (letter or memo) based on the document review.
   - Recommended changes / redline suggestions
   - Prioritization (must-fix vs. nice-to-have)
 - Tone: professional, constructive, firm on critical issues
-- Uses `contract-audit` to include provenance references
+- Uses `document-audit` to include provenance references
 
 **Persona prompt key points:**
 - Write for a business audience, not a legal one
@@ -330,7 +330,7 @@ and handoffs:
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌───────────────┐
-│ data-loader  │────▶│ contract-eval│────▶│  verification │
+│ data-loader  │────▶│ document-eval│────▶│  verification │
 │   agent      │     │    agent     │     │    agent      │
 └─────────────┘     └──────────────┘     └───────────────┘
                            │                      │
@@ -351,16 +351,16 @@ the system drives the flow instead of the presenter.
 demo/
 ├── .claude/
 │   └── skills/
-│       ├── contract-loader/
+│       ├── document-loader/
 │       │   └── skill.md
-│       ├── contract-search/
+│       ├── document-search/
 │       │   └── skill.md
-│       ├── contract-eval/
+│       ├── document-eval/
 │       │   └── skill.md
-│       └── contract-audit/
+│       └── document-audit/
 │           └── skill.md
 ├── .agents/
-│   ├── contract-eval-agent.md
+│   ├── document-eval-agent.md
 │   ├── data-investigator-agent.md
 │   ├── data-loader-agent.md
 │   ├── verification-agent.md
@@ -373,11 +373,11 @@ demo/
 │   ├── gen-contract.py                ← legacy: generates fake PDF for testing
 │   ├── playbook.md                    ← attendee take-home artifact
 │   └── prebaked/
-│       ├── contract-review-checklist.md
+│       ├── document-review-checklist.md
 │       ├── naive-review.md            ← shallow single-prompt review for contrast
 │       └── skill-example.md
 ├── data/                          ← created at runtime
-│   ├── contracts.db
+│   ├── documents.db
 │   └── chroma/
 ├── Makefile
 ├── outline.md

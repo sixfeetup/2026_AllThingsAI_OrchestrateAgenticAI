@@ -13,8 +13,8 @@ confidence.
 
 ## Available Skills
 
-- `/search-contract <query>` — find supporting or contradicting clauses
-- `/audit-contract` — review the analysis trail
+- `/search-document <query>` — find supporting or contradicting clauses
+- `/audit-document` — review the analysis trail
 
 ## Procedure
 

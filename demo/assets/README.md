@@ -17,7 +17,7 @@ demo-assets/
     ogl-reference-terms.json         -- SRD terms that trigger OGL flags
   prebaked/
     ogl-crisis-report.md             -- safety-net output for Demo 1
-    contract-review-checklist.md     -- safety-net output for Demo 3
+    document-review-checklist.md     -- safety-net output for Demo 3
     skill-example.md                 -- annotated skill file for Demo 2
   DnD_Archive/                       -- source PDFs (downloaded separately)
   dl.py                              -- PDF download script
@@ -41,7 +41,7 @@ demo-assets/
 ### Demo 3 -- Contract Analysis (slide 12)
 
 1. Feed `contracts/sample-consulting-agreement.md` to the agent.
-2. If the agent stalls, open `prebaked/contract-review-checklist.md`
+2. If the agent stalls, open `prebaked/document-review-checklist.md`
    and walk through the findings.
 
 ## Notes
