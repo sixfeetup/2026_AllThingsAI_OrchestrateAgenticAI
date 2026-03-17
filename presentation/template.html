@@ -931,6 +931,59 @@
         @keyframes helpHintOut {
             to { opacity: 0; transform: translateY(8px); }
         }
+
+        /* ===========================================
+           DEMO BLOCK — presenter instructions
+           =========================================== */
+        .demo-block {
+            position: relative;
+            background: rgba(217, 158, 46, 0.12);
+            border-left: 4px solid #d99e2e;
+            border-radius: 0 8px 8px 0;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            padding-top: clamp(1.8rem, 3vw, 2.2rem);
+            margin: var(--element-gap) 0;
+            font-family: 'Menlo', 'Consolas', 'Monaco', monospace;
+            font-size: var(--small-size);
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .demo-block::before {
+            content: 'DEMO';
+            position: absolute;
+            top: 0.4rem;
+            left: 0.8rem;
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #d99e2e;
+            opacity: 0.9;
+        }
+
+        .demo-block ul {
+            list-style: none;
+            padding-left: 1em;
+        }
+
+        .demo-block ul li::before {
+            content: '\25C6';
+            color: #d99e2e;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            font-size: 0.7em;
+            vertical-align: middle;
+        }
+
+        /* Dark slide variant */
+        .dark-slide .demo-block,
+        .divider-slide .demo-block {
+            background: rgba(217, 158, 46, 0.15);
+            color: rgba(255, 255, 255, 0.85);
+        }
     </style>
 </head>
 <body>

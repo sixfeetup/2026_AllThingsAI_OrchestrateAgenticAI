@@ -931,6 +931,59 @@
         @keyframes helpHintOut {
             to { opacity: 0; transform: translateY(8px); }
         }
+
+        /* ===========================================
+           DEMO BLOCK — presenter instructions
+           =========================================== */
+        .demo-block {
+            position: relative;
+            background: rgba(217, 158, 46, 0.12);
+            border-left: 4px solid #d99e2e;
+            border-radius: 0 8px 8px 0;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            padding-top: clamp(1.8rem, 3vw, 2.2rem);
+            margin: var(--element-gap) 0;
+            font-family: 'Menlo', 'Consolas', 'Monaco', monospace;
+            font-size: var(--small-size);
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .demo-block::before {
+            content: 'DEMO';
+            position: absolute;
+            top: 0.4rem;
+            left: 0.8rem;
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #d99e2e;
+            opacity: 0.9;
+        }
+
+        .demo-block ul {
+            list-style: none;
+            padding-left: 1em;
+        }
+
+        .demo-block ul li::before {
+            content: '\25C6';
+            color: #d99e2e;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            font-size: 0.7em;
+            vertical-align: middle;
+        }
+
+        /* Dark slide variant */
+        .dark-slide .demo-block,
+        .divider-slide .demo-block {
+            background: rgba(217, 158, 46, 0.15);
+            color: rgba(255, 255, 255, 0.85);
+        }
     </style>
 </head>
 <body>
@@ -991,157 +1044,194 @@
          SLIDE 1: Title
          ═══════════════════════════════════════════ -->
 
-    <!-- 00-orchestrate-agentic-ai.md -->
+    <!-- outline:Orchestrate Agentic AI -->
     <section class="slide title-slide" aria-label="Orchestrate Agentic AI">
 <div class="brand-mark decorative"></div>
 <div class="slide-content">
 <h1 class="reveal">Orchestrate Agentic AI</h1>
 <h2 class="reveal">Context, Checklists, and No-Miss Reviews</h2>
-<p class="subtitle reveal">Calvin Hendryx-Parker — Six Feet Up</p>
+<h3 class="reveal">Calvin Hendryx-Parker, CTO</h3>
+<h3 class="reveal">Six Feet Up</h3>
+<p class="subtitle reveal">Orchestrate Agentic AI, You Will</p>
 </div>
-<aside class="speaker-notes">- introduce your self, whatever usual patter, etc</aside>
 <span class="slide-footer">00</span>
 </section>
 
-    <!-- 01-what-is-this-really-about-who-is-it-for.md -->
-    <section class="slide content-slide" aria-label="What is this really about, who is it for">
+    <!-- outline:Who am I -->
+    <section class="slide content-slide" aria-label="Who am I">
 <div class="slide-content">
-<h2 class="reveal">What is this really about, who is it for</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Getting Things Done (.AI)</p>
+<h2 class="reveal">Who am I</h2>
 </div>
-<aside class="speaker-notes">- talk is for folks who have used AI in apps or the browser, but suspect that it could do more to solve their business problems<br>- technically enthusiastic, are familar with the terminal, or have the patience and persistence to give it a try.<br>- some words as a preamble and reassurance:<br>  - it may be more technical than some of you are ready for, but if you understand the capability, you should be able to benefit<br>  - we will move, but not too fast<br>  - there will be resource available online after the talk</aside>
+<aside class="speaker-notes">- THANK YOU<br>- INTRODUCE YOURSELF<br>- who you are, who 6ftup is, ???</aside>
 <span class="slide-footer">01</span>
 </section>
 
-    <!-- 02-where-we-are-going.md -->
-    <section class="slide content-slide" aria-label="Where we are going">
+    <!-- outline:What is this about, who is it for -->
+    <section class="slide content-slide" aria-label="What is this about, who is it for">
 <div class="slide-content">
-<h2 class="reveal">Where we are going</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![Agentic horizon](img)</p>
+<h2 class="reveal">What is this about, who is it for</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">(You) want to things done (with .AI)</p>
 </div>
-<aside class="speaker-notes">We are going to a place where we can boil down some the noise so you<br>can feel confident making use and building your own simple agent based<br>systems.<br>To do that, we are going to demo a fictious problem that might feel<br>familiar.  We will use coding agents, and show you how you can use<br>them in a business operations settings.  We discuss the pitfalls,<br>tradeoff and the opportunities that are unfolding in the space.</aside>
+<aside class="speaker-notes">My mission today is to help you understand how you can use LLM<br>agents to solve real problems you may encounter as a decision maker<br>and operator navigating the dynamic and complex world of modern<br>business.<br>If you<br>- have used AI in apps or the browser, but suspect that you could do more or get better results<br>- are technically enthusiastic, are familar with the terminal, or have the patience and persistence to give it a try.<br>- think LLMs seem to have great promise, but fear the ramification of the uncertain results.</aside>
 <span class="slide-footer">02</span>
 </section>
 
-    <!-- 03-orchestration.md -->
-    <section class="slide content-slide" aria-label="Orchestration">
+    <!-- outline:Where we are going (today) -->
+    <section class="slide content-slide" aria-label="Where we are going (today)">
 <div class="slide-content">
-<h2 class="reveal">Orchestration</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![an orchestra](img) ![a data center](img) ![dice](img)</p>
+<h2 class="reveal">Where we are going (today)</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![Agentic horizon](img)</p>
 </div>
-<aside class="speaker-notes">Wikipedia has 3 definitions for &quot;Orchestration&quot;: for music, for computers and for games.  In all three cases, you could make the argument orchestration is an act of managing complexity and the uncertainty it can create.<br>We are going talk about managing agents to help manage the complexity incipient to working in the digital age.<br>We will start with the operator to agent relationship and then talk about what we can do with larger groups of agents.</aside>
+<aside class="speaker-notes">We are going to a place where we can boil down some the noise so you<br>can feel confident making use and building your own simple agent based<br>systems.<br>You will leave with access to all the tools we will use here today and<br>knowledge about how to apply them to knowledge management problems you<br>likely encounter on a regular basis.  How to take a new document and<br>get focussed reconaisance on what you need to do next.<br>The aim of these tools is to give you techniques more reliable<br>experience when using an LLM w/ reasonable performance.  You have your<br>own heuristics and procedures for getting the right results, the talk<br>will show you how to codify that expertise so an LLM can repeatably<br>execute it for you.</aside>
 <span class="slide-footer">03</span>
 </section>
 
-    <!-- 04-lets-get-real-sort-of.md -->
-    <section class="slide content-slide" aria-label="Let&#x27;s Get Real (sort of)">
+    <!-- outline:The root of the problem: seeking determinisn -->
+    <section class="slide content-slide" aria-label="The root of the problem: seeking determinisn">
 <div class="slide-content">
-<h2 class="reveal">Let&#x27;s Get Real (sort of)</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Let&#x27;s Get Real (sort of)</p>
+<h2 class="reveal">The root of the problem: seeking determinisn</h2>
+<ul class="bullet-list">
+<li class="reveal">quality input</li>
+<li class="reveal">constraint</li>
+<li class="reveal">dialectic</li>
+<li class="reveal">visibility</li>
+</ul>
 </div>
-<aside class="speaker-notes">Let&#x27;s dive in to made up problem that should illustrate some real<br>tecniques you can use. We will explore how not managing context can<br>impact outcome, techniques for detail with context limits, [fill in<br>the rest]</aside>
+<aside class="speaker-notes">If you work in risk &amp; compliance, your job is often wading<br>through ream of uncertainty to try to determine the best possible<br>decision.<br>Anything that can remove complexity and uncertainty safely provides<br>value. There is something similar with using LLMs, which while they<br>can manage large of amount of data quickly, they inherently are<br>non-deterministic.</aside>
 <span class="slide-footer">04</span>
 </section>
 
-    <!-- 05-its-a-setup.md -->
-    <section class="slide content-slide" aria-label="It&#x27;s a Setup">
+    <!-- outline:The tool -->
+    <section class="slide content-slide" aria-label="The tool">
 <div class="slide-content">
-<h2 class="reveal">It&#x27;s a Setup</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Welcome to the offices _Safe House Games SF_.</p>
+<h2 class="reveal">The tool</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">An agent</p>
+<ul class="bullet-list">
+<li class="reveal">a context buffer</li>
+<li class="reveal">an llm connection</li>
+<li class="reveal">local tools: skills, subagents, mcp, hooks</li>
+<li class="reveal">local resources: flat files, dbs, scripts, sockets, etc</li>
+</ul>
 </div>
-<aside class="speaker-notes">Safe House is a young, fast growing, post pandemic company<br>specializing in augmented reality live action role playing<br>experiences, focussed on spycraft and lore.  They describe their<br>flagship events as &quot;capture the flag meets escape room across entire<br>cities w/ a murder mystery evening thrown in&quot;.<br>To their delight, Netflix is interested in licensing several campaigns<br>to develop into a reality tv show.  To their lawyers dismay, the<br>ownership of their IP is in an unknown situation as of this morning.<br>Safe House, in their rapid growth, heavily used classic DnD modules<br>and rules which, with the help of LLMs, transformed into the scripts<br>and rules for their 007 style adventures. Originally licensed under<br>the Open Gaming License, Hasbro has decided to rerelease some of these<br>modules and relicense them under a commercial license.<br>Netflix is on the fence, due to a corporate conflict w/ Hasbro around<br>the GIJoe movies.  Safe House&#x27;s lawyers say they can see a way forward<br>if we can identify which storylines have been used and remove all<br>titles and other identifying characteristic.<br>We have the source material, the names of the module hasbro plans to<br>relicense, and Safe House&#x27;s script repository.<br>We need to build proof that the source material Netflix wants to use<br>does not overlap with the source material Hasbro is relicensing.</aside>
+<aside class="speaker-notes">Our coding agent (claude) will be working in a basic sandbox that<br>provides access to basic *nix tools.  It has a context buffer of about<br>200k (can rougly the size of &quot;Good To Great&quot; by Jim Collins)</aside>
 <span class="slide-footer">05</span>
 </section>
 
-    <!-- 06-so-much-text-so-little-context.md -->
-    <section class="slide content-slide" aria-label="So much text, so little context">
+    <!-- outline:02 Orchestration -->
+    <section class="slide content-slide" aria-label="02 Orchestration">
 <div class="slide-content">
-<h2 class="reveal">So much text, so little context</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">[table of info about modules pdfs: files size, token sizes, totals] [table of info about context windows: claude, chatgpt, gemini]</p>
+<h2 class="reveal">02 Orchestration</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">&lt;build in&gt;![an orchestra](img) ![a data center](img) ![dice](img)&lt;/build&gt;</p>
 </div>
-<aside class="speaker-notes">&lt;demo&gt;<br>Show of borking the context<br>&lt;/demo&gt;<br>Wouldn&#x27;t it be nice if you could just dump all the things into Claude or chatgpt.<br>One of the more frustrating things about LLMs and the agent that use<br>them is the constraint of the context buffer.  Since LLMs do not learn<br>in our interactions, we must maintain state elsewhere.  The context<br>buffer is the default place... as you chat it fills with everything<br>you ask the model, every please and thank you and every reply.  Any<br>digression become part of this state, as other mechanisms often hidden<br>behind the user interface.<br>Eventually nothing more can go in and in fact your prompt cannot be<br>added to context to send to the model unless something gets removed.<br>Different systems use different strategies, some give you way to<br>explicitly in how you manage the context sent, but the limitation<br>always means the model&#x27;s response will become more and more impacted<br>by history until it is cleaned.<br>The difficulty of controlling context contributes to the<br>nondeterministic behavior of LLM driven software.  When we humans,<br>also nondeterministic agents, interact directly, determinism gets<br>harder.<br>afaict, in the claude code agent, the context is saved as raw tokenized text<br>and is not exposed by any api.<br>The context buffer is a bit like an agents working memory &amp; long term<br>memory rolled into one.  If one talks directly to the LLM, it is<br>possible to aggressively manage this &quot;hand&quot; to create more<br>durable memories while scrubbing the context.<br>otoh, we just need to get this information back to Safe Houses lawyer.<br>- show [context management explainer](context-window-explainer.html):<br>  has context windows sizes for all of the major models.  Also talks about ways to monitor context.<br>- show /context</aside>
+<aside class="speaker-notes">What does it mean Wikipedia has 3 definitions for<br>&quot;Orchestration&quot;: for music, for computers and for games.  In all three<br>cases, you could make the argument orchestration is an act of using<br>rules to coordinate and manage a group of actors to accomplish<br>something meaningful.<br>We are going to create a system of rules (skills and subagents) to constrain an increasing number of agents to give us information we can trust and use from a new and unfamilar contract.</aside>
 <span class="slide-footer">06</span>
 </section>
 
-    <!-- 07-exo-context-skills.md -->
-    <section class="slide content-slide" aria-label="Exo-context &amp; skills">
+    <!-- outline:The problem -->
+    <section class="slide content-slide" aria-label="The problem">
 <div class="slide-content">
-<h2 class="reveal">Exo-context &amp; skills</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">[brain picture](img)</p>
+<h2 class="reveal">The problem</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Claude, a contract and me makes 3.</p>
 </div>
-<aside class="speaker-notes">We need an exocortex for our agent. It can do the remembering about<br>all these text files while we explore the data. To do this we have<br>create another kind of memory: the agent skill.  Skills allow us to<br>codify (save) things we know how to do and need to do in a form that<br>the agent can do them for us, either explicitly or implicitly.<br>For memory, we will utilize the reigning champion for remember, the<br>database. We will use 2 different forms of member: sql and vector<br>storage.<br>The first is well known by LLMs who can write sql better than me.<br>- introduce sqllite skill<br>The second storages data in a way similar to the LLM, as embeddings<br>- show off chroma<br>&lt;demo&gt;<br>- show off definitions of each skill<br>- make a query for each<br>- load some small amount of data for each (list of adventures from hasbro)<br>&lt;/demo&gt;</aside>
+<aside class="speaker-notes">We have received an RFP for an important bit of work. How do we<br>figure out if this contract is right for us?<br>&lt;demo&gt;<br>- introduce the contract<br>- load into cowork<br>- fail at doing some basic things<br>&lt;/demo&gt;</aside>
 <span class="slide-footer">07</span>
 </section>
 
-    <!-- 08-the-orchestration-loop.md -->
-    <section class="slide content-slide" aria-label="The orchestration loop">
+    <!-- outline:OH NO -->
+    <section class="slide content-slide" aria-label="OH NO">
 <div class="slide-content">
-<h2 class="reveal">The orchestration loop</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The orchestration loop</p>
+<h2 class="reveal">OH NO</h2>
+
 </div>
-<aside class="speaker-notes">Many of you will recognize the following pattern which is one<br>operators tend to follow: observe, orient, decide, act. The OODA was<br>formally define by USAF Colonel John Boyd in the early 70s.<br>Unlike most formalized engineering process, it is designed for practical<br>in the moment work.<br>While claude code could do engineering for us, we are more in a making<br>furniture with a chainsaw sort of situation.  The lawyers need to<br>know, but we do know yet what the outcome will look like.<br>We will do what we can reasonable to encourage deterministic behavior,<br>but the clock is ticking.</aside>
+<div class="slide-quote"><blockquote class="quote reveal">Those results were terrible!</blockquote></div>
+<aside class="speaker-notes">- all the reasons why context gets polluted<br>- We need to make some constraints</aside>
 <span class="slide-footer">08</span>
 </section>
 
-    <!-- 09-see.md -->
-    <section class="slide content-slide" aria-label="See">
+    <!-- outline:Control the Context -->
+    <section class="slide content-slide" aria-label="Control the Context">
 <div class="slide-content">
-<h2 class="reveal">See</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![1 agents](img)</p>
+<h2 class="reveal">Control the Context</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Explicit memory management</p>
 </div>
-<aside class="speaker-notes">&lt;demo&gt;<br>Observe<br>Explore the data, prototype how to make a match<br>&lt;/demo&gt;</aside>
+<aside class="speaker-notes">- context is a wasteland that we have limited control over.<br>- old school state management still works though. all hail the filesystem<br>- We can use chromadb and sqlite to structure our document so the<br>  agent can search and query it w/ impunity.</aside>
 <span class="slide-footer">09</span>
 </section>
 
-    <!-- 10-plan.md -->
-    <section class="slide content-slide" aria-label="Plan">
+    <!-- outline:Memory & Skills Demo -->
+    <section class="slide content-slide" aria-label="Memory &amp; Skills Demo">
 <div class="slide-content">
-<h2 class="reveal">Plan</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![2 agents](img)</p>
+<h2 class="reveal">Memory &amp; Skills Demo</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Skills, skills, skills</p>
 </div>
-<aside class="speaker-notes">&lt;demo&gt;<br>Orient<br>use claude to explore the space and suggest options:<br>- dialectic with agent<br>- create a skill that helps toward final goal<br>- use a visualizer to understand problem<br>&lt;/demo&gt;</aside>
+<aside class="speaker-notes">Introduce the concept of skills and why they are so good for quickly prototyping tasks and processes.<br>&lt;demo&gt;<br>- open ../demo/.claude/skills/contract-loader<br>- load the data<br>- open ../demo/.claude/skills/contract-search<br>- search the data<br>- show how our context pollution does not impact the returns<br>&lt;/demo&gt;</aside>
 <span class="slide-footer">10</span>
 </section>
 
-    <!-- 11-choose.md -->
-    <section class="slide content-slide" aria-label="Choose">
+    <!-- outline:From search to assessment -->
+    <section class="slide content-slide" aria-label="From search to assessment">
 <div class="slide-content">
-<h2 class="reveal">Choose</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![3 agents](img)</p>
+<h2 class="reveal">From search to assessment</h2>
 </div>
-<aside class="speaker-notes">&lt;demo&gt;<br>Decide<br>- adversarial review<br>- create agents to do special parts of the job like reporter and ingester, supervisor<br>- discuss how encapsulation can help w/ context bitrot as well other things like auditing<br>- define an aceptance criterion<br>&lt;/demo&gt;</aside>
+<aside class="speaker-notes">Search is great, but I have reviewed many RFPs, I have an idea about<br>what I care about and would like to get a some automated recon before<br>I have to dig into the doc myself.<br>I want the LLM to give me feedback, but I want to be sure that<br>feedback is useful, focussed, and actionable.<br>To do this we are going to employ an idea from AI testing, the eval.<br>When testing LLMs, we assume that our response are nondeterministic,<br>so we must create a sort of bracketting of test questions and an<br>assessment of answers.<br>We will use an eval skill we have created where we give our skill a<br>criterion file, the skill uses our memory in the dbs, and then returns<br>answers.<br>&lt;demo&gt;<br>- show eval skill<br>- run naive eval<br>- run better eval<br>&lt;/demo&gt;<br>The questions constrain and focus the agent&#x27;s return, our databases constrain the data acted upon.</aside>
 <span class="slide-footer">11</span>
 </section>
 
-    <!-- 12-act.md -->
-    <section class="slide content-slide" aria-label="Act">
+    <!-- outline:More orchestration -->
+    <section class="slide content-slide" aria-label="More orchestration">
 <div class="slide-content">
-<h2 class="reveal">Act</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![4 agents](img)</p>
+<h2 class="reveal">More orchestration</h2>
+<ul class="bullet-list">
+<li class="reveal">ingest documents</li>
+<li class="reveal">output assessments</li>
+</ul>
+<div class="demo-block reveal">
+<ul>
+<li>Introduce subagents as a concept</li>
+<li>look at our agents</li>
+<li>data-investigator</li>
+<li>data-loader</li>
+<li>contract-eval</li>
+<li>response-drafter</li>
+<li>verification</li>
+<li>create a workflow: ask claude about creating a workflow for docs in, assessments out</li>
+<li>talk about routing and handoff</li>
+<li>talk about adversarial verification as a way to limit mistakes before manual proofing</li>
+<li>show the system spinning up to analyze our doc, talk about concurrency/parallelism</li>
+</ul>
 </div>
-<aside class="speaker-notes">&lt;demo&gt;<br>Act<br>- work with claude to multiplex the action using agents and skills<br>- discuss routing and handoffs<br>- have claude report progress, have a final report (explainer?)<br>&lt;/demo&gt;</aside>
+</div>
+<aside class="speaker-notes">We&#x27;ve gotten some good results, but what if have 3 proposals. 10 proposals?<br>We have been orchestrating claude through our prompts, then our skills. What if claude drove more of this orchestration itself.<br>First let&#x27;s consider what would be helpful at scale?</aside>
 <span class="slide-footer">12</span>
 </section>
 
-    <!-- 13-live-and-let-die-another-day.md -->
-    <section class="slide content-slide" aria-label="Live and let die another day">
+    <!-- outline:Takehome -->
+    <section class="slide content-slide" aria-label="Takehome">
 <div class="slide-content">
-<h2 class="reveal">Live and let die another day</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">![]()</p>
+<h2 class="reveal">Takehome</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">[QR Code](download link)</p>
 </div>
-<aside class="speaker-notes">Safe house is happy, their deal can move forward, their fans will be<br>happy, they will hire us again.<br>Talk about repo and playbook</aside>
+<aside class="speaker-notes">Talk about repo and playbook, how to install with claude code or cowork.<br>Talk about how these tools are cheap and easy to make with LLMs. Built for purpose software is now a reality. You can create skill and agents and arrange them to get real work done quickly w/ some care and patience.<br>Increasing determinism is the key, by constraint, good inputs, and<br>deploying the brownian ratchet of iterative critique and improvement.  These process apply to full software development as well. Testing, CI/CD, specification building, PR workflows, etc are just more formalized ways to create more determinism.</aside>
 <span class="slide-footer">13</span>
 </section>
 
-    <!-- 14-the-future-is-agentic.md -->
-    <section class="slide content-slide" aria-label="The Future is Agentic">
+    <!-- outline:11 Your Future [could be] Agentic -->
+    <section class="slide content-slide" aria-label="11 Your Future [could be] Agentic">
 <div class="slide-content">
-<h2 class="reveal">The Future is Agentic</h2>
-<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">The Future is Agentic</p>
-<p class="subtitle reveal">But so was the past</p>
+<h2 class="reveal">11 Your Future [could be] Agentic</h2>
+<p class="reveal" style="font-size: var(--body-size); color: rgba(255,255,255,0.6);">Gastown graphic</p>
 </div>
-<aside class="speaker-notes">Closing remarks --<br>- multi-agent workflow can model how we do things in an office as well as more low level processes<br>- we can model and enforce engineer practice in ways we never could before and it is having interesting outcomes<br>- software is cheaper which make operation more expensive<br>- context buffers issue also occur between the ears and between people -- the struggle to keep down the noice is real.</aside>
+<aside class="speaker-notes">We&#x27;ve talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.</aside>
 <span class="slide-footer">14</span>
+</section>
+
+    <!-- outline:/exit -->
+    <section class="slide content-slide" aria-label="/exit">
+<div class="slide-content">
+<h2 class="reveal">/exit</h2>
+</div>
+<aside class="speaker-notes">Closing remarks --<br>- thank you for coming on this speedy ride through building an agent workflow<br>- reinforce takeaways<br>  - don&#x27;t trust context, manage the data you want the agent to use explicitly<br>  - use skills and agents to increase determinism so you get good results from the LLM<br>  - use skills and agents to capture your workflows so you can automate more of your toil</aside>
+<span class="slide-footer">15</span>
 </section>
 <!-- ═══════════════════════════════════════════
          SLIDE CONTROLLER

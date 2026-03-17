@@ -1,26 +1,40 @@
+---
+title-prefix: Six Feet Up
+pagetitle: Orchestrate AI Agents
+author: Calvin Hendryx-Parker, CTO, Six Feet Up
+author-meta:
+    - Calvin Hendryx-Parker
+date: March 2026
+date-meta: 2026
+keywords:
+    - Agents
+    - AI
+    - LLM
+	- Determinism
+---
+
 # Orchestrate Agentic AI
----
-type: title-slide
----
-
 ## Context, Checklists, and No-Miss Reviews
+#### Calvin Hendryx-Parker, CTO
+#### Six Feet Up
 
-_Calvin Hendryx-Parker — Six Feet Up_
-
-???
+_Orchestrate Agentic AI, You Will_
 
 # Who am I
 
-???
-- INTRODUCTION
+::: notes
+- THANK YOU
+- INTRODUCE YOURSELF
+- who you are, who 6ftup is, ???
+:::
 
+# What is this about, who is it
 
-# What is this about, who is it for
+  (You)
+  want to things done
+  (with .AI)
 
-(You) Getting Things Done (with .AI)
-
-???
-
+::: notes
 My mission today is to help you understand how you can use LLM
 agents to solve real problems you may encounter as a decision maker
 and operator navigating the dynamic and complex world of modern
@@ -30,13 +44,14 @@ If you
 - have used AI in apps or the browser, but suspect that you could do more or get better results
 - are technically enthusiastic, are familar with the terminal, or have the patience and persistence to give it a try.
 - think LLMs seem to have great promise, but fear the ramification of the uncertain results.
-
+:::
 
 # Where we are going (today)
+## Where we are going we don't need roads
 
-![Agentic horizon](img)
+![Agentic horizon](./images/where-delorean.png)
 
-???
+::: notes
 
 We are going to a place where we can boil down some the noise so you
 can feel confident making use and building your own simple agent based
@@ -52,25 +67,54 @@ experience when using an LLM w/ reasonable performance.  You have your
 own heuristics and procedures for getting the right results, the talk
 will show you how to codify that expertise so an LLM can repeatably
 execute it for you.
+:::
 
-# The root of the problem: seeking determinisn
+# What Agents need
+## How do we get the best out of our agents?
+
+![Aston Martin](./images/where-db5.png)
+
+::: notes
+The car of arguably the most famous agent of all time.
+
+As agents go, 007 was predictably expensive, destructive and poorly
+behaved. A perhaps provides a good model for thinking of what we need
+to get agents to do work for us that brings more to the table than it
+take away.
+:::
+
+# The root of the problem
+## Creating determinisn
+
+with nondeterministic systems.
 
 - quality input
 - constraint
 - dialectic
 - visibility
 
-???
+::: notes
+- Operational work, technical or more business orient is almost alway non-deterministic.
+- LLMs are also non-deterministic
+- How can we take problems that we know do not have deterministic solutions and create meaningful value with non-deterministic tools?
+
 If you work in risk & compliance, your job is often wading
 through ream of uncertainty to try to determine the best possible
-decision.
+decision.  An LLM may not provide perfect answer, but it can help you pinpoint issues and opportunities faster.
+
+If we can narrow the frame and focus of the LLM, it can uncover
+important information faster, giving us the opportunity to take more
+time to dig deeper or respond or maybe just move on.
 
 Anything that can remove complexity and uncertainty safely provides
 value. There is something similar with using LLMs, which while they
 can manage large of amount of data quickly, they inherently are
 non-deterministic.
 
-# The tool
+:::
+
+# My Agent
+## The Tool For Job
 
 An agent
 - a context buffer
@@ -78,11 +122,13 @@ An agent
 - local tools: skills, subagents, mcp, hooks
 - local resources: flat files, dbs, scripts, sockets, etc
 
-???
+::: notes
 Our coding agent (claude) will be working in a basic sandbox that
-provides access to basic *nix tools.  It has a context buffer of about
-200k (can rougly the size of "Good To Great" by Jim Collins)
+provides access to basic *nix tools.  It has a context buffer when using Opus 4.6 of about
+200k (can roughly the size of "Good To Great" by Jim Collins)
 
+We will run this in a sandbox to limit what our agent has access to on our local system.
+:::
 
 # 02 Orchestration
 
@@ -90,9 +136,7 @@ provides access to basic *nix tools.  It has a context buffer of about
 
 
 
-
-
-???
+::: notes
 
 What does it mean Wikipedia has 3 definitions for
 "Orchestration": for music, for computers and for games.  In all three
@@ -101,13 +145,13 @@ rules to coordinate and manage a group of actors to accomplish
 something meaningful.
 
 We are going to create a system of rules (skills and subagents) to constrain an increasing number of agents to give us information we can trust and use from a new and unfamilar contract.
-
+:::
 
 # The problem
 
 Claude, a contract and me makes 3.
 
-???
+::: notes
 
 We have received an RFP for an important bit of work. How do we
 figure out if this contract is right for us?
@@ -117,13 +161,13 @@ figure out if this contract is right for us?
 - load into cowork
 - fail at doing some basic things
 </demo>
-
+:::
 
 # OH NO
 
 > Those results were terrible!
 
-???
+::: notes
 - all the reasons why context gets polluted
 - We need to make some constraints
 
@@ -132,17 +176,18 @@ figure out if this contract is right for us?
 Explicit memory management
 
 
-???
+::: notes
 - context is a wasteland that we have limited control over.
 - old school state management still works though. all hail the filesystem
 - We can use chromadb and sqlite to structure our document so the
   agent can search and query it w/ impunity.
+:::
 
 # Memory & Skills Demo
 
 Skills, skills, skills
 
-???
+::: notes
 Introduce the concept of skills and why they are so good for quickly prototyping tasks and processes.
 
 <demo>
@@ -152,11 +197,13 @@ Introduce the concept of skills and why they are so good for quickly prototyping
 - search the data
 - show how our context pollution does not impact the returns
 </demo>
+:::
+
 
 # From search to assessment
 
 
-???
+::: notes
 
 Search is great, but I have reviewed many RFPs, I have an idea about
 what I care about and would like to get a some automated recon before
@@ -181,6 +228,8 @@ answers.
 </demo>
 
 The questions constrain and focus the agent's return, our databases constrain the data acted upon.
+:::
+
 
 # More orchestration
 
@@ -188,12 +237,13 @@ The questions constrain and focus the agent's return, our databases constrain th
 - output assessments
 
 
-???
+::: notes
 We've gotten some good results, but what if have 3 proposals. 10 proposals?
 
 We have been orchestrating claude through our prompts, then our skills. What if claude drove more of this orchestration itself.
 
 First let's consider what would be helpful at scale?
+:::
 
 <demo>
 - Introduce subagents as a concept
@@ -208,35 +258,37 @@ First let's consider what would be helpful at scale?
   - talk about adversarial verification as a way to limit mistakes before manual proofing
   - show the system spinning up to analyze our doc, talk about concurrency/parallelism
 </demo>
-
+:::
 
 # Takehome
 
 [QR Code](download link)
 
-???
+::: notes
 Talk about repo and playbook, how to install with claude code or cowork.
 
 Talk about how these tools are cheap and easy to make with LLMs. Built for purpose software is now a reality. You can create skill and agents and arrange them to get real work done quickly w/ some care and patience.
 
 Increasing determinism is the key, by constraint, good inputs, and
 deploying the brownian ratchet of iterative critique and improvement.  These process apply to full software development as well. Testing, CI/CD, specification building, PR workflows, etc are just more formalized ways to create more determinism.
-
+:::
 
 # 11 Your Future [could be] Agentic
 
 Gastown graphic
 
-???
+::: notes
 We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.
+:::
 
 # /exit
 
 
-???
+::: notes
 Closing remarks --
 - thank you for coming on this speedy ride through building an agent workflow
 - reinforce takeaways
   - don't trust context, manage the data you want the agent to use explicitly
   - use skills and agents to increase determinism so you get good results from the LLM
   - use skills and agents to capture your workflows so you can automate more of your toil
+:::
