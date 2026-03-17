@@ -39,7 +39,9 @@
       "Read(//Users/whit/work/2026-allthings-ai-presentation/.claude/skills/**)",
       "Read(//Users/whit/work/2026-allthings-ai-presentation/.claude/skills/audlog/**)",
       "Read(//Users/whit/work/2026-allthings-ai-presentation/.agents/**)",
-      "Bash(sqlite3:*)"
+      "Bash(sqlite3:*)",
+      "Bash(rm -rf data)",
+      "Bash(mkdir -p data)"
     ]
   },
   "hooks": {
