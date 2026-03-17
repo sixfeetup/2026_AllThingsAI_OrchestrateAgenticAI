@@ -1,12 +1,11 @@
 # Presentation
 
-- Time: 45min
+- Time: 30min
 - Presenter: Calvin
 - Event: https://2026.allthingsai.org
 
 ## Resources
 
-- [WIP outline](./plan.md)
 - [Expectations](./expectations.md)
 
 ## Abstract
