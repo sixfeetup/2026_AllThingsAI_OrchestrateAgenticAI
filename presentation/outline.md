@@ -13,6 +13,7 @@ keywords:
 	- Determinism
 ---
 
+<!-- slide: 0 -->
 # Orchestrate Agentic AI
 ## Context, Checklists, and No-Miss Reviews
 #### Calvin Hendryx-Parker, CTO
@@ -20,14 +21,16 @@ keywords:
 
 _Orchestrate Agentic AI, You Will_
 
+<!-- slide: 1 -->
 # Who am I
 
 ::: notes
-- THANK YOU
+- THANK YOU FOR COMING
 - INTRODUCE YOURSELF
 - who you are, who 6ftup is, ???
 :::
 
+<!-- slide: 2 -->
 # What is this about, who is it
 
   (You)
@@ -46,6 +49,7 @@ If you
 - think LLMs seem to have great promise, but fear the ramification of the uncertain results.
 :::
 
+<!-- slide: 3 -->
 # Where we are going (today)
 ## Where we are going we don't need roads
 
@@ -69,6 +73,7 @@ will show you how to codify that expertise so an LLM can repeatably
 execute it for you.
 :::
 
+<!-- slide: 4 -->
 # What Agents need
 ## How do we get the best out of our agents?
 
@@ -83,6 +88,7 @@ to get agents to do work for us that brings more to the table than it
 take away.
 :::
 
+<!-- slide: 5 -->
 # The root of the problem
 ## Creating determinisn
 
@@ -110,9 +116,9 @@ Anything that can remove complexity and uncertainty safely provides
 value. There is something similar with using LLMs, which while they
 can manage large of amount of data quickly, they inherently are
 non-deterministic.
-
 :::
 
+<!-- slide: 6 -->
 # My Agent
 ## The Tool For Job
 
@@ -130,6 +136,7 @@ provides access to basic *nix tools.  It has a context buffer when using Opus 4.
 We will run this in a sandbox to limit what our agent has access to on our local system.
 :::
 
+<!-- slide: 7 -->
 # 02 Orchestration
 
 <build in>![an orchestra](img) ![a data center](img) ![dice](img)</build>
@@ -144,25 +151,27 @@ cases, you could make the argument orchestration is an act of using
 rules to coordinate and manage a group of actors to accomplish
 something meaningful.
 
-We are going to create a system of rules (skills and subagents) to constrain an increasing number of agents to give us information we can trust and use from a new and unfamilar contract.
+We are going to create a system of rules (skills and subagents) to constrain an increasing number of agents to give us information we can trust and use from a new and unfamiliar document.
 :::
 
+<!-- slide: 8 -->
 # The problem
 
-Claude, a contract and me makes 3.
+Claude, a new document and me makes 3.
 
 ::: notes
 
-We have received an RFP for an important bit of work. How do we
-figure out if this contract is right for us?
+We have received a new document to review — an important bit of work. How do we
+figure out if it is right for us?
 
 <demo>
-- introduce the contract
-- load into cowork
+- introduce the document
+- paste into Claude (polluted context)
 - fail at doing some basic things
 </demo>
 :::
 
+<!-- slide: 9 -->
 # OH NO
 
 > Those results were terrible!
@@ -171,6 +180,7 @@ figure out if this contract is right for us?
 - all the reasons why context gets polluted
 - We need to make some constraints
 
+<!-- slide: 10 -->
 # Control the Context
 
 Explicit memory management
@@ -178,11 +188,15 @@ Explicit memory management
 
 ::: notes
 - context is a wasteland that we have limited control over.
+- Context is a finite resource, not infinite memory — performance degrades as context fills ("lost in the middle")
+- This is context bitrot: every search result, every tangent, every tool call consumes tokens and pushes the signal further from the model's attention
+- This is why we use structured storage instead of pasting everything into context
 - old school state management still works though. all hail the filesystem
 - We can use chromadb and sqlite to structure our document so the
   agent can search and query it w/ impunity.
 :::
 
+<!-- slide: 11 -->
 # Memory & Skills Demo
 
 Skills, skills, skills
@@ -200,13 +214,14 @@ Introduce the concept of skills and why they are so good for quickly prototyping
 :::
 
 
+<!-- slide: 12 -->
 # From search to assessment
 
 
 ::: notes
 
-Search is great, but I have reviewed many RFPs, I have an idea about
-what I care about and would like to get a some automated recon before
+Search is great, but I have reviewed many documents like this, I have an idea about
+what I care about and would like to get some automated recon before
 I have to dig into the doc myself.
 
 I want the LLM to give me feedback, but I want to be sure that
@@ -231,6 +246,7 @@ The questions constrain and focus the agent's return, our databases constrain th
 :::
 
 
+<!-- slide: 13 -->
 # More orchestration
 
 - ingest documents
@@ -260,6 +276,17 @@ First let's consider what would be helpful at scale?
 </demo>
 :::
 
+<!-- slide: 14 -->
+# Show Your Work
+
+::: notes
+- Every action is logged: what was loaded, what was searched, what was evaluated, by whom
+- In regulated industries this is compliance. For everyone else, it's trust
+- Engineering parallel: this is your CI log — you can trace any finding back to the evidence
+- The audit trail is append-only. Agents can't cover their tracks
+:::
+
+<!-- slide: 15 -->
 # Takehome
 
 [QR Code](download link)
@@ -273,6 +300,7 @@ Increasing determinism is the key, by constraint, good inputs, and
 deploying the brownian ratchet of iterative critique and improvement.  These process apply to full software development as well. Testing, CI/CD, specification building, PR workflows, etc are just more formalized ways to create more determinism.
 :::
 
+<!-- slide: 16 -->
 # 11 Your Future [could be] Agentic
 
 Gastown graphic
@@ -281,6 +309,7 @@ Gastown graphic
 We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.
 :::
 
+<!-- slide: 17 -->
 # /exit
 
 
