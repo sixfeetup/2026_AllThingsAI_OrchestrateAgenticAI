@@ -9,12 +9,10 @@ _Calvin Hendryx-Parker — Six Feet Up_
 
 ???
 
-- introduce your self, whatever usual patter, etc
-
 # Who am I
 
 ???
-I am Calvin
+- INTRODUCTION
 
 
 # What is this about, who is it for
