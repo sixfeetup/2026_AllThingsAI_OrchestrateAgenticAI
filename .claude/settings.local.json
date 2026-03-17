@@ -35,10 +35,25 @@
       "Bash(find:*)",
       "Bash(chmod:*)",
       "Bash(/Users/whit/work/2026-allthings-ai-presentation/.agents/bin/verify-demo.sh)",
-      "Bash(for mode:*)"
+      "Bash(for mode:*)",
+      "Read(//Users/whit/work/2026-allthings-ai-presentation/.claude/skills/**)",
+      "Read(//Users/whit/work/2026-allthings-ai-presentation/.claude/skills/audlog/**)",
+      "Read(//Users/whit/work/2026-allthings-ai-presentation/.agents/**)",
+      "Bash(sqlite3:*)"
     ]
   },
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".agents/bin/audlog-hook.sh"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "matcher": "end session",
