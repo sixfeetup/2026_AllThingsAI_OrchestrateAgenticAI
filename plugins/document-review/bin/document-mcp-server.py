@@ -19,7 +19,6 @@ from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-# From plugins/document-review/bin/ -> repo root is three levels up
 DEMO_DIR = SCRIPT_DIR.parent.parent.parent / "demo"
 DEFAULT_DB = DEMO_DIR / "data" / "documents.db"
 DEFAULT_CHROMA = DEMO_DIR / "data" / "chroma"

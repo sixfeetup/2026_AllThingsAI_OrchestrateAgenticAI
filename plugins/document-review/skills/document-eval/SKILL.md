@@ -1,4 +1,4 @@
-# document-eval
+# eval-document
 
 Evaluate loaded documents against a criteria file, producing a structured findings report.
 
@@ -9,22 +9,20 @@ Evaluate loaded documents against a criteria file, producing a structured findin
 
 ## Instructions
 
-1. **Load criteria.** Read the criteria markdown file. Default: `demo/assets/criteria/general-red-flags.md`. Each `##` heading is one criterion to evaluate.
+1. **Gather evidence.** Run the eval script to search for relevant clauses per criterion:
+   ```bash
+   uv run --with 'chromadb,sentence-transformers' plugins/document-review/bin/document-eval.py "<criteria-file>"
+   ```
+   Default criteria: `assets/criteria/general-red-flags.md`
 
-2. **For each criterion:**
-   a. Extract the criterion name and description from the heading and body.
-   b. Use the search script to find relevant clauses across all loaded documents:
-      ```bash
-      uv run --with 'chromadb,sentence-transformers' plugins/document-review/bin/document-search.py "<criterion keywords>" --full --json
-      ```
-   c. Read the returned clause text and assess whether the issue described
-      in the criterion exists in the documents.
-   d. Rate severity: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, or `CLEAR`.
-   e. Quote the specific clause text as evidence.
-   f. Note which source document(s) the finding comes from.
-   g. Explain your reasoning.
+2. **Assess each criterion.** The script outputs evidence grouped by criterion.
+   For each criterion, read the evidence and apply judgment:
+   - Rate severity: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, or `CLEAR`
+   - Quote the specific clause text
+   - Note which source document(s) the finding comes from
+   - Explain your reasoning
 
-3. **Produce the report** in this format:
+3. **Produce the report:**
 
    ```markdown
    # Document Evaluation Report
@@ -51,14 +49,10 @@ Evaluate loaded documents against a criteria file, producing a structured findin
    **Finding:** <explanation>
    ```
 
-## Options
-
-- `--adversarial` — for each finding, also generate a counter-argument
-
 ## Available criteria files
 
-- `demo/assets/criteria/ip-and-ownership.md` — focused IP review (3 criteria)
-- `demo/assets/criteria/general-red-flags.md` — broad scan (6 criteria)
+- `assets/criteria/ip-and-ownership.md` — focused IP review (3 criteria)
+- `assets/criteria/general-red-flags.md` — broad scan (6 criteria)
 - Custom: any markdown file with `##` headings as criteria
 
 ## Constraints

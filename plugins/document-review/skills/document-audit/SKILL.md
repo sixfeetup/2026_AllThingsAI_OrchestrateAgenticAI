@@ -1,4 +1,4 @@
-# document-audit
+# audit-document
 
 Display the audit trail of all document analysis actions.
 
@@ -11,7 +11,7 @@ Display the audit trail of all document analysis actions.
 
 1. Query the audit log from SQLite:
    ```bash
-   sqlite3 -header -column demo/data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
+   sqlite3 -header -column data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
    ```
 
 2. Present the results as a chronological log:

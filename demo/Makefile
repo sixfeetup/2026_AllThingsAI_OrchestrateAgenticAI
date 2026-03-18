@@ -16,7 +16,8 @@ DATA_CACHE := data-cache
         pre-demo-setup check-deps venv-setup model-warm \
         data-cache-create data-cache-empty data-cache-loaded \
         load-cached preflight slides open-slides \
-        setup-terminal setup-desktop setup-clean
+        setup-terminal setup-desktop setup-clean \
+        plugin plugin-check
 
 ## help — show available targets
 help:
@@ -188,3 +189,13 @@ preflight:
 	@echo "  Caching:   deps and models cached (no downloads needed for load/search)"
 	@echo "  API:       Claude API required for eval/adversarial/draft steps"
 	@echo "  Fallback:  prebaked outputs in assets/prebaked/ if API is unavailable"
+
+## ---- Plugin packaging ----
+
+## plugin — build document-review plugin from demo skills & agents
+plugin:
+	bash ../.agents/bin/build-plugin.sh
+
+## plugin-check — verify plugin prerequisites
+plugin-check:
+	bash ../plugins/document-review/bin/check-deps.sh

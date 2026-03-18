@@ -1,4 +1,4 @@
-# document-search
+# search-document
 
 Search loaded document clauses using semantic and keyword search across all documents.
 
@@ -29,7 +29,7 @@ Search loaded document clauses using semantic and keyword search across all docu
 
 ## Prerequisites
 
-- Documents must be loaded first (use `/load-document` if `demo/data/documents.db` doesn't exist)
+- Documents must be loaded first (use `/load-document` if `data/documents.db` doesn't exist)
 
 ## Constraints
 

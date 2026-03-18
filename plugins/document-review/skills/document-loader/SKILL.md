@@ -21,7 +21,7 @@ Extract, parse, and load documents from a ZIP archive (or single file) into SQLi
    - Number of clauses/sections parsed
    - Format breakdown (PDFs, DOCX, XLSX, etc.)
    - Any parse warnings or skipped files
-   - Confirm both SQLite (`demo/data/documents.db`) and ChromaDB (`demo/data/chroma/`) are populated
+   - Confirm both SQLite (`data/documents.db`) and ChromaDB (`data/chroma/`) are populated
 
 ## Default path
 

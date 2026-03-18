@@ -19,7 +19,7 @@ keywords:
 #### Calvin Hendryx-Parker, CTO
 #### Six Feet Up
 
-_Orchestrate Agentic AI, You Will_
+_Orchestrate Agents, You Will_
 
 <!-- slide: 1 -->
 # Who am I
@@ -27,13 +27,13 @@ _Orchestrate Agentic AI, You Will_
 ::: notes
 - THANK YOU FOR COMING
 - INTRODUCE YOURSELF
-- who you are, who 6ftup is, ???
+- who you are, who 6ftup is, general info
 :::
 
 <!-- slide: 2 -->
-# What is this about, who is it
+# What is this about, who is it for
 
-  (You)
+  (_you_)
   want to things done
   (with .AI)
 
@@ -47,6 +47,7 @@ If you
 - have used AI in apps or the browser, but suspect that you could do more or get better results
 - are technically enthusiastic, are familar with the terminal, or have the patience and persistence to give it a try.
 - think LLMs seem to have great promise, but fear the ramification of the uncertain results.
+- are curious how to extend the AI products you use to solve your problems without going through a vendor procurement process
 :::
 
 <!-- slide: 3 -->
@@ -56,36 +57,41 @@ If you
 ![Agentic horizon](./images/where-delorean.png)
 
 ::: notes
-
 We are going to a place where we can boil down some the noise so you
 can feel confident making use and building your own simple agent based
 systems.
 
-You will leave with access to all the tools we will use here today and
-knowledge about how to apply them to knowledge management problems you
-likely encounter on a regular basis.  How to take a new document and
-get focussed reconaisance on what you need to do next.
+If this go well, you will leave with access to all the tools we will
+use here today and knowledge about how to apply them to everyday
+problems your business has.  At least you should be able to take the
+principles and find someone who can use them to build what you need.
 
-The aim of these tools is to give you techniques more reliable
-experience when using an LLM w/ reasonable performance.  You have your
-own heuristics and procedures for getting the right results, the talk
-will show you how to codify that expertise so an LLM can repeatably
-execute it for you.
+We've created some simple tools whose aim is to help you have a more
+focussed and reliable experience working with an LLM.  You can take
+these tecnicques and even the files themselve and alter them to
+include your opinions, heuristics, procedures and expertise.
+
+Just as
+we are zipping them up and offering them to you, you can spreading you
+how to can do in the same.
 :::
 
 <!-- slide: 4 -->
-# What Agents need
-## How do we get the best out of our agents?
+# Do Agents need roads?
+
 
 ![Aston Martin](./images/where-db5.png)
 
 ::: notes
-The car of arguably the most famous agent of all time.
+Hard to avoid the 007 joke.
 
-As agents go, 007 was predictably expensive, destructive and poorly
-behaved. A perhaps provides a good model for thinking of what we need
-to get agents to do work for us that brings more to the table than it
-take away.
+As agents go, 007 was predictably expensive, destructive, bad at
+following rules and poorly behaved. A perhaps provides a good model
+for thinking of what we need to get agents to do work for us that
+brings more to the table than it take away.
+
+If we want entertainment and a body count, 007 suceeds.  If we want something different we need different agents.
+
 :::
 
 <!-- slide: 5 -->
@@ -122,9 +128,11 @@ non-deterministic.
 # My Agent
 ## The Tool For Job
 
+> "Agents are models using tools in a loop"
+>    _[Hannah Moran, Anthropic](https://simonwillison.net/2025/May/22/tools-in-a-loop/)_
+
 An agent
-- a context buffer
-- an llm connection
+- a context buffer w/ llm connection
 - local tools: skills, subagents, mcp, hooks
 - local resources: flat files, dbs, scripts, sockets, etc
 
@@ -141,7 +149,12 @@ We will run this in a sandbox to limit what our agent has access to on our local
 
 ![Types of orchestration](images/orchestration-triptych.png)
 
+
+
+
 ::: notes
+
+Is a big word.
 
 What does it mean Wikipedia has 3 definitions for
 "Orchestration": for music, for computers and for games.  In all three
@@ -149,7 +162,9 @@ cases, you could make the argument orchestration is an act of using
 rules to coordinate and manage a group of actors to accomplish
 something meaningful.
 
-We are going to create a system of rules (skills and subagents) to constrain an increasing number of agents to give us information we can trust and use from a new and unfamiliar document.
+For our purposes, orchestration is organizing more than one actor
+(meat agent or digital) to do something useful.
+
 :::
 
 <!-- slide: 8 -->
@@ -159,13 +174,14 @@ Claude, a new document and me makes 3.
 
 ::: notes
 
-We have received a new document to review — an important bit of work. How do we
-figure out if it is right for us?
+- talk about the issues of document review wrt to running a business
+- lots of documents, hard know what is in them, what is important, misses can be expensive
+- talk abou the naive aproach of paste and pray
 
 <demo>
 - introduce the document
 - paste into Claude (polluted context)
-- fail at doing some basic things
+- get some weak results
 </demo>
 :::
 
@@ -175,21 +191,23 @@ figure out if it is right for us?
 > Those results were terrible!
 
 ::: notes
+this slide can be skipped
+
 - all the reasons why context gets polluted
 - We need to make some constraints
 
 <!-- slide: 10 -->
-# Control the Context
+# Tragedy of The <s>Commons</s> Context
 
-Explicit memory management
-
+- context is a workspace, not a warehouse.
+- context rules everything around me
 
 ::: notes
-- context is a wasteland that we have limited control over.
+- define context
+- context is madness to manage by hand. Imagine if you command commands changed based on the 500 entries in your command history (better analogy?)
 - Context is a finite resource, not infinite memory — performance degrades as context fills ("lost in the middle")
 - This is context bitrot: every search result, every tangent, every tool call consumes tokens and pushes the signal further from the model's attention
-- This is why we use structured storage instead of pasting everything into context
-- old school state management still works though. all hail the filesystem
+- old school state management to the rescue
 - We can use chromadb and sqlite to structure our document so the
   agent can search and query it w/ impunity.
 :::
@@ -200,14 +218,17 @@ Explicit memory management
 Skills, skills, skills
 
 ::: notes
+
+How do we talk to the sqllite and chroma? How do we load our
+data into them rather than just having it swished into the context?
+
 Introduce the concept of skills and why they are so good for quickly prototyping tasks and processes.
 
+- they start super simple as markdown documents
+- scale up to complex systems like garry tan's gstack
+
 <demo>
-- open ../demo/.claude/skills/contract-loader
-- load the data
-- open ../demo/.claude/skills/contract-search
-- search the data
-- show how our context pollution does not impact the returns
+see: [demo](../demo/terminal.md)
 </demo>
 :::
 
@@ -215,12 +236,13 @@ Introduce the concept of skills and why they are so good for quickly prototyping
 <!-- slide: 12 -->
 # From search to assessment
 
+<DEMO>
 
 ::: notes
 
 Search is great, but I have reviewed many documents like this, I have an idea about
 what I care about and would like to get some automated recon before
-I have to dig into the doc myself.
+I have to dig into the doc myself.  I also want to delegate as much of this digging to my agents.
 
 I want the LLM to give me feedback, but I want to be sure that
 feedback is useful, focussed, and actionable.
@@ -245,7 +267,9 @@ The questions constrain and focus the agent's return, our databases constrain th
 
 
 <!-- slide: 13 -->
-# More orchestration
+# Let's Orchestrate
+
+<DEMO>
 
 - ingest documents
 - output assessments
@@ -276,6 +300,8 @@ First let's consider what would be helpful at scale?
 
 <!-- slide: 14 -->
 # Show Your Work
+
+<DEMO>
 
 ::: notes
 - Every action is logged: what was loaded, what was searched, what was evaluated, by whom

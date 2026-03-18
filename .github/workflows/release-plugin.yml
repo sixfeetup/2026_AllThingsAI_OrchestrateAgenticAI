@@ -1,0 +1,98 @@
+name: Build & Release document-review Plugin
+
+on:
+  push:
+    tags:
+      - 'plugin/document-review/v*'
+    branches: [main]
+    paths:
+      - 'demo/.claude/skills/**'
+      - 'demo/.agents/bin/document-*.py'
+      - 'demo/.agents/bin/document-pipeline.py'
+      - 'plugins/document-review/.claude-plugin/plugin.json'
+      - 'plugins/document-review/README.md'
+      - '.agents/bin/build-plugin.sh'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build plugin from demo sources
+        run: bash .agents/bin/build-plugin.sh
+
+      - name: Verify plugin structure
+        run: |
+          echo "=== Plugin contents ==="
+          find plugins/document-review -type f | sort
+          echo ""
+          echo "=== Zip contents ==="
+          unzip -l plugins/document-review.zip
+          echo ""
+          echo "=== Diff check: bin scripts ==="
+          for f in document-load.py document-parse.py document-search.py document-mcp-server.py; do
+            if [ -f "plugins/document-review/bin/$f" ]; then
+              echo "  [ok] bin/$f"
+            else
+              echo "  [MISSING] bin/$f" && exit 1
+            fi
+          done
+          echo "=== Diff check: skills ==="
+          for d in document-loader document-search document-eval document-audit audlog cowork-review; do
+            if [ -f "plugins/document-review/skills/$d/SKILL.md" ]; then
+              echo "  [ok] skills/$d/SKILL.md"
+            else
+              echo "  [MISSING] skills/$d/SKILL.md" && exit 1
+            fi
+          done
+
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: document-review-plugin
+          path: plugins/document-review.zip
+
+  release:
+    needs: build-plugin
+    if: startsWith(github.ref, 'refs/tags/plugin/document-review/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download plugin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: document-review-plugin
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/plugin/document-review/}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "document-review ${{ steps.version.outputs.version }}"
+          body: |
+            ## document-review plugin ${{ steps.version.outputs.version }}
+
+            AI-driven contract and document review pipeline with semantic search,
+            criteria-based evaluation, adversarial verification, and full audit trail.
+
+            ### Installation
+
+            ```
+            /plugin marketplace add sixfeetup/2026-allthings-ai-presentation
+            /plugin install document-review
+            ```
+
+            ### Prerequisites
+
+            - `uv` (astral-sh) with Python >= 3.11
+            - `sqlite3`
+            - Python packages (auto-installed by `uv run --with`): pymupdf, chromadb, sentence-transformers, python-docx, openpyxl
+
+            Run `plugins/document-review/bin/check-deps.sh` to verify.
+          files: document-review.zip
