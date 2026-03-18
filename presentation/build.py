@@ -9,8 +9,12 @@ Reads presentation/content/NN-slug.md files in order,
 parses YAML frontmatter + markdown body, and renders
 a single self-contained HTML deck to presentation/output/deck.html.
 
+With --from-outline, reads presentation/outline.md directly
+(pandoc-style markdown with ::: notes blocks and <demo> blocks).
+
 Usage:
     uv run presentation/build.py
+    uv run presentation/build.py --from-outline
     uv run presentation/build.py --root /path/to/repo
     uv run presentation/build.py --watch    # rebuild on file changes
     uv run presentation/build.py --open     # open in browser after build
@@ -19,6 +23,7 @@ import argparse
 import re
 import sys
 import html as html_mod
+from datetime import datetime
 from pathlib import Path
 
 import yaml
@@ -66,7 +71,9 @@ def parse_frontmatter(text: str) -> tuple[dict, str]:
     if text.startswith("---"):
         parts = text.split("---", 2)
         if len(parts) >= 3:
-            meta = yaml.safe_load(parts[1]) or {}
+            # Replace tabs with spaces — YAML forbids tabs for indentation
+            yaml_text = parts[1].replace("\t", "    ")
+            meta = yaml.safe_load(yaml_text) or {}
             body = parts[2].strip()
             return meta, body
     return {}, text.strip()
@@ -206,11 +213,58 @@ def validate_images(
 
 
 def split_notes(body: str) -> tuple[str, str]:
-    """Split slide body from speaker notes on '???' separator."""
+    """Split slide body from speaker notes.
+
+    Supports two formats:
+    - Legacy ``???`` separator (content/*.md files)
+    - Pandoc-style ``::: notes`` / ``:::`` blocks (outline.md)
+
+    Returns (visible_body, notes_text).
+    """
+    # Try pandoc-style ::: notes ... ::: first (closed block)
+    notes_pattern = re.compile(
+        r"^::: notes\s*\n(.*?)^:::\s*$",
+        re.MULTILINE | re.DOTALL,
+    )
+    m = notes_pattern.search(body)
+    if m:
+        notes_text = m.group(1).strip()
+        visible = body[:m.start()] + body[m.end():]
+        return visible.strip(), notes_text
+
+    # Try unclosed ::: notes (everything after it is notes)
+    unclosed = re.search(r"^::: notes\s*$", body, re.MULTILINE)
+    if unclosed:
+        notes_text = body[unclosed.end():].strip()
+        visible = body[:unclosed.start()].strip()
+        return visible, notes_text
+
+    # Fall back to legacy ??? separator
     parts = re.split(r"^\?\?\?\s*$", body, maxsplit=1, flags=re.MULTILINE)
     if len(parts) == 2:
         return parts[0].strip(), parts[1].strip()
     return body, ""
+
+
+def render_demo_block(lines: list[str]) -> str:
+    """Render <demo> block content as a styled demo-block div."""
+    items: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            items.append(stripped[2:])
+        elif stripped:
+            items.append(stripped)
+
+    if items:
+        li_html = "\n".join(
+            f"<li>{escape(item)}</li>" for item in items
+        )
+        inner = f"<ul>\n{li_html}\n</ul>"
+    else:
+        inner = ""
+
+    return f'<div class="demo-block reveal">\n{inner}\n</div>'
 
 
 def render_body(body: str, meta: dict) -> str:
@@ -225,6 +279,18 @@ def render_body(body: str, meta: dict) -> str:
 
     while i < len(lines):
         line = lines[i]
+
+        # --- <demo> block ---
+        if line.strip() == "<demo>" or line.strip().startswith("<demo>"):
+            demo_lines = []
+            i += 1
+            while i < len(lines) and not lines[i].strip().startswith("</demo>"):
+                demo_lines.append(lines[i])
+                i += 1
+            if i < len(lines):
+                i += 1  # skip closing </demo>
+            chunks.append(render_demo_block(demo_lines))
+            continue
 
         # --- Fenced code block ---
         fence_match = re.match(r"^```(\w*)$", line)
@@ -388,6 +454,11 @@ def render_body(body: str, meta: dict) -> str:
             i += 1
             continue
 
+        # --- Stray ::: lines (skip gracefully) ---
+        if line.strip().startswith(":::"):
+            i += 1
+            continue
+
         # --- Plain paragraph ---
         if line.strip():
             para_lines = []
@@ -396,10 +467,11 @@ def render_body(body: str, meta: dict) -> str:
                 lines[i].startswith(">"),
                 lines[i].startswith("- "),
                 lines[i].startswith("```"),
-                lines[i].startswith(":::"),
+                lines[i].strip().startswith(":::"),
+                lines[i].strip() == "<demo>" or lines[i].strip().startswith("<demo>"),
                 lines[i].startswith("*") and lines[i].endswith("*"),
                 lines[i].startswith("_") and lines[i].endswith("_"),
-                lines[i].startswith("—"),
+                lines[i].startswith("\u2014"),
                 re.match(r"^\[explainer:", lines[i].strip()),
             ]):
                 para_lines.append(lines[i].strip())
@@ -607,6 +679,44 @@ def _minimal_shell() -> tuple[str, str]:
 
 
 # ---------------------------------------------------------------------------
+# Outline-mode: read outline.md and split into slides
+# ---------------------------------------------------------------------------
+def parse_outline(outline_path: Path) -> list[tuple[dict, str]]:
+    """Parse outline.md into a list of (meta, body) slide tuples.
+
+    Each ``# `` heading starts a new slide.  YAML frontmatter at the top
+    of the file is used for deck metadata but not rendered as a slide.
+    """
+    text = outline_path.read_text()
+    deck_meta, text = parse_frontmatter(text)
+
+    # Split on lines that start with '# ' (level-1 heading)
+    slide_chunks: list[str] = []
+    current: list[str] = []
+
+    for line in text.split("\n"):
+        if re.match(r"^# ", line):
+            if current:
+                slide_chunks.append("\n".join(current))
+            current = [line]
+        else:
+            current.append(line)
+    if current:
+        slide_chunks.append("\n".join(current))
+
+    slides: list[tuple[dict, str]] = []
+    for idx, chunk in enumerate(slide_chunks):
+        # First slide is title-slide, rest are content-slide
+        slide_type = "title-slide" if idx == 0 else "content-slide"
+        meta = {"type": slide_type, "footer": f"{idx:02d}"}
+
+        # Use the heading text as the body (it will be rendered by render_body)
+        slides.append((meta, chunk.strip()))
+
+    return slides
+
+
+# ---------------------------------------------------------------------------
 # Main build
 # ---------------------------------------------------------------------------
 def build():
@@ -647,6 +757,34 @@ def build():
         for w in image_warnings:
             print(w)
 
+    _write_output(slides_html)
+
+
+def build_from_outline():
+    """Build deck from presentation/outline.md instead of content/*.md."""
+    outline_path = REPO_ROOT / "presentation" / "outline.md"
+    if not outline_path.exists():
+        print("outline.md not found at", outline_path)
+        sys.exit(1)
+
+    slides = parse_outline(outline_path)
+    slides_html = []
+
+    for idx, (meta, body) in enumerate(slides):
+        slide_html = build_slide(meta, body)
+        # Use a label from the heading for the comment
+        h_match = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
+        label = h_match.group(1) if h_match else f"slide-{idx}"
+        slides_html.append(
+            f"    <!-- outline:{label} -->\n    {slide_html}"
+        )
+        print(f"  slide {idx:02d}: {label} -> {meta.get('type', 'content-slide')}")
+
+    _write_output(slides_html)
+
+
+def _write_output(slides_html: list[str]):
+    """Write rendered slides to output files."""
     head, tail = load_template_shell()
     OUTPUT_DIR.mkdir(exist_ok=True)
     raw_html = head + "\n\n".join(slides_html) + tail
@@ -656,7 +794,8 @@ def build():
         'src="../images/', 'src="../../images/'
     )
     OUTPUT_FILE.write_text(output_html)
-    print(f"\n  Built {len(slides_html)} slides -> {OUTPUT_FILE}")
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\n  Built {len(slides_html)} slides -> {OUTPUT_FILE}  [{ts}]")
 
     # --- Write to dist/ for gh-pages (images/ is a sibling) ---
     if DIST_DIR.exists():
@@ -683,13 +822,22 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         dest="open_browser",
         help="Open the built deck in the default browser",
     )
+    parser.add_argument(
+        "--from-outline",
+        action="store_true",
+        dest="from_outline",
+        help="Read outline.md instead of content/*.md",
+    )
     return parser.parse_args(argv)
 
 
 if __name__ == "__main__":
     args = _parse_args()
     _init_paths(args.root)
-    build()
+    if args.from_outline:
+        build_from_outline()
+    else:
+        build()
     if args.open_browser:
         import subprocess
         subprocess.run(["open", str(OUTPUT_FILE)])

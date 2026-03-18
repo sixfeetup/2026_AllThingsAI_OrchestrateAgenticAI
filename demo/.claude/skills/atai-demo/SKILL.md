@@ -1,72 +1,54 @@
 # atai-demo
 
-Navigate the demo script during the live presentation.
+Demo prompt navigator. Reads `script/prompts.json` for the prompt list.
 
 ## Triggers
 
-- `/atai-demo` — show the step menu
-- `/atai-demo <number>` — jump to a specific step
-- `/atai-demo next` — advance to the next step
+- `/atai` — show the prompt list, let presenter pick
+- `/atai <N>` — jump to and execute prompt #N
+- `/atai next` — execute the next prompt in sequence
+- `/atai reload` — regenerate prompts.json from terminal.md
 
 ## Instructions
 
-Read `demo/script/terminal.md` and parse the steps.
+1. Read `script/prompts.json`. Each entry has: `num`, `step`, `title`,
+   `prompt`, `type`, `run`, and optionally `optional: true`.
 
-When invoked with **no argument** or `menu`, present this chooser:
+2. **No arguments:** show a compact numbered list (one line per prompt,
+   truncated to ~65 chars). Use AskUserQuestion to let the presenter pick.
 
-```
-## Demo Navigator
+3. **With a number or `next`:**
+   a. Print just the command as a markdown heading:
+      ```
+      ## <prompt truncated to 80 chars>
+      ```
+      Show only the command text — no `#N`, no `Step S`, no `▶`.
+   b. Execute based on `type`:
+      - `script` → run the `run` command via Bash
+      - `script+assess` → run `run` via Bash, then apply LLM judgment
+        (severity ratings, evidence quotes, findings)
+      - `file` → Read and display the file referenced in `run`
+      - `file+compare` → Read the file, compare to prior eval findings
+      - `agent` → Read the agent template in `run`, execute the `prompt`
+      - `freeform` → execute `prompt` directly as a Claude instruction
+      - `talk` → nothing to execute, show key info and move on
+   c. Print footer with step context and next pointer:
+      ```
+      Step S · #N/16 — NEXT → <next title>
+      ```
 
- 0. OH NO — prebaked naive review          (~1:30)  [slides 8-10]
- 1. Roster — show skills & agents          (~1:00)  [slide 11]
- 2. Load — ingest the RFP archive          (~1:30)
- 3. Search — keyword + semantic queries    (~2:00)
- 4. Eval (IP) — focused criteria eval      (~2:00)  [slide 12]
- 5. Eval (red flags) — broad scan          (~1:30)
- 5.5 Naive Contrast — before/after         (~0:45)
- 6  Edit & Re-eval — TDD for agents        (~1:30)  [if time]
- 6.5 Bitrot — context degradation          (~1:30)
- 7. Adversarial — red team the findings    (~2:00)  [slide 13]
- 8. Draft — response memo                  (~1:00)
- 9. Audit — full provenance trail          (~1:00)  [slide 14]
-10. Pipeline — show the full flow          (~1:30)
+4. **`next` skips `optional` prompts** unless explicitly requested by number.
 
-Which step? (enter number)
-```
+5. **`--notes`**: read `script/terminal.md` and append Say: lines for the
+   current step only.
 
-Use the AskUserQuestion tool to let the presenter pick a step from the list. Include all steps as options.
+## Reload
 
-When a step is selected (by number argument or from the menu), display that step's **cue card**:
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP <N> — <TITLE>                  ~<time>
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-SLIDE: <slide transition note if any>
-
-RUN:
-  <the exact prompt or command to execute>
-
-NOTES:
-  <talking points, quoted from terminal.md>
-
-APPLAUSE MOMENT:
-  <if any, highlighted>
-
-NEXT → Step <N+1>: <title>
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-When invoked with `next`, determine which step was last shown in this session and advance to the next one.
-
-## Cue card content
-
-Pull all content directly from `demo/script/terminal.md`. Do not paraphrase — use the exact prompts and talking points from that file. The "RUN" section should contain the exact code block from the step. The "NOTES" section should contain the **Say:** lines verbatim.
+When invoked with `reload`: run `python3 script/gen-prompts.py` to
+regenerate `script/prompts.json` from `script/terminal.md`. Report
+the prompt count and list.
 
 ## Constraints
 
-- Do NOT execute the prompts — just display them for the presenter to copy/run
-- Keep the cue card compact — it needs to be readable at a glance during a live talk
-- Always show which step comes next so the presenter knows the flow
-- If step 6 (Edit & Re-eval) is selected, note it's the optional "if time permits" step
+- Screen is audience-visible — no meta-commentary unless `--notes`.
+- Track position across invocations so `next` works.

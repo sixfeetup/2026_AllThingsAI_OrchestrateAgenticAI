@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "document-review": {
+      "command": "uv",
+      "args": [
+        "run", "--with", "mcp,pymupdf,chromadb,sentence-transformers",
+        ".agents/bin/document-mcp-server.py"
+      ]
+    }
+  }
+}

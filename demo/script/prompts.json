@@ -1,0 +1,139 @@
+[
+  {
+    "num": 1,
+    "step": "0",
+    "title": "OH NO",
+    "prompt": "@assets/prebaked/naive-review.md\n\n\"This is what we got from paste-and-pray \u2014 a single prompt with no structure.\"",
+    "type": "file",
+    "run": "read assets/prebaked/naive-review.md"
+  },
+  {
+    "num": 2,
+    "step": "0.5",
+    "title": "Context Pollution",
+    "prompt": "!bitrot all --intensity 5 --seed 42",
+    "type": "script",
+    "run": "uv run .agents/bin/bitrot-simulator.py all --intensity 5 --seed 42"
+  },
+  {
+    "num": 3,
+    "step": "1",
+    "title": "Roster",
+    "prompt": "Show me the skills in .claude/skills/ and agents in .agents/ \u2014 list each with a one-line description.",
+    "type": "freeform",
+    "run": null
+  },
+  {
+    "num": 4,
+    "step": "2",
+    "title": "Load",
+    "prompt": "/load-document \"assets/1-RFP 20-020 - Original Documents.zip\"",
+    "type": "script",
+    "run": "uv run .agents/bin/document-load.py \"assets/1-RFP 20-020 - Original Documents.zip\""
+  },
+  {
+    "num": 5,
+    "step": "3.1",
+    "title": "Search",
+    "prompt": "/search-document \"submission requirements\"",
+    "type": "script",
+    "run": "uv run .agents/bin/document-search.py \"submission requirements\""
+  },
+  {
+    "num": 6,
+    "step": "3.2",
+    "title": "Search (2)",
+    "prompt": "/search-document \"evaluation criteria scoring\"",
+    "type": "script",
+    "run": "uv run .agents/bin/document-search.py \"evaluation criteria scoring\""
+  },
+  {
+    "num": 7,
+    "step": "3.3",
+    "title": "Search (3)",
+    "prompt": "/search-document \"liability indemnification\"",
+    "type": "script",
+    "run": "uv run .agents/bin/document-search.py \"liability indemnification\""
+  },
+  {
+    "num": 8,
+    "step": "4",
+    "title": "Focused Eval",
+    "prompt": "/eval-document assets/criteria/ip-and-ownership.md",
+    "type": "script+assess",
+    "run": "uv run --with 'chromadb,sentence-transformers' .agents/bin/document-eval.py assets/criteria/ip-and-ownership.md"
+  },
+  {
+    "num": 9,
+    "step": "5",
+    "title": "Broad Eval",
+    "prompt": "/eval-document assets/criteria/general-red-flags.md",
+    "type": "script+assess",
+    "run": "uv run --with 'chromadb,sentence-transformers' .agents/bin/document-eval.py assets/criteria/general-red-flags.md"
+  },
+  {
+    "num": 10,
+    "step": "5.5",
+    "title": "Naive Contrast",
+    "prompt": "@assets/prebaked/naive-review.md\n\nCompare this to what we just found.",
+    "type": "file+compare",
+    "run": "read assets/prebaked/naive-review.md"
+  },
+  {
+    "num": 11,
+    "step": "6.5",
+    "title": "Bitrot",
+    "prompt": "(talk) Bitrot",
+    "type": "talk",
+    "run": null
+  },
+  {
+    "num": 12,
+    "step": "7",
+    "title": "Adversarial Review",
+    "prompt": "Using the verification agent (.agents/verification-agent.md), challenge the findings from the evaluation. For each finding, construct the best counter-argument, then render a verdict: upheld, downgraded, or dismissed.",
+    "type": "agent",
+    "run": "read .agents/verification-agent.md"
+  },
+  {
+    "num": 13,
+    "step": "8",
+    "title": "Draft Response",
+    "prompt": "Using the response drafter agent (.agents/response-drafter-agent.md), draft a professional response memo based on the verified findings. Group by severity, suggest specific changes.",
+    "type": "agent",
+    "run": "read .agents/response-drafter-agent.md"
+  },
+  {
+    "num": 14,
+    "step": "9",
+    "title": "Audit",
+    "prompt": "/audit-document",
+    "type": "script",
+    "run": "sqlite3 -header -column data/documents.db \"SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id\""
+  },
+  {
+    "num": 15,
+    "step": "10",
+    "title": "Pipeline",
+    "prompt": "data-loader \u2192 document-eval \u2192 verification \u2192 response-drafter\n                   |\n             data-investigator",
+    "type": "freeform",
+    "run": null
+  },
+  {
+    "num": 16,
+    "step": "11",
+    "title": "Full Pipeline",
+    "prompt": "/cowork-review",
+    "type": "script+assess",
+    "run": "uv run --with 'pymupdf,python-docx,openpyxl,chromadb,sentence-transformers' .agents/bin/document-pipeline.py --skip-load"
+  },
+  {
+    "num": 17,
+    "step": "6:",
+    "title": "Edit & Re-eval",
+    "prompt": "Open assets/criteria/ip-and-ownership.md and add a 4th criterion: \"Moral Rights Waiver\" \u2014 look for any waiver of moral rights that is unlimited in scope or lacks geographic boundaries. Then re-run the eval.",
+    "type": "freeform",
+    "run": null,
+    "optional": true
+  }
+]

@@ -1,8 +1,10 @@
 SHELL   := /bin/zsh
 CONTENT := $(sort $(wildcard content/*.md))
 OUTPUT  := output/deck.html
+OUTPUT_REVEAL := output/deck-reveal.html
 DIST    := ../dist/deck.html
 BUILD   := build.py
+BUILD_REVEAL := build-reveal.py
 IMAGES  := images
 
 # Web-optimised JPEGs: 1400px wide, quality 80
@@ -14,9 +16,15 @@ WEB_JPGS  := $(patsubst $(IMAGES)/%.png,$(IMAGES)/%_web.jpg,$(PNG_SRCS))
 # Pass --root to build.py when ROOT is set (e.g. make build ROOT=/some/path)
 BUILD_FLAGS := $(if $(ROOT),--root $(ROOT))
 
-.PHONY: build open clean reset-content watch list deploy serve web-images lint
+# FROM_OUTLINE=1 reads outline.md instead of content/*.md
+ifdef FROM_OUTLINE
+BUILD_FLAGS += --from-outline
+endif
+
+.PHONY: build open clean reset-content watch list deploy serve web-images lint build-reveal open-reveal open-presentation-reveal
 
 ## build — render content/*.md into output/deck.html + dist/deck.html
+##         (use FROM_OUTLINE=1 to read outline.md instead)
 build: $(OUTPUT)
 
 $(OUTPUT): $(CONTENT) $(BUILD)
@@ -70,6 +78,19 @@ $(IMAGES)/%_web.jpg: $(IMAGES)/%.png
 ## lint — check content markdown with markdownlint
 lint:
 	npx --yes markdownlint-cli 'content/*.md'
+
+## build-reveal — render outline.md into output/deck-reveal.html (Reveal.js)
+build-reveal: $(OUTPUT_REVEAL)
+
+$(OUTPUT_REVEAL): outline.md $(BUILD_REVEAL)
+	uv run $(BUILD_REVEAL) $(if $(ROOT),--root $(ROOT))
+
+## open-reveal — build Reveal.js deck and open in browser
+open-reveal: $(OUTPUT_REVEAL)
+	open "$(CURDIR)/$(OUTPUT_REVEAL)"
+
+## open-presentation-reveal — alias for open-reveal
+open-presentation-reveal: open-reveal
 
 ## list — show slide order
 list:

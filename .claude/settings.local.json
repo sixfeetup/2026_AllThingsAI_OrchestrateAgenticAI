@@ -31,13 +31,32 @@
       "WebFetch(domain:super-tribble-8w5zrvy.pages.github.io)",
       "Bash(grep:*)",
       "Bash(multiclaude:*)",
-      "Bash(do echo:*)"
+      "Bash(do echo:*)",
+      "Bash(find:*)",
+      "Bash(chmod:*)",
+      "Bash(/Users/whit/work/2026-allthings-ai-presentation/.agents/bin/verify-demo.sh)",
+      "Bash(for mode:*)",
+      "Read(//Users/whit/work/2026-allthings-ai-presentation/.claude/skills/**)",
+      "Read(//Users/whit/work/2026-allthings-ai-presentation/.claude/skills/audlog/**)",
+      "Read(//Users/whit/work/2026-allthings-ai-presentation/.agents/**)",
+      "Bash(sqlite3:*)",
+      "Bash(rm -rf data)",
+      "Bash(mkdir -p data)"
+
     ]
   },
-
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "high",
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".agents/bin/audlog-hook.sh"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "matcher": "end session",
@@ -49,5 +68,7 @@
         ]
       }
     ]
-  }
+  },
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true
 }
