@@ -298,18 +298,18 @@ Increasing determinism is the key, by constraint, good inputs, and
 deploying the brownian ratchet of iterative critique and improvement.  These process apply to full software development as well. Testing, CI/CD, specification building, PR workflows, etc are just more formalized ways to create more determinism.
 :::
 
+
 <!-- slide: 16 -->
 # 11 Your Future [could be] Agentic
 
-Gastown graphic
+![gastown wasteland blogpost image](./images/gastown-wasteland.png)
 
 ::: notes
 We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.
 :::
 
 <!-- slide: 17 -->
-# /exit
-
+# /exit agent
 
 ::: notes
 Closing remarks --
