@@ -9,6 +9,9 @@ Presenter scripts for the "Orchestrate Agentic AI" conference talk.
 | [predemo.md](predemo.md) | Pre-show setup checklist — run the night before and 15 min before your slot |
 | [terminal.md](terminal.md) | Demo script for running entirely in Claude Code CLI |
 | [hybrid.md](hybrid.md) | Demo script using Claude Desktop (Step 0 + cowork) and Claude Code (Steps 1-9) |
+| [hybrid-setup.md](hybrid-setup.md) | Step-by-step setup for Claude Desktop + MCP + cowork windows |
+| [setup-terminal.sh](setup-terminal.sh) | Install deps for terminal demo (brew, uv, python, claude CLI, venv, model) |
+| [setup-desktop.sh](setup-desktop.sh) | Add Claude Desktop + MCP on top of terminal setup |
 
 ## Which script to use
 

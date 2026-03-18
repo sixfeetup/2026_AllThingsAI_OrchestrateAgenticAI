@@ -15,7 +15,8 @@ DATA_CACHE := data-cache
 .PHONY: document load search test clean reset help \
         pre-demo-setup check-deps venv-setup model-warm \
         data-cache-create data-cache-empty data-cache-loaded \
-        load-cached preflight
+        load-cached preflight slides open-slides \
+        setup-terminal setup-desktop setup-clean
 
 ## help — show available targets
 help:
@@ -135,6 +136,38 @@ load-cached:
 	rm -rf data
 	cp -r $(DATA_CACHE)/loaded data
 	@echo "  Cached data restored — ready for search/eval"
+
+## ---- System setup (delegates to shell scripts) ----
+
+## setup-terminal — install all deps for the terminal demo
+setup-terminal: .setup-terminal.stamp
+
+.setup-terminal.stamp:
+	bash script/setup-terminal.sh
+	@touch $@
+
+## setup-desktop — install Claude Desktop + MCP deps (includes terminal deps)
+setup-desktop: .setup-desktop.stamp
+
+.setup-desktop.stamp: .setup-terminal.stamp
+	bash script/setup-desktop.sh
+	@touch $@
+
+## setup-clean — remove setup stamps to force re-run
+setup-clean:
+	rm -f .setup-terminal.stamp .setup-desktop.stamp
+
+## ---- Slides ----
+
+## slides — build the reveal.js presentation
+slides:
+	@$(MAKE) -C ../presentation build-reveal
+
+## open-slides — build and open the presentation
+open-slides:
+	@$(MAKE) -C ../presentation open-reveal
+
+## ---- Verification ----
 
 ## preflight — verify everything is cached and ready for offline demo
 preflight:
