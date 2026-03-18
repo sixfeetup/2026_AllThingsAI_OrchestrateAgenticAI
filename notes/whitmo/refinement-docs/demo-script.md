@@ -20,6 +20,10 @@ didn't have the context of our specific Risk Policy. This is the Yes-Man NPC."
 ---
 
 ## Phase 2: The Level 2 Orchestration (10 min)
+**Possible beat:** Live-edit a skill mid-demo (e.g. broaden the eval
+criteria in document-eval to find more issues) — shows skills are
+iterative, not fixed. Good for illustrating the edit→re-run loop.
+
 **Action:** Run the multi-agent script using the roles.
 ```bash
 ./scripts/run-level-2.sh --file artifacts/sample-contract.md
