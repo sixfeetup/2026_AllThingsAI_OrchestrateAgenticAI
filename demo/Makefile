@@ -146,10 +146,10 @@ setup-terminal: .setup-terminal.stamp
 	bash script/setup-terminal.sh
 	@touch $@
 
-## setup-desktop — install Claude Desktop + MCP deps (includes terminal deps)
+## setup-desktop — full one-command Desktop setup (MCP + skills + agent paste files + data)
 setup-desktop: .setup-desktop.stamp
 
-.setup-desktop.stamp: .setup-terminal.stamp
+.setup-desktop.stamp:
 	bash script/setup-desktop.sh
 	@touch $@
 
