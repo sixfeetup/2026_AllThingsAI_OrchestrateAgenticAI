@@ -53,7 +53,7 @@ Orchestrates the full multi-agent review pipeline end-to-end: load documents, ru
 
 The plugin includes an MCP server (`bin/document-mcp-server.py`) that exposes the pipeline as MCP tools for use with Claude Desktop, Cowork, or any MCP-compatible client.
 
-To run the MCP server:
+To run the MCP server standalone:
 
 ```bash
 uv run --with 'mcp,pymupdf,python-docx,openpyxl,chromadb,sentence-transformers' \
@@ -61,6 +61,38 @@ uv run --with 'mcp,pymupdf,python-docx,openpyxl,chromadb,sentence-transformers' 
 ```
 
 The server provides these tools over stdio: `load_document`, `search_document`, `audit_document`, `list_criteria_files`, `get_document_stats`, and `read_criteria_file`.
+
+### Claude Desktop integration
+
+**Upload the plugin (MCP + skills):** Open Claude Desktop → **Customize** → **Browse Plugins** → **Upload Plugin**, then select this directory (`plugins/document-review`). Claude Desktop will read the `.claude-plugin/plugin.json` manifest and register the MCP server automatically.
+
+**Upload skills individually:** To add skills without the full plugin, go to **Customize** → **Browse Plugins** → **Upload Plugin** and select an individual skill directory from `plugins/document-review/skills/`:
+
+- `skills/document-loader` — `/load-document`
+- `skills/document-search` — `/search-document`
+- `skills/document-eval` — `/eval-document`
+- `skills/document-audit` — `/audit-document`
+- `skills/audlog` — `/audlog`
+- `skills/cowork-review` — `/cowork-review`
+
+Each skill directory contains a `SKILL.md` that Claude Desktop will recognize.
+
+**Via manual MCP config:** Add the following to `~/Library/Application Support/Claude/claude_desktop_config.json` and restart Claude Desktop:
+
+```json
+{
+  "mcpServers": {
+    "document-review": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with", "mcp,pymupdf,python-docx,openpyxl,chromadb,sentence-transformers",
+        "/absolute/path/to/plugins/document-review/bin/document-mcp-server.py"
+      ]
+    }
+  }
+}
+```
 
 ## Data
 
