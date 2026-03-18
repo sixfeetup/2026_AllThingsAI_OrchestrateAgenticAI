@@ -4,9 +4,9 @@ DOCUMENT_SOURCE := assets/1-RFP 20-020 - Original Documents.zip
 GEN_SCRIPT   := assets/gen-contract.py
 DB           := data/documents.db
 CHROMA       := data/chroma
-PARSE_SCRIPT := ../.agents/bin/document-parse.py
-LOAD_SCRIPT  := ../.agents/bin/document-load.py
-SEARCH_SCRIPT := ../.agents/bin/document-search.py
+PARSE_SCRIPT := .agents/bin/document-parse.py
+LOAD_SCRIPT  := .agents/bin/document-load.py
+SEARCH_SCRIPT := .agents/bin/document-search.py
 
 VENV := .venv
 MODEL_CACHE := .model-cache
@@ -40,7 +40,7 @@ search: venv-setup
 
 ## test — run parser smoke tests
 test: venv-setup
-	uv run ../.agents/bin/test-parse.py
+	uv run .agents/bin/test-parse.py
 
 ## clean — remove all generated artifacts
 clean:
@@ -85,16 +85,9 @@ $(MODEL_CACHE)/.warmed: $(VENV)/.installed
 	@echo "Warming local model cache..."
 	SENTENCE_TRANSFORMERS_HOME=$(MODEL_CACHE)/sentence-transformers \
 	HF_HOME=$(MODEL_CACHE)/huggingface \
-	uv run python -c "\
-		from chromadb.utils.embedding_functions import DefaultEmbeddingFunction; \
-		ef = DefaultEmbeddingFunction(); \
-		ef(['warmup test']); \
-		print('  Model cache warmed')"
+	uv run .agents/bin/warm-model-cache.py
 	@echo "Warming default model cache (for live skill invocations)..."
-	uv run python -c "\
-		from chromadb.utils.embedding_functions import DefaultEmbeddingFunction; \
-		DefaultEmbeddingFunction()(['warmup']); \
-		print('  Default model cache warmed')"
+	uv run .agents/bin/warm-model-cache.py
 	@touch $@
 
 ## data-cache-create — create pre-loaded data snapshots
@@ -109,11 +102,7 @@ data-cache-empty: $(VENV)/.installed
 	@mkdir -p $(DATA_CACHE)/empty/chroma
 	SENTENCE_TRANSFORMERS_HOME=$(MODEL_CACHE)/sentence-transformers \
 	HF_HOME=$(MODEL_CACHE)/huggingface \
-	uv run python -c "\
-		import chromadb; \
-		client = chromadb.PersistentClient(path='$(DATA_CACHE)/empty/chroma'); \
-		client.create_collection('document_clauses', metadata={'hnsw:space': 'cosine'}); \
-		print('  Empty ChromaDB initialized')"
+	uv run python -c "import chromadb; client = chromadb.PersistentClient(path='$(DATA_CACHE)/empty/chroma'); client.get_or_create_collection('document_clauses', metadata={'hnsw:space': 'cosine'}); print('  Empty ChromaDB initialized')"
 
 ## data-cache-loaded — snapshot with documents fully loaded
 data-cache-loaded: $(VENV)/.installed
@@ -169,7 +158,7 @@ open-slides:
 
 ## ---- Verification ----
 
-## preflight — verify everything is cached and ready for offline demo
+## preflight — verify deps, caches, and API access
 preflight:
 	@echo "Running preflight checks..."
 	@test -f "$(DOCUMENT_SOURCE)" && echo "  Document archive exists" || (echo "  Document archive not found (FATAL)" && exit 1)
@@ -192,7 +181,10 @@ preflight:
 		|| (echo "Claude API may not be responding — check auth and connectivity" && exit 0)
 	@echo "  Claude API responding"
 	@echo "Checking MCP server..."
-	@uv run python -c "import importlib.util; spec = importlib.util.spec_from_file_location('mcp', '../.agents/bin/document-mcp-server.py'); print('  MCP server script loadable')" \
+	@uv run python -c "import importlib.util; spec = importlib.util.spec_from_file_location('mcp', '.agents/bin/document-mcp-server.py'); print('  MCP server script loadable')" \
 		|| (echo "MCP server script has import errors" && exit 0)
 	@echo ""
-	@echo "Preflight passed. Ready for offline demo."
+	@echo "Preflight passed."
+	@echo "  Caching:   deps and models cached (no downloads needed for load/search)"
+	@echo "  API:       Claude API required for eval/adversarial/draft steps"
+	@echo "  Fallback:  prebaked outputs in assets/prebaked/ if API is unavailable"

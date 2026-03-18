@@ -9,6 +9,7 @@
 ```
 Slides 0-7 (intro)
   → Step 0: OH NO (prebaked naive review)
+  → Step 0.5: Context pollution (bitrot generator)
 Slides 8-10 (problem → oh no → control context)
   → Step 1: Roster
 Slide 11 (memory & skills)
@@ -18,13 +19,14 @@ Slide 12 (search to assessment)
   → Step 4: Eval (IP)
   → Step 5: Eval (red flags)
   → Step 5.5: Naive contrast
-  → Step 6.5: Bitrot
+  → Step 6.5: Bitrot (talk)
 Slide 13 (more orchestration)
   → Step 7: Adversarial
   → Step 8: Draft
 Slide 14 (show your work)
   → Step 9: Audit
   → Step 10: Pipeline
+  → Step 11: Full Pipeline (composed)
 Slides 15-17 (takehome → future → exit)
 ```
 
@@ -45,6 +47,18 @@ Show the prebaked naive review:
 **Say:** "Notice: 'no critical red flags identified.' It missed everything. Vague, hedge-wordy, no section references. This is a context failure, not a model failure."
 
 **Transition:** "We can do better. We need to control the context."
+
+---
+
+## Step 0.5 — Context Pollution (~0:30)
+
+Inject noise to show what unmanaged context looks like:
+
+```
+!bitrot all --intensity 5 --seed 42
+```
+
+**Say:** "And this is what happens in a long session — tool outputs, tangents, contradictory instructions pile up. The context fills with noise. Watch what that does to quality."
 
 > SLIDE: Show slides 8 (The Problem), 9 (OH NO), 10 (Control the Context)
 
@@ -146,14 +160,18 @@ Compare this to what we just found.
 
 **Say:** "Context is a finite resource. 15-47% performance drop as context fills. This is why scoped agents with clean context outperform one long session. Session boundaries are a feature, not a bug."
 
+Show: `/context` perhaps comparing to start or a new session
+
 ---
 
-## Step 7 — Adversarial (~2:00)
+## Step 7 — Adversarial Review (~2:00)
 
 > SLIDE: Show slide 13 (More orchestration)
 
 ```
 Using the verification agent (.agents/verification-agent.md), challenge the findings from the evaluation. For each finding, construct the best counter-argument, then render a verdict: upheld, downgraded, or dismissed.
+
+/eval-document {insert criterion} --adversarial
 ```
 
 **Say:** "We've found issues. But are they real? The red team's job is to argue against every finding."
@@ -199,6 +217,24 @@ data-loader → document-eval → verification → response-drafter
 ```
 
 **Say:** "Same skills, same agents — but the system drives the flow. Each agent gets clean context. This is why agent swarms beat single long sessions."
+
+**Say:** "We ran each step manually. What if we compose the whole thing?"
+
+---
+
+## Step 11 — Full Pipeline (~3:00)
+
+> SLIDE: Keep pipeline diagram visible
+
+```
+/cowork-review
+```
+
+**While running, narrate:** "One command. It loads the archive, runs both criteria files, challenges every finding, drafts the response, and logs everything. Same skills, same agents — but now the system drives the flow. No human in the loop until the report lands."
+
+**After completion:** "Look at the audit trail. Every search, every eval, every verdict — all traceable. This is what production telemetry looks like for an agent system."
+
+**If slow:** Let it run — the audience is watching the pipeline execute in real time. That IS the demo. If it takes more than 3 minutes, narrate what's happening at each stage.
 
 > SLIDE: Return to slides 15 (Takehome), 16 (Future), 17 (/exit)
 

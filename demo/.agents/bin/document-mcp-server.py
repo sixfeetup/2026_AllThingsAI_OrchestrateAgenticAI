@@ -19,7 +19,7 @@ from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEMO_DIR = SCRIPT_DIR.parent.parent / "demo"
+DEMO_DIR = SCRIPT_DIR.parent.parent
 DEFAULT_DB = DEMO_DIR / "data" / "documents.db"
 DEFAULT_CHROMA = DEMO_DIR / "data" / "chroma"
 PARSE_SCRIPT = SCRIPT_DIR / "document-parse.py"

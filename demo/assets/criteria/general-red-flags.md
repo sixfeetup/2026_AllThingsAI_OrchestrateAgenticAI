@@ -1,6 +1,6 @@
-# General Contract Red Flags
+# General Red Flags
 
-Criteria for identifying common red flags in a Master Services Agreement. Each criterion below is evaluated independently against the contract text.
+Criteria for identifying common red flags in contract and procurement documents. Each criterion below is evaluated independently against the document text.
 
 ## Impossible or Missing Dates
 

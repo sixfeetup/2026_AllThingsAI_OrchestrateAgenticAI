@@ -1,6 +1,6 @@
-# document-audit
+# audit-document
 
-Display the audit trail of all contract analysis actions.
+Display the audit trail of all document analysis actions.
 
 ## Triggers
 
@@ -11,12 +11,12 @@ Display the audit trail of all contract analysis actions.
 
 1. Query the audit log from SQLite:
    ```bash
-   sqlite3 -header -column demo/data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
+   sqlite3 -header -column data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
    ```
 
 2. Present the results as a chronological log:
-   - **load** actions: what file was loaded, how many clauses
-   - **search** actions: what was searched, how many results
+   - **load** actions: what archive/files were loaded, how many documents, how many clauses
+   - **search** actions: what was searched, how many results, across which documents
    - **eval** actions: what criteria were used, findings summary
 
 3. If the user asks for a provenance summary, cross-reference:
@@ -26,7 +26,7 @@ Display the audit trail of all contract analysis actions.
 
 ## Prerequisites
 
-- Contract must be loaded (the audit_log table is created during load)
+- Documents must be loaded (the audit_log table is created during load)
 
 ## Constraints
 

@@ -15,7 +15,7 @@ Session timeline — view or add entries to the audit trail.
 Query the audit log:
 
 ```bash
-sqlite3 -json demo/data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
+sqlite3 -json data/documents.db "SELECT id, timestamp, action, actor, detail FROM audit_log ORDER BY id"
 ```
 
 Parse JSON detail blobs and render as a table:
@@ -54,7 +54,7 @@ Action categories: `load`, `search`, `eval`, `verify`, `draft`, `edit`,
 `handoff`, `decision`, `note`, `error`.
 
 ```bash
-sqlite3 demo/data/documents.db "INSERT INTO audit_log (action, detail, actor) VALUES ('<action>', '<user message>', 'user')"
+sqlite3 data/documents.db "INSERT INTO audit_log (action, detail, actor) VALUES ('<action>', '<user message>', 'user')"
 ```
 
 Confirm: "Logged: [action] — <message>"
@@ -70,4 +70,4 @@ Confirm: "Logged: [action] — <message>"
 
 ## Prerequisites
 
-- `demo/data/documents.db` must exist (created by `/load-document`)
+- `data/documents.db` must exist (created by `/load-document`)

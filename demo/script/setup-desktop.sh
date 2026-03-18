@@ -27,7 +27,7 @@ step() { echo -e "\n${GREEN}==>${RESET} $1"; }
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DEMO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_ROOT="$(cd "$DEMO_DIR/.." && pwd)"
-MCP_SCRIPT="$PROJECT_ROOT/.agents/bin/document-mcp-server.py"
+MCP_SCRIPT="$DEMO_DIR/.agents/bin/document-mcp-server.py"
 SKILLS_SRC="$DEMO_DIR/.claude/skills"
 AGENTS_DIR="$DEMO_DIR/.agents"
 DESKTOP_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
@@ -77,7 +77,7 @@ else
       "command": "uv",
       "args": [
         "run", "--with", "mcp,pymupdf,chromadb,sentence-transformers",
-        "../.agents/bin/document-mcp-server.py"
+        ".agents/bin/document-mcp-server.py"
       ]
     }
   }

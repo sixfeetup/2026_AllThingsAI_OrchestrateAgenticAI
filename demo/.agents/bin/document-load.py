@@ -19,8 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 PARSER_SCRIPT = Path(__file__).resolve().parent / "document-parse.py"
-DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "documents.db"
-DEFAULT_CHROMA = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "chroma"
+DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "data" / "documents.db"
+DEFAULT_CHROMA = Path(__file__).resolve().parent.parent.parent / "data" / "chroma"
 
 
 def init_db(db_path: Path) -> sqlite3.Connection:

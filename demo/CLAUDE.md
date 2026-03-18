@@ -176,7 +176,7 @@ project root for reference:
 |------|---------------|
 | Demo root | `demo/` |
 | Document archive | `demo/assets/1-RFP 20-020 - Original Documents.zip` |
-| MCP server script | `.agents/bin/document-mcp-server.py` |
+| MCP server script | `demo/.agents/bin/document-mcp-server.py` |
 | Skills source | `demo/.claude/skills/` |
 | Agent templates | `demo/.agents/*.md` |
 | Generated paste files | `demo/generated/paste-verifier.md`, `demo/generated/paste-drafter.md` |

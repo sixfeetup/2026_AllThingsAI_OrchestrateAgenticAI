@@ -87,7 +87,7 @@ Load it from Claude Code (you'll do this during Step 2 of the live demo):
 ```bash
 cd demo
 uv run --with 'pymupdf,chromadb,sentence-transformers,python-docx,openpyxl,path' \
-  ../.agents/bin/document-load.py "assets/1-RFP 20-020 - Original Documents.zip" \
+  .agents/bin/document-load.py "assets/1-RFP 20-020 - Original Documents.zip" \
   --db data/documents.db --chroma data/chroma
 ```
 

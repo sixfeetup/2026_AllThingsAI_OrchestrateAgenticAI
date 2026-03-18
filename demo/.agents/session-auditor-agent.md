@@ -33,7 +33,7 @@ Every significant session event gets a timeline entry:
 
 1. **Query the audit_log** from SQLite for machine-logged events:
    ```bash
-   sqlite3 -json demo/data/documents.db "SELECT * FROM audit_log ORDER BY id"
+   sqlite3 -json data/documents.db "SELECT * FROM audit_log ORDER BY id"
    ```
 
 2. **Review the conversation history** for events not captured in the
@@ -97,5 +97,5 @@ Every significant session event gets a timeline entry:
 - If you can't determine exact timestamps, use relative ordering.
 - Write to the audit_log when you produce your timeline:
   ```bash
-  sqlite3 demo/data/documents.db "INSERT INTO audit_log (action, detail, actor) VALUES ('session-audit', 'Timeline produced with N entries', 'session-auditor-agent')"
+  sqlite3 data/documents.db "INSERT INTO audit_log (action, detail, actor) VALUES ('session-audit', 'Timeline produced with N entries', 'session-auditor-agent')"
   ```

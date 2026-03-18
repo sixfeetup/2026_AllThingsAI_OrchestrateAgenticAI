@@ -22,8 +22,8 @@ import sqlite3
 import sys
 from pathlib import Path
 
-DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "documents.db"
-DEFAULT_CHROMA = Path(__file__).resolve().parent.parent.parent / "demo" / "data" / "chroma"
+DEFAULT_DB = Path(__file__).resolve().parent.parent.parent / "data" / "documents.db"
+DEFAULT_CHROMA = Path(__file__).resolve().parent.parent.parent / "data" / "chroma"
 
 
 def search_chroma(chroma_dir: Path, query: str, top_k: int) -> list[dict]:

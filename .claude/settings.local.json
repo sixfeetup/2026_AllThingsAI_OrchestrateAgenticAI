@@ -42,6 +42,7 @@
       "Bash(sqlite3:*)",
       "Bash(rm -rf data)",
       "Bash(mkdir -p data)"
+
     ]
   },
   "hooks": {
