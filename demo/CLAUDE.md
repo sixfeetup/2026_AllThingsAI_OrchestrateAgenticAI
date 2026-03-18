@@ -1,4 +1,4 @@
-# Document Review Demo — Claude Desktop / Cowork Setup
+# Agent Orchestration Document Review Demo — Claude Desktop / Cowork Setup
 
 This directory contains a document review pipeline demo for a conference talk
 on building agentic AI systems. These instructions cover setup for
