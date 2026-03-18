@@ -35,3 +35,8 @@ relicense, and Safe House's script repository.
 
 We need to build proof that the source material Netflix wants to use
 does not overlap with the source material Hasbro is relicensing.
+
+A good contract is a good spec, and a good spec is how we get good
+performance out of agents. Ambiguity in documents is the same problem
+as ambiguity in requirements — if the input is vague, the agent's
+output will be too.

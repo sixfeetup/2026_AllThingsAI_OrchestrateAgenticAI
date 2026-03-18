@@ -1,0 +1,6 @@
+{
+  "name": "document-review",
+  "description": "AI-driven contract and document review pipeline with semantic search, criteria-based evaluation, adversarial verification, and full audit trail.",
+  "version": "0.1.0",
+  "author": { "name": "Six Feet Up" }
+}
