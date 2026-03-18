@@ -292,6 +292,7 @@ def main():
         print(json.dumps(output, indent=2))
     else:
         # Markdown report
+        ## @@ use a template
         print(f"# Document Evaluation — Evidence Gathered")
         print(f"")
         print(f"**Criteria file:** {criteria_path.name}")
