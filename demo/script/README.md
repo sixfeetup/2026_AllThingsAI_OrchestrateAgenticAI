@@ -36,5 +36,5 @@ Both scripts assume [predemo.md](predemo.md) has been completed first.
 
 ## Timing
 
-Both scripts target **~18 minutes** of demo time within a ~45 minute talk slot.
+Both scripts target **~18 minutes** of demo time within a ~30 minute talk slot.
 The remaining time is slides (intro, concepts, wrap-up).

@@ -29,18 +29,18 @@ document:
 		|| (echo "Document archive not found: $(DOCUMENT_SOURCE)" && exit 1)
 
 ## load — parse and load document archive into SQLite + ChromaDB
-load:
+load: venv-setup
 	@test -f "$(DOCUMENT_SOURCE)" || (echo "Document archive not found. Place it at: $(DOCUMENT_SOURCE)" && exit 1)
-	uv run --with 'pymupdf,chromadb,sentence-transformers,python-docx,openpyxl' $(LOAD_SCRIPT) "$(DOCUMENT_SOURCE)"
+	uv run $(LOAD_SCRIPT) "$(DOCUMENT_SOURCE)"
 
 ## search — search loaded document (usage: make search Q="submission requirements")
-search:
+search: venv-setup
 	@test -f $(DB) || (echo "Run 'make load' first" && exit 1)
-	uv run --with 'chromadb,sentence-transformers' $(SEARCH_SCRIPT) "$(Q)"
+	uv run $(SEARCH_SCRIPT) "$(Q)"
 
 ## test — run parser smoke tests
-test:
-	uv run --with 'pymupdf,python-docx,openpyxl,path' ../.agents/bin/test-parse.py
+test: venv-setup
+	uv run ../.agents/bin/test-parse.py
 
 ## clean — remove all generated artifacts
 clean:

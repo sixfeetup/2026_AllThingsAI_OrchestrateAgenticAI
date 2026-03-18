@@ -12,4 +12,7 @@ Demo
 - time and money
   -
 
-  - look up products in mcp
+
+CoWork available "products"
+- look up products in mcp
+  - anthropic "Legal"

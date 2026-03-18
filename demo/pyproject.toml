@@ -10,4 +10,6 @@ dependencies = [
     "fpdf2",
     "path",
     "pyyaml",
+    "python-docx",
+    "openpyxl",
 ]

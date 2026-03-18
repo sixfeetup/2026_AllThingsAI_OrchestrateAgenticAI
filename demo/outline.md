@@ -2,21 +2,10 @@
 
 ## Prep
 
-- Create a contract from a business BigCo partner including
-  - 30 pages -- PDF w/ some spooky hidden text about cupcakes
-  - 7 ambiguous or problem clauses
-    - contradictions
-	- impossible date (e.g. delivery date is in the past)
-	- Incorrect name (tbd)
-	- Ambiguous timeframe
-	- Ambiguous terms
-	- Ambiguous licensing
-	- Ambiguous staffing
-
-- schema for loading
+- Load in our RFP document
 
 - Templates for our agents
-  - contract eval agent
+  - document eval agent
   - data investigator
   - data loader
   - verification agent (adversarial review)
@@ -33,7 +22,7 @@
 	- apply and report
   - auditing skill
 
-Pollute the context window?
+Run/follow script to pollute the context window?
 
 ## Demo
 
@@ -47,22 +36,22 @@ Pollute the context window?
 
 ### Load
 
-- load in our contract
+- load in our document
   - mv to preload, do some searches
 
 ### Plan
 
 - Establish goals
   - talk about how determinism is important
-  - talk about ambiguity in contracts
-  - talk about how a good contract is a good spec and a good spec is how we get good performance out of agents
+  - talk about ambiguity in documents
+  - talk about how a good document is a good spec and a good spec is how we get good performance out of agents
   - Talk about testing agent systems and evals
 
 ### Eval
 
-_Look at the contract eval skill_
+_Look at the document eval skill_
 
-- Eval the contract
+- Eval the document
   - edit the skill to find more things
   - do aversarily review using gemini and codex
 
