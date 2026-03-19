@@ -29,4 +29,5 @@ Have not had adequate time to assure it works or try demoing with it.  Might be 
 ## Notable caveats
 
 We have no way to address a document in this system, so whatever is
-loaded is what the skills operate on.
+loaded is what the skills operate on. Loading another document cleans
+out the old one.
