@@ -17,7 +17,8 @@ DATA_CACHE := data-cache
         data-cache-create data-cache-empty data-cache-loaded \
         load-cached preflight slides open-slides \
         setup-terminal setup-desktop setup-clean \
-        plugin plugin-check
+        plugin plugin-check \
+        download-shakespeare
 
 ## help — show available targets
 help:
@@ -189,6 +190,14 @@ preflight:
 	@echo "  Caching:   deps and models cached (no downloads needed for load/search)"
 	@echo "  API:       Claude API required for eval/adversarial/draft steps"
 	@echo "  Fallback:  prebaked outputs in assets/prebaked/ if API is unavailable"
+
+SHAKESPEARE := assets/Shakespeare-Complete-Works.pdf
+
+## download-shakespeare — fetch Shakespeare PDF for context pollution testing
+download-shakespeare: $(SHAKESPEARE)
+
+$(SHAKESPEARE):
+	curl -L -o $@ 'https://www.holybooks.com/wp-content/uploads/Shakespeare-Complete-Works.pdf'
 
 ## ---- Plugin packaging ----
 

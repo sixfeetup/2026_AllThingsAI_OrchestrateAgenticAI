@@ -6,7 +6,6 @@
 
 ## Resources
 
-- [Expectations](./expectations.md)
 - [Presentation](./presentation/outline)
 - [Demo](./demo)
 - [Notes](./notes)

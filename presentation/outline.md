@@ -183,6 +183,11 @@ Claude, a new document and me makes 3.
 - paste into Claude (polluted context)
 - get some weak results
 </demo>
+
+This is also a good place to talk about how tools exist like claude's Legal skills.  That said, composing tools in workflow and understanding something about how they work underneath me you can use these technique with existing tools.
+
+For the purpose of learning, we will build up from the filesystem.
+
 :::
 
 <!-- slide: 9 -->
@@ -195,6 +200,8 @@ this slide can be skipped
 
 - all the reasons why context gets polluted
 - We need to make some constraints
+
+
 
 <!-- slide: 10 -->
 # Tragedy of The <s>Commons</s> Context
