@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/setup-deps.sh",
+            "timeout": 120,
+            "statusMessage": "Installing document-review dependencies..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Skill|Agent|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/skills/audlog/audlog-hook.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
