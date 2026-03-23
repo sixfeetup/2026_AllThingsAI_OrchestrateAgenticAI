@@ -1,0 +1,117 @@
+/**
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+
+// Load utils
+@use 'sass:color';
+@use 'template/mixins' as mixins;
+
+$active-color: #2a76dd;
+
+// Inject theme variables (with some overrides)
+@use 'template/settings' with (
+  $background-color: #fff,
+
+  $block-margin: 10px,
+
+  $main-color: #222,
+  $main-font-size: 40px,
+  $main-font: "'Roboto', sans-serif",
+
+  $heading-color: #222,
+  $heading-margin: 0 0 10px 0,
+  $heading-font: "'Saira Condensed', Impact, sans-serif",
+  $heading-text-shadow: none,
+  $heading-letter-spacing: -0.03em,
+  $heading-line-height: 1,
+  $heading-text-transform: uppercase,
+  $heading-font-weight: 900,
+
+  $heading1-size: 2.3em,
+  $heading2-size: 1.7em,
+  $heading3-size: 1.3em,
+  $heading4-size: 1.0em,
+
+  $code-font: "'Fira Code', monospace",
+
+  $link-color: $active-color,
+  $link-color-hover: color.scale($active-color, $lightness: 15%),
+  $selection-background-color: color.scale($active-color, $lightness: 25%)
+);
+
+// Inject the theme template
+@use 'template/theme';
+
+// Include theme-specific fonts
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Roboto&family=Saira+Condensed:wght@900&display=swap');
+
+// Change text when the background is inverted
+@include mixins.dark-bg-text-color(#fff);
+
+.slide-background {
+    filter: grayscale(50%) opacity(20%) blur(0);
+
+    &.original {
+        filter: none;
+    }
+    &.semi-filtered {
+        filter: grayscale(60%) opacity(40%) blur(0);
+    }
+}
+
+.reveal pre {
+    &.small {
+        font-size: 0.4em;
+    }
+    &.smaller {
+        font-size: 0.3em;
+    }
+}
+
+.reveal pre.stretch code {
+    max-height: 100% !important;
+}
+
+.reveal pre code {
+    background: white;
+    max-height: 450px !important;
+}
+
+.reveal .slides>section,
+.reveal .slides>section>section {
+	padding: 0px 0px;
+}
+
+.reveal .slides {
+    text-align: left;
+}
+
+.reveal .slides section>* {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.reveal ul { list-style-type: none !important; }
+
+.reveal ol li {
+  margin-left: 60px;
+  margin-right: 20px;
+}
+
+.reveal ul li:before {
+    content: '»';
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 30px;
+    margin-right: 20px;
+}
+
+body:after {
+  content: url(../../images/logo.png);
+  transform: scale(.2);
+  position: fixed;
+  bottom: -14em;
+  left: -26em;
+}
