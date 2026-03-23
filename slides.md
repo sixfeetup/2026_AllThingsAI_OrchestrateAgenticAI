@@ -19,7 +19,6 @@ keywords:
 #### Calvin Hendryx-Parker, CTO
 #### Six Feet Up
 
-_Orchestrate Agents, You Will_
 
 # Who am I
 
