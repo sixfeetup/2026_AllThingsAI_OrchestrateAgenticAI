@@ -34,9 +34,7 @@ keywords:
 
 # What is this about, who is it for {.r-fit-text data-background="images/3.png"}
 
-  (_you_)  
-  want to things done  
-  (with .AI)
+![](images/UncleAI.jpeg)
 
 ::: notes
 My mission today is to help you understand how you can use LLM
@@ -106,8 +104,8 @@ non-deterministic.
 # My Agent {data-background="images/6.png"}
 ## The Tool For Job
 
-> "Agents are models using tools in a loop"
->    _[Hannah Moran, Anthropic](https://simonwillison.net/2025/May/22/tools-in-a-loop/)_
+> "Agents are models using tools in a loop"  
+>    --_[Hannah Moran, Anthropic](https://simonwillison.net/2025/May/22/tools-in-a-loop/)_
 
 An agent
 - a context buffer w/ llm connection
