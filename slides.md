@@ -13,26 +13,29 @@ keywords:
     - Determinism
 ---
 
-# Orchestrate Agentic AI
+# Orchestrate Agentic AI {data-background="images/1.png"}
 
-## Context, Checklists, and No-Miss Reviews
+## Context, Checklists, and No-Miss Reviews {.r-fit-text}
 #### Calvin Hendryx-Parker, CTO
 #### Six Feet Up
-
-
-# Who am I
+#### All Things AI 2026
 
 ::: notes
 - THANK YOU FOR COMING
 - INTRODUCE YOURSELF
-- who you are, who 6ftup is, general info
+- who you are, who Six Feet Up is, general info
 :::
+ 
+# Talk Slides {data-background="images/2.png"}
 
-<!-- slide: 2 -->
-# What is this about, who is it for
+<https://github.com/sixfeetup/2026_AllThingsAI_OrchestrateAgenticAI>
+![Talk Slides QR Code](images/talk-slides-qr.png)
 
-  (_you_)
-  want to things done
+
+# What is this about, who is it for {.r-fit-text data-background="images/3.png"}
+
+  (_you_)  
+  want to things done  
   (with .AI)
 
 ::: notes
@@ -48,11 +51,8 @@ If you
 - are curious how to extend the AI products you use to solve your problems without going through a vendor procurement process
 :::
 
-<!-- slide: 3 -->
-# Where we are going (today)
-## Where we are going we don't need roads
+# Where we are going (today) {data-background="images/4.png"}
 
-![Agentic horizon](./images/where-delorean.png)
 
 ::: notes
 We are going to a place where we can boil down some the noise so you
@@ -69,31 +69,12 @@ focussed and reliable experience working with an LLM.  You can take
 these tecnicques and even the files themselve and alter them to
 include your opinions, heuristics, procedures and expertise.
 
-Just as
-we are zipping them up and offering them to you, you can spreading you
+Just as we are zipping them up and offering them to you, you can spreading you
 how to can do in the same.
 :::
 
-<!-- slide: 4 -->
-# Do Agents need roads?
 
-
-![Aston Martin](./images/where-db5.png)
-
-::: notes
-Hard to avoid the 007 joke.
-
-As agents go, 007 was predictably expensive, destructive, bad at
-following rules and poorly behaved. A perhaps provides a good model
-for thinking of what we need to get agents to do work for us that
-brings more to the table than it take away.
-
-If we want entertainment and a body count, 007 suceeds.  If we want something different we need different agents.
-
-:::
-
-<!-- slide: 5 -->
-# The root of the problem
+# The root of the problem {data-background="images/5.png"}
 ## Creating determinisn
 
 with nondeterministic systems.
@@ -122,8 +103,7 @@ can manage large of amount of data quickly, they inherently are
 non-deterministic.
 :::
 
-<!-- slide: 6 -->
-# My Agent
+# My Agent {data-background="images/6.png"}
 ## The Tool For Job
 
 > "Agents are models using tools in a loop"
@@ -142,13 +122,10 @@ provides access to basic *nix tools.  It has a context buffer when using Opus 4.
 We will run this in a sandbox to limit what our agent has access to on our local system.
 :::
 
-<!-- slide: 7 -->
-# 02 Orchestration
+
+# Orchestration {data-background="images/1.png"}
 
 ![Types of orchestration](images/orchestration-triptych.png)
-
-
-
 
 ::: notes
 
@@ -165,8 +142,7 @@ For our purposes, orchestration is organizing more than one actor
 
 :::
 
-<!-- slide: 8 -->
-# The problem
+# The problem {data-background="images/8.png"}
 
 Claude, a new document and me makes 3.
 
@@ -188,8 +164,7 @@ For the purpose of learning, we will build up from the filesystem.
 
 :::
 
-<!-- slide: 9 -->
-# OH NO
+# OH NO {data-background="images/9.png"}
 
 > Those results were terrible!
 
@@ -201,8 +176,7 @@ this slide can be skipped
 
 
 
-<!-- slide: 10 -->
-# Tragedy of The <s>Commons</s> Context
+# Tragedy of The <s>Commons</s> Context {data-background="images/10.png"}
 
 - context is a workspace, not a warehouse.
 - context rules everything around me
@@ -218,7 +192,7 @@ this slide can be skipped
 :::
 
 <!-- slide: 11 -->
-# Memory & Skills Demo
+# Memory & Skills Demo {data-background="images/2.png"}
 
 Skills, skills, skills
 
@@ -239,7 +213,7 @@ see: [demo](../demo/terminal.md)
 
 
 <!-- slide: 12 -->
-# From search to assessment
+# From search to assessment {data-background="images/3.png"}
 
 <DEMO>
 
@@ -272,7 +246,7 @@ The questions constrain and focus the agent's return, our databases constrain th
 
 
 <!-- slide: 13 -->
-# Let's Orchestrate
+# Let's Orchestrate {data-background="images/4.png"}
 
 <DEMO>
 
@@ -304,7 +278,7 @@ First let's consider what would be helpful at scale?
 :::
 
 <!-- slide: 14 -->
-# Show Your Work
+# Show Your Work {data-background="images/5.png"}
 
 <DEMO>
 
@@ -316,7 +290,7 @@ First let's consider what would be helpful at scale?
 :::
 
 <!-- slide: 15 -->
-# Takehome
+# Takehome {data-background="images/6.png"}
 
 [QR Code](download link)
 
@@ -330,8 +304,7 @@ deploying the brownian ratchet of iterative critique and improvement.  These pro
 :::
 
 
-<!-- slide: 16 -->
-# 11 Your Future [could be] Agentic
+# 11 Your Future [could be] Agentic {data-background="images/8.png"}
 
 ![gastown wasteland blogpost image](./images/gastown-wasteland.png)
 
@@ -339,8 +312,13 @@ deploying the brownian ratchet of iterative critique and improvement.  These pro
 We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.
 :::
 
-<!-- slide: 17 -->
-# /exit agent
+# Talk To Me {.r-fit-text data-background="images/9.png"}
+
+📩 <calvin@sixfeetup.com>  
+🤝 <https://linkedin.com/in/calvinhp>  
+✖️ [@calvinhp](https://x.com/calvinhp)  
+🐘 [@calvinhp@fosstodon.org](https://fosstodon.org/@calvinhp)  
+🦋 [@calvinhp.com](https://bsky.app/profile/calvinhp.com)
 
 ::: notes
 Closing remarks --
@@ -349,4 +327,4 @@ Closing remarks --
   - don't trust context, manage the data you want the agent to use explicitly
   - use skills and agents to increase determinism so you get good results from the LLM
   - use skills and agents to capture your workflows so you can automate more of your toil
-:::
+    :::
