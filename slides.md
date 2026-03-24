@@ -73,7 +73,7 @@ how to can do in the same.
 
 
 # The root of the problem {data-background="images/5.png"}
-## Creating determinisn
+## Creating determinism
 
 with nondeterministic systems.
 
@@ -101,29 +101,29 @@ can manage large of amount of data quickly, they inherently are
 non-deterministic.
 :::
 
-# My Agent {data-background="images/6.png"}
+# Agents {data-background="images/6.png"}
 ## The Tool For Job
 
 > "Agents are models using tools in a loop"  
 >    --_[Hannah Moran, Anthropic](https://simonwillison.net/2025/May/22/tools-in-a-loop/)_
 
-An agent
-- a context buffer w/ llm connection
+- a context buffer w/ LLM connection
 - local tools: skills, subagents, mcp, hooks
 - local resources: flat files, dbs, scripts, sockets, etc
 
 ::: notes
 Our coding agent (claude) will be working in a basic sandbox that
-provides access to basic *nix tools.  It has a context buffer when using Opus 4.6 of about
-200k (can roughly the size of "Good To Great" by Jim Collins)
+provides access to basic *nix tools.
+
+It has a context buffer when using Opus 4.6 of about
+200k (can roughly read the size of "Good To Great" by Jim Collins)
 
 We will run this in a sandbox to limit what our agent has access to on our local system.
 :::
 
 
-# Orchestration {data-background="images/1.png"}
 
-![Types of orchestration](images/orchestration-triptych.png)
+# Orchestration {data-background="images/1.png"}
 
 ::: notes
 
@@ -144,11 +144,12 @@ For our purposes, orchestration is organizing more than one actor
 
 Claude, a new document and me makes 3.
 
-::: notes
+Let's see this in action...
 
+::: notes
 - talk about the issues of document review wrt to running a business
 - lots of documents, hard know what is in them, what is important, misses can be expensive
-- talk abou the naive aproach of paste and pray
+- talk about the naive approach of paste and pray
 
 <demo>
 - introduce the document
@@ -162,26 +163,25 @@ For the purpose of learning, we will build up from the filesystem.
 
 :::
 
-# OH NO {data-background="images/9.png"}
-
-> Those results were terrible!
+# {.original background-iframe="explainers/rfp_token_analysis_inital.html"}
 
 ::: notes
 this slide can be skipped
 
 - all the reasons why context gets polluted
 - We need to make some constraints
+:::
 
+# {.original background-iframe="explainers/shakespeare_token_viz.html"}
 
+# Tragedy of The <s>Commons</s> Context {.r-fit-text data-background="images/10.png"}
 
-# Tragedy of The <s>Commons</s> Context {data-background="images/10.png"}
-
-- context is a workspace, not a warehouse.
-- context rules everything around me
+- Context is a Workspace, not a Warehouse.
+- Context Rules Everything Around Me
 
 ::: notes
 - define context
-- context is madness to manage by hand. Imagine if you command commands changed based on the 500 entries in your command history (better analogy?)
+- context is madness to manage by hand. Imagine if your command commands changed based on the 500 entries in your command history (better analogy?)
 - Context is a finite resource, not infinite memory — performance degrades as context fills ("lost in the middle")
 - This is context bitrot: every search result, every tangent, every tool call consumes tokens and pushes the signal further from the model's attention
 - old school state management to the rescue
@@ -189,7 +189,8 @@ this slide can be skipped
   agent can search and query it w/ impunity.
 :::
 
-<!-- slide: 11 -->
+# {.original background-iframe="explainers/context-window-explainer.html"}
+
 # Memory & Skills Demo {data-background="images/2.png"}
 
 Skills, skills, skills
@@ -209,24 +210,21 @@ see: [demo](../demo/terminal.md)
 </demo>
 :::
 
-
-<!-- slide: 12 -->
 # From search to assessment {data-background="images/3.png"}
 
 <DEMO>
 
 ::: notes
-
 Search is great, but I have reviewed many documents like this, I have an idea about
 what I care about and would like to get some automated recon before
 I have to dig into the doc myself.  I also want to delegate as much of this digging to my agents.
 
 I want the LLM to give me feedback, but I want to be sure that
-feedback is useful, focussed, and actionable.
+feedback is useful, focused, and actionable.
 
-To do this we are going to employ an idea from AI testing, the eval.
-When testing LLMs, we assume that our response are nondeterministic,
-so we must create a sort of bracketting of test questions and an
+To do this we are going to use an idea from AI testing, the eval.
+When testing LLMs, we assume that our responses are nondeterministic,
+so we must create a sort of bracketing of test questions and an
 assessment of answers.
 
 We will use an eval skill we have created where we give our skill a
@@ -239,11 +237,9 @@ answers.
 - run better eval
 </demo>
 
-The questions constrain and focus the agent's return, our databases constrain the data acted upon.
+The questions constrain and focus the agent's return; our databases constrain the data acted upon.
 :::
 
-
-<!-- slide: 13 -->
 # Let's Orchestrate {data-background="images/4.png"}
 
 <DEMO>
@@ -251,14 +247,12 @@ The questions constrain and focus the agent's return, our databases constrain th
 - ingest documents
 - output assessments
 
-
 ::: notes
 We've gotten some good results, but what if have 3 proposals. 10 proposals?
 
 We have been orchestrating claude through our prompts, then our skills. What if claude drove more of this orchestration itself.
 
-First let's consider what would be helpful at scale?
-:::
+First, let's consider what would be helpful at scale?
 
 <demo>
 - Introduce subagents as a concept
@@ -275,8 +269,7 @@ First let's consider what would be helpful at scale?
 </demo>
 :::
 
-<!-- slide: 14 -->
-# Show Your Work {data-background="images/5.png"}
+# Bonus: Auditing {data-background="images/5.png"}
 
 <DEMO>
 
@@ -287,10 +280,10 @@ First let's consider what would be helpful at scale?
 - The audit trail is append-only. Agents can't cover their tracks
 :::
 
-<!-- slide: 15 -->
-# Takehome {data-background="images/6.png"}
+# TAKHOMASAK {data-background="images/6.png"}
 
-[QR Code](download link)
+<https://github.com/sixfeetup/2026_AllThingsAI_OrchestrateAgenticAI>
+![Talk Slides QR Code](images/talk-slides-qr.png)
 
 ::: notes
 Talk about repo and playbook, how to install with claude code or cowork.
@@ -302,12 +295,12 @@ deploying the brownian ratchet of iterative critique and improvement.  These pro
 :::
 
 
-# 11 Your Future [could be] Agentic {data-background="images/8.png"}
+# Your Future [could be] Agentic {.r-fit-text data-background="images/8.png"}
 
-![gastown wasteland blogpost image](./images/gastown-wasteland.png)
+![](images/collabtown.jpg){.r-stretch}
 
 ::: notes
-We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent driven compute we are increasingly living in.
+We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent-driven compute we are increasingly living in.
 :::
 
 # Talk To Me {.r-fit-text data-background="images/9.png"}

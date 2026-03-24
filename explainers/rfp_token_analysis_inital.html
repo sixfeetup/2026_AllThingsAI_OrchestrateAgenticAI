@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RFP 20-020 — Naive Analysis & Token Usage</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+
+    /* ── layout ── */
+    .page { max-width: 1200px; margin: 0 auto; }
+
+    /* ── header ── */
+    .header { margin-bottom: 24px; }
+    .header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .badge { background: #dc2626; border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 700; letter-spacing: .05em; white-space: nowrap; }
+    .header h1 { font-size: 20px; font-weight: 700; color: #f1f5f9; line-height: 1.25; }
+    .header p  { font-size: 13px; color: #64748b; margin-top: 4px; }
+
+    /* ── summary cards ── */
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .card { border-radius: 10px; padding: 14px; }
+    .card-val  { font-size: 26px; font-weight: 800; }
+    .card-lbl  { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+    /* ── tabs ── */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; flex-wrap: wrap; }
+    .tab-btn {
+      background: transparent; color: #94a3b8; border: 1px solid #334155;
+      border-radius: 6px; padding: 8px 18px; cursor: pointer; font-size: 13px;
+      font-weight: 500; transition: all .15s;
+    }
+    .tab-btn.active { background: #6366f1; color: white; border-color: #6366f1; }
+
+    /* ── panels ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── issues grid ── */
+    .issues-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .issue-card {
+      background: #1e293b; border-radius: 8px; padding: 14px;
+      cursor: pointer; border: 1px solid transparent;
+      border-left-width: 4px; transition: opacity .15s;
+    }
+    .issue-card:hover { opacity: .9; }
+    .issue-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .sev-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: .08em; }
+    .cat-badge { font-size: 10px; color: #64748b; background: #0f172a; padding: 2px 8px; border-radius: 4px; }
+    .issue-title  { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+    .issue-detail { font-size: 12px; color: #94a3b8; line-height: 1.7; margin-top: 8px; display: none; }
+    .issue-hint   { font-size: 11px; color: #475569; font-style: italic; margin-top: 4px; }
+    .issue-card.open .issue-detail { display: block; }
+    .issue-card.open .issue-hint   { display: none; }
+
+    /* ── charts panel ── */
+    .chart-box { background: #1e293b; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+    .chart-box h2 { font-size: 15px; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
+    .chart-box .sub { font-size: 12px; color: #64748b; margin-bottom: 16px; }
+    .chart-wrap { position: relative; }
+
+    /* ── table ── */
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 8px 10px; color: #64748b; font-weight: 600; border-bottom: 1px solid #334155; white-space: nowrap; }
+    td { padding: 8px 10px; border-bottom: 1px solid #0f172a; }
+    tr.limit-row { background: #1f0d00; }
+    .note-cell { color: #64748b; font-style: italic; }
+    .tag { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+
+    /* ── file coverage ── */
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: #1e293b; border-radius: 10px; padding: 16px; text-align: center; }
+    .stat-val { font-size: 28px; font-weight: 800; }
+    .stat-lbl { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+    .stat-sub { font-size: 11px; color: #475569; margin-top: 4px; }
+    .legend   { display: flex; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #94a3b8; }
+    .legend-dot  { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+    .critical-box { background: #1f0a0a; border: 1px solid #ef444455; border-radius: 10px; padding: 16px; margin-top: 16px; }
+    .critical-box h3 { color: #ef4444; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+    .critical-item { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #2d1515; }
+    .critical-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .critical-name { color: #fca5a5; font-weight: 600; font-size: 12px; }
+    .critical-size { color: #64748b; font-size: 11px; margin-left: 8px; }
+    .critical-desc { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+    /* ── risks grid ── */
+    .risks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .risk-card { background: #1e293b; border-radius: 8px; padding: 16px; border: 1px solid transparent; border-left-width: 4px; }
+    .risk-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+    .risk-body  { font-size: 12px; color: #94a3b8; line-height: 1.75; }
+
+    /* ── footer ── */
+    .footer { margin-top: 24px; font-size: 11px; color: #334155; text-align: center; }
+
+    @media (max-width: 700px) {
+      .cards, .issues-grid, .risks-grid, .stats-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div class="badge">RFP 20-020</div>
+      <div>
+        <h1>Indiana Dept. of Administration — Personal Property Tax Online Filing System</h1>
+        <p>Naive Context-Buffer Analysis · 15 Issues · 18 Files in Package · 14 Tool Calls</p>
+      </div>
+    </div>
+    <div class="cards" id="summary-cards"></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('issues')">Issues (15)</button>
+    <button class="tab-btn" onclick="switchTab('tokens')">Token Usage</button>
+    <button class="tab-btn" onclick="switchTab('files')">File Coverage</button>
+    <button class="tab-btn" onclick="switchTab('risks')">Context Risks</button>
+  </div>
+
+  <!-- Panels -->
+  <div id="panel-issues" class="panel active"></div>
+  <div id="panel-tokens" class="panel"></div>
+  <div id="panel-files"  class="panel"></div>
+  <div id="panel-risks"  class="panel"></div>
+
+  <p class="footer">RFP 20-020 · Indiana Department of Administration · Personal Property Tax Online Filing System · Naive context-buffer analysis</p>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+
+const toolCalls = [
+  { step:1,  label:"ls uploads/workspace",       inputAdd:50,   outputAdd:60,   cumInput:13050, cumOutput:60,    note:"Initial file discovery" },
+  { step:2,  label:"unzip -l (list contents)",   inputAdd:80,   outputAdd:220,  cumInput:13350, cumOutput:280,   note:"18 files identified, 9.3 MB total" },
+  { step:3,  label:"unzip (extract all)",        inputAdd:90,   outputAdd:280,  cumInput:13520, cumOutput:560,   note:"Files extracted to working dir" },
+  { step:4,  label:"pdftotext (extract RFP)",    inputAdd:100,  outputAdd:80,   cumInput:13700, cumOutput:640,   note:"77KB text, 11,239 words extracted" },
+  { step:5,  label:"pip + doc extraction",       inputAdd:350,  outputAdd:3200, cumInput:14150, cumOutput:3840,  note:"Addenda + sample contract read" },
+  { step:6,  label:"RFP lines 1–200",            inputAdd:120,  outputAdd:3100, cumInput:14390, cumOutput:6940,  note:"ToC, intro, definitions, scope summary" },
+  { step:7,  label:"RFP lines 200–500",          inputAdd:120,  outputAdd:3400, cumInput:14630, cumOutput:10340, note:"Scopes A–I detailed requirements" },
+  { step:8,  label:"RFP lines 500–900",          inputAdd:120,  outputAdd:4200, cumInput:14870, cumOutput:14540, note:"Process rules, milestones, MWBE" },
+  { step:9,  label:"RFP lines 900–1200",         inputAdd:120,  outputAdd:4100, cumInput:15110, cumOutput:18640, note:"IVOSB, ADA, compliance, proposal prep" },
+  { step:10, label:"RFP lines 1200–1844",        inputAdd:120,  outputAdd:500,  cumInput:15350, cumOutput:19140, note:"⚠️ HIT OUTPUT LIMIT — persisted to disk", limit:true },
+  { step:11, label:"Read persisted file",        inputAdd:4000, outputAdd:3800, cumInput:19470, cumOutput:22940, note:"Eval criteria recovered from disk" },
+  { step:12, label:"catdoc addenda (failed)",    inputAdd:80,   outputAdd:50,   cumInput:19630, cumOutput:22990, note:"catdoc not available on system" },
+  { step:13, label:"strings + docx extraction", inputAdd:300,  outputAdd:3600, cumInput:20050, cumOutput:26590, note:"Addenda & contract read; XML noise mixed in" },
+  { step:14, label:"File size analysis",         inputAdd:280,  outputAdd:480,  cumInput:20450, cumOutput:27070, note:"Token estimates for all unread files" },
+];
+
+const fileData = [
+  { name:"attJ.pdf (Tax Forms)",        tokens:339506, read:false, critical:true,  desc:"Contains all 7 personal property tax form definitions. The core technical deliverable — never read in this analysis." },
+  { name:"RFP Main PDF (binary)",       tokens:49316,  read:false,                 desc:"Binary PDF; replaced by extracted .txt file for reading." },
+  { name:"rfp_main.txt (extracted)",    tokens:19326,  read:true },
+  { name:"attH.pdf (Filing Process)",   tokens:18726,  read:false, critical:true,  desc:"Online filing and transmission process to County Assessors — the county integration architecture. Critical for Scope B." },
+  { name:"attI.pdf (Agent Process)",    tokens:16303,  read:false, critical:true,  desc:"Authorized agent acceptance process. Critical for Scope A delegation requirements." },
+  { name:"attE.doc (Biz Template)",     tokens:4147,   read:false },
+  { name:"attB.docx (Sample Contract)", tokens:3271,   read:true,  partial:true },
+  { name:"add1.doc (Addendum 1)",       tokens:2553,   read:true,  partial:true },
+  { name:"add2.doc (Addendum 2)",       tokens:2592,   read:true,  partial:true },
+  { name:"attC.xls (Econ Impact)",      tokens:2566,   read:false },
+  { name:"attA.docx (MWBE Form)",       tokens:1393,   read:false },
+  { name:"attA1.docx (IVOSB Form)",     tokens:1387,   read:false },
+  { name:"attF.docx (Tech Proposal)",   tokens:1543,   read:true,  partial:true },
+  { name:"attD.xlsx (Cost Template)",   tokens:717,    read:false },
+  { name:"Q&A attG.xlsx",              tokens:543,    read:false },
+  { name:"attG.xlsx",                   tokens:394,    read:false },
+  { name:"attG Resp.xlsx",             tokens:526,    read:false },
+  { name:"attK.xlsx (Ref Check)",       tokens:280,    read:false },
+];
+
+const issues = [
+  { cat:"Scope",      sev:"High",   title:"Deferred Scope — Notifications & Reports",     detail:"Scope F explicitly states 'Additional details will be provided during the planning stage' — twice. Vendors must price undefined work blind, with no measurable acceptance criteria." },
+  { cat:"Scope",      sev:"High",   title:"Vague Quality Standards",                       detail:"System must be 'user-friendly, expansive, and sophisticated' — no SLAs, no uptime targets, no security framework (NIST? StateRAMP? FedRAMP?) is specified anywhere in the RFP." },
+  { cat:"Scope",      sev:"High",   title:"92-County CAMA Integration Complexity",         detail:"REST API integration with County Assessor CAMA software across all 92 Indiana counties. Neither the CAMA vendors nor the API standards are defined. Largest single technical risk." },
+  { cat:"Timeline",   sev:"High",   title:"~15 Months to Full Statewide Deployment",       detail:"Award ~Sept 2019, target Jan 1 2021. Respondents must provide two timelines (aggressive + less aggressive) — the State itself acknowledges the aggressive target may not be realistic." },
+  { cat:"Contract",   sev:"High",   title:"Mandatory Funding Cancellation Clause",         detail:"The State can cancel the contract at any time for funding reasons. Non-negotiable. For a multi-year, multi-million dollar custom system build, this is existential financial risk for the vendor." },
+  { cat:"Contract",   sev:"High",   title:"State Owns All Work Product",                   detail:"Ownership of Documents and Materials is a mandatory, non-negotiable clause. All IP, code, and deliverables transfer to the State. No carve-outs for vendor pre-existing IP visible in the sample contract." },
+  { cat:"Financial",  sev:"High",   title:"$300K Financial Responsibility Bond Required",  detail:"Must be delivered BEFORE the contract becomes effective — irrevocable letter of credit, certified check, cashier's check, or surety bond. High barrier to smaller or newer vendors." },
+  { cat:"Contract",   sev:"Medium", title:"Entire Proposal Can Become Contract",           detail:"Section 2.3.5: any portion of the RFP or the respondent's proposal may be incorporated into the final contract. Vendors must be very careful what they commit to in their proposals." },
+  { cat:"Financial",  sev:"Medium", title:"180-Day Firm Pricing",                          detail:"All pricing must remain firm and open for 180 days from proposal due date. No escalation clauses. For a contract covering multiple years with deferred scope, this creates significant pricing risk." },
+  { cat:"Compliance", sev:"Medium", title:"Complex MWBE / IVOSB Requirements",             detail:"8% MBE + 8% WBE + 3% IVOSB subcontractor commitments. Must use certified Indiana firms from IDOA directory. Monthly Pay Audit reporting. Failure = potential material breach of contract." },
+  { cat:"Timeline",   sev:"Medium", title:"Two Addenda Issued Before Due Date",            detail:"Addendum 1 extended the deadline 2 weeks (July 31 → Aug 14). Addendum 2 corrected the Cost Proposal template. Both before proposals were due — signs the RFP was released prematurely." },
+  { cat:"Evaluation", sev:"Medium", title:"Opaque Technical Scoring Weights",              detail:"Evaluation section lists Pass/Fail, Management/Quality, Cost, Buy Indiana (5pts), MWBE (10pts), IVOSB (5pts) — but never states the point weight for the Technical Proposal itself." },
+  { cat:"Scope",      sev:"Medium", title:"Document Retention Policy Undefined",           detail:"Scope E requires storage 'in accordance to the State's retention policies' — but those policies are not included or referenced. Vendors cannot properly architect or price storage." },
+  { cat:"Scope",      sev:"Medium", title:"Amendment Limit Is Restrictive",                detail:"Only ONE amendment allowed per filing (Scope D). Given the State's ability to expand scope post-award, one mistake by a filer permanently forfeits their amendment right." },
+  { cat:"Process",    sev:"Low",    title:"CD-ROM Submission Required",                    detail:"In 2019, proposals required on CD-ROM (1 original + 3 copies), physically delivered to a building with weapons screening. Logistically cumbersome and already outdated at time of issue." },
+];
+
+const SEV_COLOR = { High:"#ef4444", Medium:"#f97316", Low:"#eab308" };
+const SEV_BG    = { High:"#1f0a0a", Medium:"#1a0d00", Low:"#1a1a00" };
+
+// ─── SUMMARY CARDS ────────────────────────────────────────────────────────────
+
+(function buildCards(){
+  const totalRead   = fileData.filter(f=>f.read).reduce((s,f)=>s+f.tokens,0);
+  const totalUnread = fileData.filter(f=>!f.read).reduce((s,f)=>s+f.tokens,0);
+  const cards = [
+    { val: issues.filter(i=>i.sev==="High").length,   lbl:"High Severity Issues",    color:"#ef4444", bg:"#1f0a0a" },
+    { val: issues.filter(i=>i.sev==="Medium").length, lbl:"Medium Severity Issues",  color:"#f97316", bg:"#1a0d00" },
+    { val: fileData.filter(f=>!f.read||f.partial).length+" / "+fileData.length, lbl:"Files NOT Fully Read", color:"#f59e0b", bg:"#1a1200" },
+    { val: Math.round(totalUnread/1000)+"K est.",     lbl:"Estimated Unread Tokens", color:"#a78bfa", bg:"#0d0a1f" },
+  ];
+  const el = document.getElementById("summary-cards");
+  el.innerHTML = cards.map(c=>`
+    <div class="card" style="background:${c.bg};border:1px solid ${c.color}44">
+      <div class="card-val" style="color:${c.color}">${c.val}</div>
+      <div class="card-lbl">${c.lbl}</div>
+    </div>`).join("");
+})();
+
+// ─── ISSUES PANEL ─────────────────────────────────────────────────────────────
+
+(function buildIssues(){
+  const el = document.getElementById("panel-issues");
+  el.innerHTML = `<div class="issues-grid">${issues.map((iss,i)=>`
+    <div class="issue-card" id="iss-${i}"
+         style="border-color:${SEV_COLOR[iss.sev]}44;border-left-color:${SEV_COLOR[iss.sev]}"
+         onclick="toggleIssue(${i})">
+      <div class="issue-meta">
+        <span class="sev-badge" style="background:${SEV_COLOR[iss.sev]}22;color:${SEV_COLOR[iss.sev]}">${iss.sev.toUpperCase()}</span>
+        <span class="cat-badge">${iss.cat}</span>
+      </div>
+      <div class="issue-title">${iss.title}</div>
+      <div class="issue-detail">${iss.detail}</div>
+      <div class="issue-hint">Click to expand ↓</div>
+    </div>`).join("")}</div>`;
+})();
+
+function toggleIssue(i){
+  document.getElementById("iss-"+i).classList.toggle("open");
+}
+
+// ─── TOKENS PANEL ─────────────────────────────────────────────────────────────
+
+let tokenChartInst = null;
+
+(function buildTokens(){
+  const el = document.getElementById("panel-tokens");
+  el.innerHTML = `
+    <div class="chart-box">
+      <h2>Cumulative Token Consumption Per Tool Call</h2>
+      <p class="sub">Input tokens grow with every turn as the full conversation re-reads into context. Step 10 is where the output limit was silently hit.</p>
+      <div class="chart-wrap" style="height:300px"><canvas id="tokenChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h2>Tool Call Log</h2>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Action</th>
+            <th style="color:#818cf8">+Input</th><th style="color:#34d399">+Output</th>
+            <th style="color:#a78bfa">Cum. Input</th><th style="color:#6ee7b7">Cum. Output</th>
+            <th>Note</th>
+          </tr></thead>
+          <tbody>${toolCalls.map(t=>`
+            <tr ${t.limit?'class="limit-row"':""}>
+              <td style="color:#64748b">${t.step}</td>
+              <td style="color:${t.limit?"#f97316":"#e2e8f0"};font-weight:${t.limit?700:400}">
+                ${t.label}${t.limit?'<span class="tag" style="background:#f9731622;color:#f97316">⚠️ LIMIT</span>':""}
+              </td>
+              <td style="color:#818cf8">+${t.inputAdd.toLocaleString()}</td>
+              <td style="color:#34d399">+${t.outputAdd.toLocaleString()}</td>
+              <td style="color:#a78bfa;font-weight:500">${t.cumInput.toLocaleString()}</td>
+              <td style="color:#6ee7b7;font-weight:500">${t.cumOutput.toLocaleString()}</td>
+              <td class="note-cell">${t.note}</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px;font-size:11px;color:#475569;font-style:italic">
+        Token counts are estimates. System prompt (~12K tokens) included in Step 1 cumulative input but not shown as a discrete step. Actual tokenization varies by model.
+      </p>
+    </div>`;
+})();
+
+function drawTokenChart(){
+  const ctx = document.getElementById("tokenChart");
+  if (!ctx || tokenChartInst) return;
+  tokenChartInst = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: toolCalls.map(t=>"S"+t.step),
+      datasets: [
+        {
+          label: "Input Tokens",
+          data:  toolCalls.map(t=>t.cumInput),
+          borderColor: "#818cf8", backgroundColor: "#818cf820",
+          borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.3, fill: false,
+        },
+        {
+          label: "Output Tokens",
+          data:  toolCalls.map(t=>t.cumOutput),
+          borderColor: "#34d399", backgroundColor: "#34d39920",
+          borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.3, fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode:"index", intersect:false },
+      plugins: {
+        legend: { labels:{ color:"#94a3b8", font:{ size:12 } } },
+        tooltip: {
+          backgroundColor: "#1e293b", borderColor: "#334155", borderWidth: 1,
+          titleColor: "#94a3b8", bodyColor: "#e2e8f0", padding: 12,
+          callbacks: {
+            title: (items) => {
+              const idx = items[0].dataIndex;
+              return `Step ${toolCalls[idx].step}: ${toolCalls[idx].label}`;
+            },
+            afterBody: (items) => {
+              const idx = items[0].dataIndex;
+              const t = toolCalls[idx];
+              const lines = [`Note: ${t.note}`];
+              if (t.limit) lines.push("⚠️ Output limit hit — content persisted to disk");
+              return lines;
+            },
+            label: (item) => ` ${item.dataset.label}: ${item.raw.toLocaleString()} tokens`
+          }
+        },
+        annotation: undefined
+      },
+      scales: {
+        x: { ticks:{ color:"#64748b" }, grid:{ color:"#1e293b" } },
+        y: {
+          ticks:{ color:"#64748b", callback: v=> (v/1000).toFixed(0)+"K" },
+          grid:{ color:"#334155" },
+        }
+      }
+    }
+  });
+  // Draw 8K output limit annotation manually as a plugin would require extra lib
+  // Instead: add a dashed dataset
+  tokenChartInst.data.datasets.push({
+    label: "~8K Output Limit",
+    data: toolCalls.map(()=>8192),
+    borderColor: "#f97316", borderDash: [6,4],
+    borderWidth: 1.5, pointRadius: 0, fill: false,
+  });
+  tokenChartInst.update();
+}
+
+// ─── FILES PANEL ──────────────────────────────────────────────────────────────
+
+let fileChartInst = null;
+
+(function buildFiles(){
+  const totalRead   = fileData.filter(f=>f.read && !f.partial).reduce((s,f)=>s+f.tokens,0);
+  const totalPartial= fileData.filter(f=>f.partial).reduce((s,f)=>s+f.tokens,0);
+  const totalUnread = fileData.filter(f=>!f.read).reduce((s,f)=>s+f.tokens,0);
+  const totalAll    = totalRead + totalPartial + totalUnread;
+
+  const criticals = fileData.filter(f=>!f.read && f.critical);
+
+  const el = document.getElementById("panel-files");
+  el.innerHTML = `
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val" style="color:#a78bfa">${Math.round(totalAll/1000)}K</div>
+        <div class="stat-lbl">Total if all files read</div>
+        <div class="stat-sub">~2.15× the 200K context limit</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color:#34d399">${Math.round((totalRead+totalPartial)/1000)}K</div>
+        <div class="stat-lbl">Actually consumed</div>
+        <div class="stat-sub">~9.7% of the full package</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color:#ef4444">${Math.round(totalUnread/1000)}K</div>
+        <div class="stat-lbl">Left unread</div>
+        <div class="stat-sub">Includes all 3 critical PDFs</div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <h2>Estimated Tokens per File vs. What Was Read</h2>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>Fully read</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Partially read (XML noise)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Unread — Critical</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#475569"></div>Unread — Supporting</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6366f155;border:1px dashed #6366f1"></div>200K Context Limit</div>
+      </div>
+      <div class="chart-wrap" style="height:340px"><canvas id="fileChart"></canvas></div>
+    </div>
+    <div class="critical-box">
+      <h3>⚠️ Critical Unread Files</h3>
+      ${criticals.map(f=>`
+        <div class="critical-item">
+          <span class="critical-name">${f.name}</span>
+          <span class="critical-size">~${Math.round(f.tokens/1000)}K est. tokens</span>
+          <p class="critical-desc">${f.desc||""}</p>
+        </div>`).join("")}
+    </div>`;
+})();
+
+function drawFileChart(){
+  const ctx = document.getElementById("fileChart");
+  if (!ctx || fileChartInst) return;
+
+  const sorted = [...fileData].sort((a,b)=>b.tokens-a.tokens);
+
+  const colors = sorted.map(f=>{
+    if (f.read && !f.partial) return "#34d399";
+    if (f.partial)            return "#f59e0b";
+    if (f.critical)           return "#ef4444";
+    return "#475569";
+  });
+
+  fileChartInst = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: sorted.map(f=>f.name),
+      datasets: [{
+        label: "Estimated Tokens",
+        data:  sorted.map(f=>f.tokens),
+        backgroundColor: colors,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:false },
+        tooltip: {
+          backgroundColor:"#1e293b", borderColor:"#334155", borderWidth:1,
+          titleColor:"#e2e8f0", bodyColor:"#94a3b8", padding:12,
+          callbacks: {
+            label: (item) => {
+              const f = [...fileData].sort((a,b)=>b.tokens-a.tokens)[item.dataIndex];
+              const status = f.read && !f.partial ? "Fully read"
+                           : f.partial            ? "Partially read (XML noise)"
+                           : f.critical           ? "NOT READ — Critical"
+                           :                        "Not read";
+              return [` ${item.raw.toLocaleString()} est. tokens`, ` Status: ${status}`];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks:{ color:"#64748b", font:{size:9}, maxRotation:45, minRotation:30 },
+          grid: { color:"#1e293b" }
+        },
+        y: {
+          ticks:{ color:"#64748b", callback: v=>(v>=1000 ? Math.round(v/1000)+"K" : v) },
+          grid: { color:"#334155" },
+          max: 360000
+        }
+      }
+    }
+  });
+
+  // 200K context limit line
+  fileChartInst.data.datasets.push({
+    type: "line",
+    label: "200K Context Limit",
+    data: sorted.map(()=>200000),
+    borderColor: "#6366f1", borderDash:[6,4], borderWidth:2,
+    pointRadius:0, fill:false,
+  });
+  fileChartInst.update();
+}
+
+// ─── RISKS PANEL ──────────────────────────────────────────────────────────────
+
+(function buildRisks(){
+  const risks = [
+    { icon:"🔴", color:"#ef4444", title:"Token Overflow — Impossible to Read Everything Naively",
+      body:"attJ (the 7 tax forms) alone estimates ~340K tokens — more than the full 200K context window. Reading the entire package would require ~430K tokens, roughly 2.15× the limit. A single-context naive approach physically cannot hold this RFP in full." },
+    { icon:"🟠", color:"#f97316", title:"Silent Tool Output Truncation at Step 10",
+      body:"At Step 10, reading lines 1200–1844 hit the ~8K per-call output limit. The system silently persisted content to disk and returned only a 2KB preview. Without catching this, the evaluation criteria and scoring details would have been permanently lost — with no warning." },
+    { icon:"🟡", color:"#eab308", title:"Binary Format Contamination",
+      body:"The .doc addenda are old binary Word format. Extracting with 'strings' returned hundreds of lines of SharePoint/OPC XML alongside the actual content (2 sentences each). Naive extraction consumed tokens on pure garbage — the signal-to-noise ratio was under 1%." },
+    { icon:"🟡", color:"#eab308", title:"Conversation Growth Compounds Cost",
+      body:"Every tool call adds to the input context for all subsequent calls. By Step 14 the cumulative input was ~20K tokens — before writing any analysis. In long agentic sessions, this growth can silently push toward limits, causing model degradation or unexpected truncation." },
+    { icon:"🟣", color:"#a78bfa", title:"No Retrieval = No Re-Query",
+      body:"Without a retrieval layer (ChromaDB, embeddings, etc.), once the RFP text scrolls out of the active context it is gone. Every follow-up question ('what did section 2.3.5 say?') requires a fresh file read. Precision questions on a 430K token corpus become expensive and slow." },
+    { icon:"🟣", color:"#a78bfa", title:"Coverage Gaps Are Silent — No Warning Given",
+      body:"This analysis skipped attJ (7 tax forms), attH (filing process), attI (agent process), attE (business template), and attC/D (cost/economic templates). That's ~95% of supporting detail — with zero indication to the analyst that anything was missing. The analysis looks complete but isn't." },
+    { icon:"🔵", color:"#38bdf8", title:"No Structured Memory or Versioning",
+      body:"Everything lives only in conversation context. There is no structured database of clauses, no ability to diff against an addendum, no cross-reference between sections. If addenda change a requirement, manual reconciliation across large documents is required every time." },
+    { icon:"🟢", color:"#34d399", title:"Skills Approach Mitigates Most of These Risks",
+      body:"The document-review skill (load-document → ChromaDB → eval-document → search-document) pays parsing costs once, stores all clauses in SQLite + vector embeddings, and enables targeted semantic search on demand. Analysis scales well beyond context limits with full traceability." },
+  ];
+  const el = document.getElementById("panel-risks");
+  el.innerHTML = `<div class="risks-grid">${risks.map(r=>`
+    <div class="risk-card" style="border-color:${r.color}33;border-left-color:${r.color}">
+      <div class="risk-title" style="color:${r.color}">${r.icon} ${r.title}</div>
+      <div class="risk-body">${r.body}</div>
+    </div>`).join("")}</div>`;
+})();
+
+// ─── TAB SWITCHING ────────────────────────────────────────────────────────────
+
+function switchTab(id){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("panel-"+id).classList.add("active");
+  event.currentTarget.classList.add("active");
+
+  if (id === "tokens") drawTokenChart();
+  if (id === "files")  drawFileChart();
+}
+</script>
+</body>
+</html>

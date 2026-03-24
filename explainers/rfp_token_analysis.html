@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RFP 20-020 — Token Usage Analysis</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e2e8f0; padding: 32px; }
+  h1 { font-size: 1.6rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; color: #94a3b8; margin-bottom: 36px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  .card { background: #1e2130; border-radius: 12px; padding: 24px; border: 1px solid #2d3748; }
+  .card h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 16px; }
+  .card .big-num { font-size: 2.4rem; font-weight: 700; color: #f8fafc; }
+  .card .big-label { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; }
+
+  /* Context bar */
+  .context-section { background: #1e2130; border-radius: 12px; padding: 24px; border: 1px solid #2d3748; margin-bottom: 24px; }
+  .context-section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 20px; }
+  .bar-container { height: 48px; border-radius: 8px; overflow: hidden; display: flex; margin-bottom: 16px; position: relative; }
+  .bar-segment { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; overflow: hidden; white-space: nowrap; }
+  .bar-legend { display: flex; flex-wrap: wrap; gap: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #cbd5e1; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  /* Document table */
+  .doc-section { background: #1e2130; border-radius: 12px; padding: 24px; border: 1px solid #2d3748; margin-bottom: 24px; }
+  .doc-section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  th { text-align: left; color: #64748b; font-weight: 600; padding: 8px 12px; border-bottom: 1px solid #2d3748; }
+  td { padding: 10px 12px; border-bottom: 1px solid #1a1f2e; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #252b3b; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+  .badge-loaded { background: #14532d; color: #86efac; }
+  .badge-missing { background: #7f1d1d; color: #fca5a5; }
+  .badge-critical { background: #7c2d12; color: #fdba74; border: 1px solid #ea580c; }
+  .badge-image { background: #1e3a5f; color: #93c5fd; }
+  .token-bar-wrap { display: flex; align-items: center; gap: 10px; }
+  .token-mini-bar { height: 8px; border-radius: 4px; min-width: 2px; }
+  .token-val { font-variant-numeric: tabular-nums; color: #94a3b8; font-size: 0.78rem; }
+
+  /* Risk section */
+  .risk-section { background: #1e2130; border-radius: 12px; padding: 24px; border: 1px solid #2d3748; }
+  .risk-section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 20px; }
+  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .risk-card { border-radius: 8px; padding: 16px; border: 1px solid; }
+  .risk-high { background: #2d1515; border-color: #7f1d1d; }
+  .risk-med { background: #2d2215; border-color: #78350f; }
+  .risk-low { background: #1a2d1a; border-color: #14532d; }
+  .risk-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
+  .risk-high .risk-title { color: #fca5a5; }
+  .risk-med .risk-title { color: #fdba74; }
+  .risk-low .risk-title { color: #86efac; }
+  .risk-body { font-size: 0.78rem; color: #94a3b8; line-height: 1.5; }
+
+  .full-width { grid-column: 1 / -1; }
+  .note { font-size: 0.75rem; color: #64748b; margin-top: 12px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>RFP 20-020 — Naive Context Buffer Analysis</h1>
+<p class="subtitle">Indiana Personal Property Tax Online Filing System &nbsp;·&nbsp; Token usage audit &nbsp;·&nbsp; Claude claude-sonnet-4-6</p>
+
+<div class="grid">
+  <div class="card">
+    <h2>Context Window (Model Limit)</h2>
+    <div class="big-num">200,000</div>
+    <div class="big-label">tokens — claude-sonnet-4-6 maximum</div>
+  </div>
+  <div class="card">
+    <h2>Tokens Used This Analysis</h2>
+    <div class="big-num" style="color:#f59e0b">~33,340</div>
+    <div class="big-label">16.7% of context window consumed</div>
+  </div>
+  <div class="card">
+    <h2>Documents Analyzed</h2>
+    <div class="big-num" style="color:#86efac">1 of 16</div>
+    <div class="big-label">Only the main RFP PDF was fully read</div>
+  </div>
+  <div class="card">
+    <h2>Unread Document Tokens</h2>
+    <div class="big-num" style="color:#fca5a5">~27,700</div>
+    <div class="big-label">tokens in attachments not loaded into context</div>
+  </div>
+</div>
+
+<!-- Context window bar -->
+<div class="context-section">
+  <h2>Context Window Breakdown — 200,000 Token Budget</h2>
+  <div class="bar-container">
+    <!-- System prompt: 8000/200000 = 4% -->
+    <div class="bar-segment" style="width:4%; background:#6366f1; color:#e0e7ff;">sys</div>
+    <!-- Conversation: 6200/200000 = 3.1% -->
+    <div class="bar-segment" style="width:3.1%; background:#0ea5e9; color:#e0f2fe;">conv</div>
+    <!-- RFP doc: 19140/200000 = 9.57% -->
+    <div class="bar-segment" style="width:9.57%; background:#10b981; color:#d1fae5;">RFP</div>
+    <!-- Remaining: 166660/200000 = 83.33% -->
+    <div class="bar-segment" style="width:83.33%; background:#1e2130; color:#475569; border: 1px dashed #334155;">
+      &nbsp;&nbsp;Available (83.3%)
+    </div>
+  </div>
+  <div class="bar-legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#6366f1"></div>System Prompt (~8,000 tokens)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0ea5e9"></div>Conversation &amp; Tool Overhead (~6,200 tokens)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>RFP Main Document (~19,140 tokens)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#334155; border:1px dashed #475569"></div>Remaining Budget (~166,660 tokens)</div>
+  </div>
+  <p class="note">⚠️ Note: The tool's Read tool hit a 10,000-token single-call limit — the 19k-token RFP required 3 separate Read calls to fully ingest. This is one example of a naive context limit encountered during this analysis.</p>
+</div>
+
+<!-- Document table -->
+<div class="doc-section">
+  <h2>All RFP Documents — Token Inventory</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Description</th>
+        <th>Tokens (est.)</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>RFP 20-020 Document.pdf</td>
+        <td>Main RFP — 33 pages</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:76px; background:#10b981;"></div>
+            <span class="token-val">19,140</span>
+          </div>
+        </td>
+        <td><span class="badge badge-loaded">✓ Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attB.docx</td>
+        <td>Sample Contract — CRITICAL unread</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:92px; background:#ef4444;"></div>
+            <span class="token-val">23,038</span>
+          </div>
+        </td>
+        <td><span class="badge badge-critical">⚠ Critical — Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attF.docx</td>
+        <td>Technical Proposal Template</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:10px; background:#f59e0b;"></div>
+            <span class="token-val">2,624</span>
+          </div>
+        </td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attA1.docx</td>
+        <td>IVOSB Participation Form</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:3px; background:#f59e0b;"></div>
+            <span class="token-val">828</span>
+          </div>
+        </td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attA.docx</td>
+        <td>MWBE Participation Form</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:3px; background:#f59e0b;"></div>
+            <span class="token-val">752</span>
+          </div>
+        </td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attH.pdf</td>
+        <td>Online Filing &amp; Transmission Process</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:1px; background:#f59e0b;"></div>
+            <span class="token-val">212</span>
+          </div>
+        </td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attI.pdf</td>
+        <td>Authorized Agent Acceptance Process</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:1px; background:#f59e0b;"></div>
+            <span class="token-val">243</span>
+          </div>
+        </td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attJ.pdf</td>
+        <td>Personal Property Tax Forms (17 pages)</td>
+        <td>
+          <div class="token-bar-wrap">
+            <div class="token-mini-bar" style="width:1px; background:#3b82f6;"></div>
+            <span class="token-val">~0 (images)</span>
+          </div>
+        </td>
+        <td><span class="badge badge-image">Image-only PDF</span></td>
+      </tr>
+      <tr>
+        <td>020attC.xls</td>
+        <td>Indiana Economic Impact Form</td>
+        <td><span class="token-val">Not extracted</span></td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attD UPDATED.xlsx</td>
+        <td>Cost Proposal Template</td>
+        <td><span class="token-val">Not extracted</span></td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attE.doc</td>
+        <td>Business Proposal Template</td>
+        <td><span class="token-val">Not extracted</span></td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attG.xlsx / Q&amp;A Attachment G.xlsx</td>
+        <td>Q&amp;A Template + Responses</td>
+        <td><span class="token-val">Not extracted</span></td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020attK.xlsx</td>
+        <td>Reference Check Form</td>
+        <td><span class="token-val">Not extracted</span></td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+      <tr>
+        <td>020add1.doc / 020add2.doc</td>
+        <td>Addenda 1 &amp; 2</td>
+        <td><span class="token-val">Not extracted</span></td>
+        <td><span class="badge badge-missing">✗ Not Loaded</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">Token estimates use chars ÷ 4 heuristic. Actual Claude tokenization will vary. Spreadsheets and .doc files were not text-extracted; their token counts are unknown but likely significant.</p>
+</div>
+
+<!-- Risks -->
+<div class="risk-section">
+  <h2>Context Buffer Risks Observed in This Analysis</h2>
+  <div class="risk-grid">
+    <div class="risk-card risk-high">
+      <div class="risk-title">🔴 Critical: Contract Not Analyzed</div>
+      <div class="risk-body">Attachment B (Sample Contract, ~23k tokens) was never loaded. All 11 identified RFP issues exist without the legal context of indemnification, IP ownership, liability caps, or termination clauses. This naive analysis cannot substitute for contract review.</div>
+    </div>
+    <div class="risk-card risk-high">
+      <div class="risk-title">🔴 Tool Read Limit Hit</div>
+      <div class="risk-body">The Read tool enforces a 10,000-token per-call limit. The RFP at ~19,140 tokens required 3 separate reads, creating risk that continuity of understanding is fragmented — the model processes the document in disconnected chunks rather than holistically.</div>
+    </div>
+    <div class="risk-card risk-med">
+      <div class="risk-title">🟠 Image-Only PDFs Invisible</div>
+      <div class="risk-body">Attachment J contains all 7 personal property tax forms across 17 pages. It extracted as 16 characters — effectively blank. Without OCR, the actual form structure, field names, and validation logic cannot be reviewed, yet these forms are the core of Scope A.</div>
+    </div>
+    <div class="risk-card risk-med">
+      <div class="risk-title">🟠 Addenda Not Reviewed</div>
+      <div class="risk-body">Two addenda (add1, add2) are present in the zip and were not extracted or analyzed. Addenda in government RFPs frequently modify scope, requirements, and deadlines. Any analysis without them is incomplete and potentially misleading.</div>
+    </div>
+    <div class="risk-card risk-med">
+      <div class="risk-title">🟠 Spreadsheets Unanalyzed</div>
+      <div class="risk-body">The Cost Proposal template (Attachment D), Q&A responses (Attachment G), and Reference form (Attachment K) are Excel files. Their content — pricing structure, official Q&A clarifications, reference requirements — is entirely absent from this analysis.</div>
+    </div>
+    <div class="risk-card risk-low">
+      <div class="risk-title">🟢 Sufficient Headroom Exists</div>
+      <div class="risk-body">~166,660 tokens remain in the context window. All extractable text documents in this RFP package (~47k tokens total) could theoretically fit in a single context window if loaded properly — but doing so naively fills ~33% of the window leaving less room for reasoning and output.</div>
+    </div>
+    <div class="risk-card risk-high full-width">
+      <div class="risk-title">🔴 Long-Term: Context Decay Across Sessions</div>
+      <div class="risk-body">The most critical risk for a multi-session analysis workflow: each new conversation starts fresh. None of the document content, cross-references, or analytical conclusions carry forward. A human reviewer reading this RFP would build a persistent mental model; a naive context-buffer approach rebuilds from zero each time — at significant token cost and with risk of inconsistent conclusions across sessions. This is exactly the problem that specialized retrieval-augmented approaches (like the document-review plugin) are designed to solve.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

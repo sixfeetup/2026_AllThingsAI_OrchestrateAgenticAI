@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shakespeare — Context Window Experiment</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #080b12;
+    color: #e2e8f0;
+    padding: 40px 48px;
+    min-height: 100vh;
+  }
+
+  h1 { font-size: 1.7rem; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 40px; }
+
+  /* ── Stat cards ── */
+  .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-bottom: 36px; }
+  .stat { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px 22px; }
+  .stat .num { font-size: 2rem; font-weight: 800; line-height: 1; }
+  .stat .lbl { font-size: 0.75rem; color: #6b7280; margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; }
+  .stat .sub { font-size: 0.78rem; color: #9ca3af; margin-top: 4px; }
+  .red   { color: #f87171; }
+  .amber { color: #fbbf24; }
+  .green { color: #34d399; }
+  .blue  { color: #60a5fa; }
+
+  /* ── Section wrapper ── */
+  .section { background: #111827; border: 1px solid #1f2937; border-radius: 14px; padding: 28px 30px; margin-bottom: 28px; }
+  .section-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .12em; color: #4b5563; margin-bottom: 22px; }
+
+  /* ── Main comparison bar ── */
+  .big-bar-wrap { position: relative; margin-bottom: 12px; }
+  .big-bar-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .big-bar { height: 36px; border-radius: 8px; background: #1f2937; overflow: hidden; display: flex; position: relative; }
+  .big-bar .fill { display: flex; align-items: center; padding-left: 10px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; overflow: hidden; }
+  .window-line {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: #ef4444;
+    z-index: 10;
+  }
+  .window-label {
+    position: absolute;
+    top: -20px;
+    font-size: 0.68rem;
+    color: #ef4444;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    font-weight: 700;
+  }
+
+  /* ── Scroll-style document strip ── */
+  .strip-wrap { position: relative; height: 80px; border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+  .strip-bg { position: absolute; inset: 0; background: #1f2937; }
+  .strip-fill {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, #10b981 0%, #059669 16.7%, transparent 16.7%);
+  }
+  .strip-overflow {
+    position: absolute; inset: 0;
+    left: 16.7%;
+    background: repeating-linear-gradient(
+      135deg,
+      rgba(239,68,68,0.15) 0px,
+      rgba(239,68,68,0.15) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    border-left: 2px solid #ef4444;
+  }
+  .strip-cutline {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 16.7%;
+    width: 2px;
+    background: #ef4444;
+    z-index: 5;
+  }
+  .strip-label {
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem; font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+  .strip-label.left  { left: 0; width: 16.7%; color: #d1fae5; top: 0; bottom: 0; }
+  .strip-label.right { left: 18%; right: 0; color: #fca5a5; top: 0; bottom: 0; flex-direction: column; gap: 2px; }
+  .strip-label.right span { font-size: 0.68rem; font-weight: 400; color: #ef4444; }
+
+  /* ── Works list ── */
+  .works-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .work-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 6px;
+    margin: 2px 4px;
+    font-size: 0.82rem;
+  }
+  .work-row:hover { background: #1f2937; }
+  .work-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .work-name { flex: 1; color: #d1d5db; }
+  .work-pages { font-size: 0.72rem; color: #6b7280; min-width: 80px; text-align: right; }
+  .work-badge {
+    font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    min-width: 60px; text-align: center;
+  }
+  .badge-fits    { background: #064e3b; color: #6ee7b7; }
+  .badge-lost    { background: #450a0a; color: #fca5a5; }
+  .badge-partial { background: #451a03; color: #fdba74; }
+
+  /* ── Horizontal page timeline ── */
+  .timeline { position: relative; height: 60px; border-radius: 8px; overflow: visible; margin: 24px 0 40px; }
+  .tl-track { position: absolute; top: 20px; left: 0; right: 0; height: 8px; background: #1f2937; border-radius: 4px; }
+  .tl-fill  { position: absolute; top: 20px; left: 0; height: 8px; background: #10b981; border-radius: 4px; width: 16.7%; }
+  .tl-overflow { position: absolute; top: 20px; left: 16.7%; right: 0; height: 8px;
+    background: repeating-linear-gradient(90deg, #ef4444 0px, #ef4444 3px, transparent 3px, transparent 8px);
+    border-radius: 0 4px 4px 0;
+  }
+  .tl-marker {
+    position: absolute; top: 12px; width: 2px; height: 24px;
+    background: #ef4444;
+    transform: translateX(-50%);
+  }
+  .tl-marker::after {
+    content: attr(data-label);
+    position: absolute; top: 28px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem; color: #ef4444; white-space: nowrap; font-weight: 700;
+  }
+  .tl-tick {
+    position: absolute; top: 36px;
+    font-size: 0.65rem; color: #4b5563;
+    transform: translateX(-50%);
+  }
+  .tl-tick::before {
+    content: '';
+    position: absolute;
+    top: -10px; left: 50%;
+    width: 1px; height: 6px;
+    background: #374151;
+    transform: translateX(-50%);
+  }
+
+  /* ── Context budget bar ── */
+  .budget-bar { height: 28px; border-radius: 6px; background: #1f2937; display: flex; overflow: hidden; margin-bottom: 10px; }
+  .budget-seg { display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; white-space: nowrap; overflow: hidden; }
+  .budget-legend { display: flex; flex-wrap: wrap; gap: 14px; }
+  .bleg { display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: #9ca3af; }
+  .bleg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── "What fits" radial-style ── */
+  .radial-wrap { display: flex; align-items: center; gap: 48px; }
+  .donut-svg { flex-shrink: 0; }
+  .donut-center { font-size: 1.1rem; font-weight: 800; fill: #f8fafc; }
+  .donut-sub    { font-size: 0.55rem; fill: #6b7280; }
+  .donut-facts { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+  .fact { border-left: 3px solid; padding: 8px 14px; border-radius: 0 6px 6px 0; background: #0f172a; }
+  .fact-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+  .fact-val { font-size: 1.1rem; font-weight: 800; }
+  .fact-sub { font-size: 0.72rem; color: #6b7280; margin-top: 2px; }
+
+  .note { font-size: 0.72rem; color: #4b5563; margin-top: 16px; font-style: italic; }
+  .divider { border: none; border-top: 1px solid #1f2937; margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<h1>The Shakespeare Experiment</h1>
+<p class="subtitle">Naive context-buffer analysis &nbsp;·&nbsp; What happens when a document is 6× larger than the model's memory</p>
+
+<!-- Stat cards -->
+<div class="stat-row">
+  <div class="stat">
+    <div class="num red">1,200,000</div>
+    <div class="lbl">Document Tokens</div>
+    <div class="sub">Complete Works · 3,601 pages</div>
+  </div>
+  <div class="stat">
+    <div class="num blue">200,000</div>
+    <div class="lbl">Context Window</div>
+    <div class="sub">Claude claude-sonnet-4-6 maximum</div>
+  </div>
+  <div class="stat">
+    <div class="num amber">6.0×</div>
+    <div class="lbl">Overflow Ratio</div>
+    <div class="sub">Document ÷ context window</div>
+  </div>
+  <div class="stat">
+    <div class="num red">83.3%</div>
+    <div class="lbl">Lost to Overflow</div>
+    <div class="sub">~3,001 pages silently truncated</div>
+  </div>
+</div>
+
+<!-- Section 1: The raw size comparison -->
+<div class="section">
+  <div class="section-title">Document Size vs. Context Window</div>
+
+  <div class="big-bar-label">
+    <span>Shakespeare Complete Works</span>
+    <span style="color:#f87171">1,200,000 tokens</span>
+  </div>
+  <div class="big-bar" style="margin-bottom:14px; position:relative;">
+    <div class="fill" style="width:100%; background:linear-gradient(90deg,#1d4ed8,#7c3aed); color:#bfdbfe;">
+      Complete Works · 1,200,038 tokens
+    </div>
+    <div class="window-line" style="left:16.7%">
+      <div class="window-label">Context limit</div>
+    </div>
+  </div>
+
+  <div class="big-bar-label">
+    <span>Context Window</span>
+    <span style="color:#34d399">200,000 tokens</span>
+  </div>
+  <div class="big-bar" style="margin-bottom: 24px;">
+    <div class="fill" style="width:16.67%; background:#10b981; color:#d1fae5;">16.7% of doc</div>
+    <div class="fill" style="width:83.33%; background:#1f2937; color:#4b5563; padding-left:12px; font-weight:400;">
+      83.3% of Shakespeare is beyond reach →
+    </div>
+  </div>
+
+  <!-- Page timeline -->
+  <div style="position:relative; margin-bottom: 8px;">
+    <div style="font-size:0.72rem; color:#4b5563; margin-bottom:4px;">Page timeline (1 → 3,601)</div>
+    <div class="timeline">
+      <div class="tl-track"></div>
+      <div class="tl-fill"></div>
+      <div class="tl-overflow"></div>
+      <div class="tl-marker" style="left:16.7%" data-label="Page ~600 · Context full"></div>
+      <!-- ticks -->
+      <div class="tl-tick" style="left:0%">1</div>
+      <div class="tl-tick" style="left:25%">900</div>
+      <div class="tl-tick" style="left:50%">1800</div>
+      <div class="tl-tick" style="left:75%">2700</div>
+      <div class="tl-tick" style="left:100%">3601</div>
+    </div>
+  </div>
+  <p class="note">⚠ Extraction attempt crashed with OOM (exit 137) before any text was returned — the PDF is too large to even hold in RAM during a naive full extraction.</p>
+</div>
+
+<!-- Section 2: What fits / what's lost radial -->
+<div class="section">
+  <div class="section-title">Coverage: What Fits vs. What's Lost</div>
+
+  <div class="radial-wrap">
+    <!-- SVG donut -->
+    <svg class="donut-svg" width="180" height="180" viewBox="0 0 180 180">
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#1f2937" stroke-width="22"/>
+      <!-- lost: 83.3% = 301.2° of 360 -->
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#ef4444" stroke-width="22"
+        stroke-dasharray="377.0 75.4"
+        stroke-dashoffset="94.2"
+        stroke-linecap="butt" opacity="0.7"/>
+      <!-- fits: 16.7% = 60.1° -->
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#10b981" stroke-width="22"
+        stroke-dasharray="75.4 377.0"
+        stroke-dashoffset="94.2"
+        stroke-linecap="butt"/>
+      <text x="90" y="84" text-anchor="middle" class="donut-center">16.7%</text>
+      <text x="90" y="98" text-anchor="middle" class="donut-sub">FITS IN CONTEXT</text>
+    </svg>
+
+    <div class="donut-facts">
+      <div class="fact" style="border-color:#10b981;">
+        <div class="fact-label" style="color:#10b981;">Fits in context</div>
+        <div class="fact-val green">~600 pages &nbsp;·&nbsp; 200k tokens</div>
+        <div class="fact-sub">Sonnets, Venus &amp; Adonis, Henry VI (Parts 1–3)</div>
+      </div>
+      <div class="fact" style="border-color:#ef4444;">
+        <div class="fact-label" style="color:#ef4444;">Lost to overflow</div>
+        <div class="fact-val red">~3,001 pages &nbsp;·&nbsp; 1,000k tokens</div>
+        <div class="fact-sub">Richard III, Romeo &amp; Juliet, Hamlet, Macbeth, Othello + 20 more works — silently truncated</div>
+      </div>
+      <div class="fact" style="border-color:#f59e0b;">
+        <div class="fact-label" style="color:#f59e0b;">Failure mode</div>
+        <div class="fact-val amber">Silent truncation</div>
+        <div class="fact-sub">No error is thrown. The model answers as if it read everything.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Works coverage -->
+<div class="section">
+  <div class="section-title">Work-by-Work Coverage Estimate</div>
+  <div class="works-grid">
+
+    <div class="work-row">
+      <div class="work-dot" style="background:#10b981"></div>
+      <div class="work-name">The Sonnets</div>
+      <div class="work-pages">pp. 1–60</div>
+      <div class="work-badge badge-fits">FITS</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#10b981"></div>
+      <div class="work-name">Venus &amp; Adonis / Lucrece</div>
+      <div class="work-pages">pp. 61–120</div>
+      <div class="work-badge badge-fits">FITS</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#10b981"></div>
+      <div class="work-name">Henry VI, Part 1</div>
+      <div class="work-pages">pp. 121–280</div>
+      <div class="work-badge badge-fits">FITS</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#10b981"></div>
+      <div class="work-name">Henry VI, Part 2</div>
+      <div class="work-pages">pp. 281–450</div>
+      <div class="work-badge badge-fits">FITS</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#10b981"></div>
+      <div class="work-name">Henry VI, Part 3</div>
+      <div class="work-pages">pp. 451–600</div>
+      <div class="work-badge badge-fits">FITS</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Richard III</div>
+      <div class="work-pages">pp. 601–800</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">The Comedy of Errors</div>
+      <div class="work-pages">pp. 801–920</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Titus Andronicus</div>
+      <div class="work-pages">pp. 921–1,060</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">The Taming of the Shrew</div>
+      <div class="work-pages">pp. 1,061–1,200</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Two Gentlemen of Verona</div>
+      <div class="work-pages">pp. 1,201–1,320</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Love's Labour's Lost</div>
+      <div class="work-pages">pp. 1,321–1,460</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Romeo and Juliet</div>
+      <div class="work-pages">pp. 1,461–1,620</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Richard II</div>
+      <div class="work-pages">pp. 1,621–1,760</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">A Midsummer Night's Dream</div>
+      <div class="work-pages">pp. 1,761–1,890</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">King John</div>
+      <div class="work-pages">pp. 1,891–2,020</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">The Merchant of Venice</div>
+      <div class="work-pages">pp. 2,021–2,160</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Henry IV, Part 1</div>
+      <div class="work-pages">pp. 2,161–2,300</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Henry IV, Part 2</div>
+      <div class="work-pages">pp. 2,301–2,460</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Much Ado About Nothing</div>
+      <div class="work-pages">pp. 2,461–2,580</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Henry V</div>
+      <div class="work-pages">pp. 2,581–2,740</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Julius Caesar</div>
+      <div class="work-pages">pp. 2,741–2,880</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">As You Like It</div>
+      <div class="work-pages">pp. 2,881–3,010</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Twelfth Night</div>
+      <div class="work-pages">pp. 3,011–3,130</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Hamlet</div>
+      <div class="work-pages">pp. 3,131–3,340</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Merry Wives of Windsor</div>
+      <div class="work-pages">pp. 3,341–3,460</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+    <div class="work-row">
+      <div class="work-dot" style="background:#ef4444"></div>
+      <div class="work-name">Troilus, Othello, etc.</div>
+      <div class="work-pages">pp. 3,461–3,601</div>
+      <div class="work-badge badge-lost">LOST</div>
+    </div>
+
+  </div>
+  <p class="note">Page ranges estimated from uniform distribution across 3,601 pages. Actual boundaries depend on PDF layout.</p>
+</div>
+
+<!-- Section 4: The failure cascade -->
+<div class="section">
+  <div class="section-title">The Three-Layer Failure Cascade</div>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+
+    <div style="display:flex; gap:16px; align-items:flex-start; padding:16px; background:#0f172a; border-radius:8px; border-left:3px solid #ef4444;">
+      <div style="font-size:1.4rem; flex-shrink:0;">💀</div>
+      <div>
+        <div style="font-size:0.85rem; font-weight:700; color:#fca5a5; margin-bottom:4px;">Layer 1 — Process crash (OOM, exit 137)</div>
+        <div style="font-size:0.78rem; color:#9ca3af; line-height:1.6;">
+          The naive extraction attempt — iterating all 3,601 pages into a single Python string — exhausted VM memory before producing a single token. The process was killed by the OS. This happens <em>before</em> even attempting to pass text to the model.
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:16px; align-items:flex-start; padding:16px; background:#0f172a; border-radius:8px; border-left:3px solid #f59e0b;">
+      <div style="font-size:1.4rem; flex-shrink:0;">✂️</div>
+      <div>
+        <div style="font-size:0.85rem; font-weight:700; color:#fdba74; margin-bottom:4px;">Layer 2 — Silent truncation (if extraction survived)</div>
+        <div style="font-size:0.78rem; color:#9ca3af; line-height:1.6;">
+          If text were successfully extracted, loading it into the context window would silently drop everything after ~200k tokens. No exception is raised. No warning appears. The model would receive only the first ~600 pages and proceed to answer questions as if it had read 3,601.
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:16px; align-items:flex-start; padding:16px; background:#0f172a; border-radius:8px; border-left:3px solid #6366f1;">
+      <div style="font-size:1.4rem; flex-shrink:0;">🎭</div>
+      <div>
+        <div style="font-size:0.85rem; font-weight:700; color:#a5b4fc; margin-bottom:4px;">Layer 3 — Confident wrongness</div>
+        <div style="font-size:0.78rem; color:#9ca3af; line-height:1.6;">
+          Asked "What happens in Act III of Hamlet?" — a play the model never read from this document — it would answer from training data, not from the PDF. The answer would sound authoritative, cite nothing from the actual file, and the user would have no way to know the PDF was never actually consulted. This is the most dangerous failure mode.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Section 5: Comparison vs RFP -->
+<div class="section">
+  <div class="section-title">Comparison: RFP vs. Shakespeare — Naive Load</div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; margin-bottom:16px;">
+    <div style="padding:0 20px 0 0; border-right:1px solid #1f2937;">
+      <div style="font-size:0.8rem; font-weight:700; color:#60a5fa; margin-bottom:12px;">📄 RFP 20-020</div>
+      <div class="budget-bar">
+        <div class="budget-seg" style="width:9.6%; background:#10b981; color:#d1fae5;">RFP</div>
+        <div class="budget-seg" style="width:90.4%; background:#1f2937; color:#374151; font-size:0.62rem; padding-left:8px;">Available</div>
+      </div>
+      <div style="font-size:0.75rem; color:#6b7280; margin-top:6px;">19,140 tokens · 9.6% of window · ✓ fits</div>
+      <div style="font-size:0.75rem; color:#4b5563; margin-top:4px;">But: only 1 of 16 files loaded · contract never read</div>
+    </div>
+    <div style="padding:0 0 0 20px;">
+      <div style="font-size:0.8rem; font-weight:700; color:#c084fc; margin-bottom:12px;">📚 Shakespeare</div>
+      <div class="budget-bar">
+        <div class="budget-seg" style="width:16.7%; background:#10b981; color:#d1fae5; font-size:0.62rem;">Fits</div>
+        <div class="budget-seg" style="width:83.3%; background:#ef4444; color:#fee2e2; font-size:0.62rem; opacity:0.7;">× 1,000,438 tokens overflow</div>
+      </div>
+      <div style="font-size:0.75rem; color:#f87171; margin-top:6px;">1,200,038 tokens · 600% of window · ✗ crashes</div>
+      <div style="font-size:0.75rem; color:#4b5563; margin-top:4px;">83.3% of content silently lost · OOM on extraction</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:4px;">
+    <div style="text-align:center; padding:14px; background:#0f172a; border-radius:8px;">
+      <div style="font-size:0.7rem; color:#6b7280; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">The right approach</div>
+      <div style="font-size:0.82rem; color:#34d399; font-weight:600;">Retrieval-Augmented</div>
+      <div style="font-size:0.72rem; color:#6b7280; margin-top:4px;">Store in DB · fetch only relevant chunks · 2–5k tokens per query</div>
+    </div>
+    <div style="text-align:center; padding:14px; background:#0f172a; border-radius:8px;">
+      <div style="font-size:0.7rem; color:#6b7280; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">Works for small docs</div>
+      <div style="font-size:0.82rem; color:#fbbf24; font-weight:600;">Naive Context Load</div>
+      <div style="font-size:0.72rem; color:#6b7280; margin-top:4px;">&lt;150k tokens · single session · no multi-doc cross-ref</div>
+    </div>
+    <div style="text-align:center; padding:14px; background:#0f172a; border-radius:8px;">
+      <div style="font-size:0.7rem; color:#6b7280; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">Fails silently</div>
+      <div style="font-size:0.82rem; color:#f87171; font-weight:600;">Naive Oversized Load</div>
+      <div style="font-size:0.72rem; color:#6b7280; margin-top:4px;">&gt;200k tokens · OOM · truncation · confident wrong answers</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
