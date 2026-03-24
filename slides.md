@@ -134,8 +134,9 @@ For the purpose of learning, we will build up from the filesystem.
 
 # Tragedy of The <s>Commons</s> Context {.r-fit-text data-background="images/10.png"}
 
-- Context is a Workspace, not a Warehouse.
-- Context Rules Everything Around Me
+- Context is a Workspace, not a Warehouse.  
+
+  <img src="images/context_rules.jpeg" style="margin: 0 auto; display: block; width: 500px;">
 
 ::: notes
 - define context
@@ -170,6 +171,9 @@ We will run this in a sandbox to limit what our agent has access to on our local
 :::
 
 # Orchestration {data-background="images/1.png"}
+
+- Agent's Orchestrated is Magic
+
 
 ::: notes
 

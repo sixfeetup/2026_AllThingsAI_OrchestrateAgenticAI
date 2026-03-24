@@ -14,3 +14,4 @@ images/old-books.jpg filter=lfs diff=lfs merge=lfs -text
 images/abstract.jpg filter=lfs diff=lfs merge=lfs -text
 images/collabtown.jpg filter=lfs diff=lfs merge=lfs -text
 images/wasteland.webp filter=lfs diff=lfs merge=lfs -text
+images/context_rules.jpeg filter=lfs diff=lfs merge=lfs -text
