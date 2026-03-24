@@ -1,3 +1,0 @@
-# Explainers
-
-@@table of contents@@
