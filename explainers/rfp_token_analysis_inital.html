@@ -126,16 +126,16 @@
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('issues')">Issues (15)</button>
+    <button class="tab-btn" onclick="switchTab('issues')">Issues (15)</button>
     <button class="tab-btn" onclick="switchTab('tokens')">Token Usage</button>
-    <button class="tab-btn" onclick="switchTab('files')">File Coverage</button>
+    <button class="tab-btn active" onclick="switchTab('files')">File Coverage</button>
     <button class="tab-btn" onclick="switchTab('risks')">Context Risks</button>
   </div>
 
   <!-- Panels -->
-  <div id="panel-issues" class="panel active"></div>
+  <div id="panel-issues" class="panel"></div>
   <div id="panel-tokens" class="panel"></div>
-  <div id="panel-files"  class="panel"></div>
+  <div id="panel-files"  class="panel active"></div>
   <div id="panel-risks"  class="panel"></div>
 
   <p class="footer">RFP 20-020 · Indiana Department of Administration · Personal Property Tax Online Filing System · Naive context-buffer analysis</p>
@@ -515,6 +515,9 @@ function switchTab(id){
   if (id === "tokens") drawTokenChart();
   if (id === "files")  drawFileChart();
 }
+
+// Draw the file chart on initial load since "files" is the default tab
+drawFileChart();
 </script>
 </body>
 </html>

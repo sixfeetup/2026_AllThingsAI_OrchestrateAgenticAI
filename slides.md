@@ -65,7 +65,7 @@ principles and find someone who can use them to build what you need.
 We've created some simple tools whose aim is to help you have a more
 focussed and reliable experience working with an LLM.  You can take
 these tecnicques and even the files themselve and alter them to
-include your opinions, heuristics, procedures and expertise.
+include your opinions, heuristics, procedures, and expertise.
 
 Just as we are zipping them up and offering them to you, you can spreading you
 how to can do in the same.
@@ -101,44 +101,6 @@ can manage large of amount of data quickly, they inherently are
 non-deterministic.
 :::
 
-# Agents {data-background="images/6.png"}
-## The Tool For Job
-
-> "Agents are models using tools in a loop"  
->    --_[Hannah Moran, Anthropic](https://simonwillison.net/2025/May/22/tools-in-a-loop/)_
-
-- a context buffer w/ LLM connection
-- local tools: skills, subagents, mcp, hooks
-- local resources: flat files, dbs, scripts, sockets, etc
-
-::: notes
-Our coding agent (claude) will be working in a basic sandbox that
-provides access to basic *nix tools.
-
-It has a context buffer when using Opus 4.6 of about
-200k (can roughly read the size of "Good To Great" by Jim Collins)
-
-We will run this in a sandbox to limit what our agent has access to on our local system.
-:::
-
-
-
-# Orchestration {data-background="images/1.png"}
-
-::: notes
-
-Is a big word.
-
-What does it mean Wikipedia has 3 definitions for
-"Orchestration": for music, for computers and for games.  In all three
-cases, you could make the argument orchestration is an act of using
-rules to coordinate and manage a group of actors to accomplish
-something meaningful.
-
-For our purposes, orchestration is organizing more than one actor
-(meat agent or digital) to do something useful.
-
-:::
 
 # The problem {data-background="images/8.png"}
 
@@ -148,26 +110,22 @@ Let's see this in action...
 
 ::: notes
 - talk about the issues of document review wrt to running a business
-- lots of documents, hard know what is in them, what is important, misses can be expensive
+- lots of documents, hard to know what is in them, what is important, misses can be expensive
 - talk about the naive approach of paste and pray
 
-<demo>
+demo...
 - introduce the document
 - paste into Claude (polluted context)
 - get some weak results
-</demo>
 
-This is also a good place to talk about how tools exist like claude's Legal skills.  That said, composing tools in workflow and understanding something about how they work underneath me you can use these technique with existing tools.
+This is also a good place to talk about how tools exist like claude's Legal skills.  That said, composing tools in a workflow and understanding something about how they work underneath and you can use these techniques with existing tools.
 
 For the purpose of learning, we will build up from the filesystem.
-
 :::
 
 # {.original background-iframe="explainers/rfp_token_analysis_inital.html"}
 
 ::: notes
-this slide can be skipped
-
 - all the reasons why context gets polluted
 - We need to make some constraints
 :::
@@ -191,28 +149,62 @@ this slide can be skipped
 
 # {.original background-iframe="explainers/context-window-explainer.html"}
 
-# Memory & Skills Demo {data-background="images/2.png"}
+# Agents {data-background="images/6.png"}
 
-Skills, skills, skills
+> "Agents are models using tools in a loop"  
+>    --_[Hannah Moran, Anthropic](https://simonwillison.net/2025/May/22/tools-in-a-loop/)_
+
+## The Tool For Job
+- a context buffer w/ LLM connection
+- local tools: skills, subagents, mcp, hooks
+- local resources: flat files, dbs, scripts, sockets, etc
+
+::: notes
+Our coding agent (claude) will be working in a basic sandbox that
+provides access to basic *nix tools.
+
+It has a context buffer when using Opus 4.6 of about
+200k (can roughly read the size of "Good To Great" by Jim Collins)
+
+We will run this in a sandbox to limit what our agent has access to on our local system.
+:::
+
+# Orchestration {data-background="images/1.png"}
 
 ::: notes
 
+Is a big word.
+
+What does it mean Wikipedia has 3 definitions for
+"Orchestration": for music, for computers and for games.  In all three
+cases, you could make the argument orchestration is an act of using
+rules to coordinate and manage a group of actors to achieve
+something meaningful.
+
+For our purposes, orchestration is organizing more than one actor
+(meat agent or digital) to do something useful.
+
+:::
+# Memory & Skills Demo {data-background="images/2.png"}
+
+Skills, Skills, Skills
+
+::: notes
 How do we talk to the sqllite and chroma? How do we load our
 data into them rather than just having it swished into the context?
 
 Introduce the concept of skills and why they are so good for quickly prototyping tasks and processes.
 
-- they start super simple as markdown documents
-- scale up to complex systems like garry tan's gstack
+- they start super simple as Markdown documents
+- scale up to complex systems
 
-<demo>
-see: [demo](../demo/terminal.md)
-</demo>
+see: [demo](demo/terminal.md)
 :::
 
 # From search to assessment {data-background="images/3.png"}
 
-<DEMO>
+* Document Criteria
+* Start Building Beginnings of Evals
 
 ::: notes
 Search is great, but I have reviewed many documents like this, I have an idea about
@@ -222,7 +214,7 @@ I have to dig into the doc myself.  I also want to delegate as much of this digg
 I want the LLM to give me feedback, but I want to be sure that
 feedback is useful, focused, and actionable.
 
-To do this we are going to use an idea from AI testing, the eval.
+To do this, we are going to use an idea from AI testing, the eval.
 When testing LLMs, we assume that our responses are nondeterministic,
 so we must create a sort of bracketing of test questions and an
 assessment of answers.
@@ -231,21 +223,17 @@ We will use an eval skill we have created where we give our skill a
 criterion file, the skill uses our memory in the dbs, and then returns
 answers.
 
-<demo>
+demo
 - show eval skill
-- run naive eval
 - run better eval
-</demo>
 
 The questions constrain and focus the agent's return; our databases constrain the data acted upon.
 :::
 
 # Let's Orchestrate {data-background="images/4.png"}
 
-<DEMO>
-
-- ingest documents
-- output assessments
+- Ingest Documents
+- Output Assessments
 
 ::: notes
 We've gotten some good results, but what if have 3 proposals. 10 proposals?
@@ -254,7 +242,7 @@ We have been orchestrating claude through our prompts, then our skills. What if 
 
 First, let's consider what would be helpful at scale?
 
-<demo>
+demo
 - Introduce subagents as a concept
   - look at our agents
     - data-investigator
@@ -266,12 +254,11 @@ First, let's consider what would be helpful at scale?
   - talk about routing and handoff
   - talk about adversarial verification as a way to limit mistakes before manual proofing
   - show the system spinning up to analyze our doc, talk about concurrency/parallelism
-</demo>
 :::
 
 # Bonus: Auditing {data-background="images/5.png"}
 
-<DEMO>
+- Follow and Document the Agent's Journey
 
 ::: notes
 - Every action is logged: what was loaded, what was searched, what was evaluated, by whom
@@ -318,4 +305,4 @@ Closing remarks --
   - don't trust context, manage the data you want the agent to use explicitly
   - use skills and agents to increase determinism so you get good results from the LLM
   - use skills and agents to capture your workflows so you can automate more of your toil
-    :::
+:::
