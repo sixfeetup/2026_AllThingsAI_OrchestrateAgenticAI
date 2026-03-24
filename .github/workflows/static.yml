@@ -54,6 +54,7 @@ jobs:
           mv index.html _site/
           mv dist/ _site/
           mv plugin/ _site/
+          mv explainers/ _site/
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
