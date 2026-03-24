@@ -286,7 +286,7 @@ deploying the brownian ratchet of iterative critique and improvement.  These pro
 :::
 
 
-# Your Future [could be] Agentic {.r-fit-text data-background="images/8.png"}
+# Your Future (could be) Agentic {.r-fit-text data-background="images/8.png"}
 
 ![](images/collabtown.jpg){.r-stretch}
 
