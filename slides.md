@@ -4,7 +4,6 @@ pagetitle: Orchestrate AI Agents
 author: Calvin Hendryx-Parker, CTO, Six Feet Up
 author-meta:
     - Calvin Hendryx-Parker
-date: All Things AI 2026
 date-meta: 2026
 keywords:
     - Agents
@@ -13,12 +12,12 @@ keywords:
     - Determinism
 ---
 
-# Orchestrate Agentic AI {data-background="images/1.png"}
-
-## Context, Checklists, and No-Miss Reviews {.r-fit-text}
-#### Calvin Hendryx-Parker, CTO
+# "Oh You're Right" {.r-fit-text data-background="images/1.png"}
+## Is Not A Review: AI That Proves What It Checked {.r-fit-text}
+### Calvin Hendryx-Parker, CTO
+### Whit Morriss, Sr. Architect
 #### Six Feet Up
-#### All Things AI 2026
+#### LinkedIn Live
 
 ::: notes
 - THANK YOU FOR COMING
@@ -26,12 +25,6 @@ keywords:
 - who you are, who Six Feet Up is, general info
 :::
  
-# Talk Slides {data-background="images/2.png"}
-
-<https://github.com/sixfeetup/2026_AllThingsAI_OrchestrateAgenticAI>
-![Talk Slides QR Code](images/talk-slides-qr.png)
-
-
 # What is this about, who is it for {.r-fit-text data-background="images/3.png"}
 
 ![](images/UncleAI.jpeg)
@@ -75,7 +68,7 @@ how to can do in the same.
 # The root of the problem {data-background="images/5.png"}
 ## Creating determinism
 
-with nondeterministic systems.
+with stochastic systems.
 
 - quality input
 - constraint
@@ -170,28 +163,12 @@ It has a context buffer when using Opus 4.6 of about
 We will run this in a sandbox to limit what our agent has access to on our local system.
 :::
 
-# Orchestration {data-background="images/1.png"}
+# What's in the box? {data-background="images/2.png"}
 
-- Agent's Orchestrated is Magic
-
-
-::: notes
-
-Is a big word.
-
-What does it mean Wikipedia has 3 definitions for
-"Orchestration": for music, for computers and for games.  In all three
-cases, you could make the argument orchestration is an act of using
-rules to coordinate and manage a group of actors to achieve
-something meaningful.
-
-For our purposes, orchestration is organizing more than one actor
-(meat agent or digital) to do something useful.
-
-:::
-# Memory & Skills Demo {data-background="images/2.png"}
-
-Skills, Skills, Skills
+### Memory & Skills 
+### From search to assessment
+### Let's Orchestrate
+### Bonus: Auditing
 
 ::: notes
 How do we talk to the sqllite and chroma? How do we load our
@@ -202,15 +179,17 @@ Introduce the concept of skills and why they are so good for quickly prototyping
 - they start super simple as Markdown documents
 - scale up to complex systems
 
-see: [demo](demo/terminal.md)
-:::
+Orchestration is a big word.
 
-# From search to assessment {data-background="images/3.png"}
+What does it mean Wikipedia has 3 definitions for
+"Orchestration": for music, for computers and for games.  In all three
+cases, you could make the argument orchestration is an act of using
+rules to coordinate and manage a group of actors to achieve
+something meaningful.
 
-* Document Criteria
-* Start Building Beginnings of Evals
+For our purposes, orchestration is organizing more than one actor
+(meat agent or digital) to do something useful.
 
-::: notes
 Search is great, but I have reviewed many documents like this, I have an idea about
 what I care about and would like to get some automated recon before
 I have to dig into the doc myself.  I also want to delegate as much of this digging to my agents.
@@ -227,54 +206,19 @@ We will use an eval skill we have created where we give our skill a
 criterion file, the skill uses our memory in the dbs, and then returns
 answers.
 
-demo
-- show eval skill
-- run better eval
-
 The questions constrain and focus the agent's return; our databases constrain the data acted upon.
-:::
 
-# Let's Orchestrate {data-background="images/4.png"}
-
-- Ingest Documents
-- Output Assessments
-
-::: notes
-We've gotten some good results, but what if have 3 proposals. 10 proposals?
-
-We have been orchestrating claude through our prompts, then our skills. What if claude drove more of this orchestration itself.
-
-First, let's consider what would be helpful at scale?
-
-demo
-- Introduce subagents as a concept
-  - look at our agents
-    - data-investigator
-	- data-loader
-	- contract-eval
-	- response-drafter
-	- verification
-- create a workflow: ask claude about creating a workflow for docs in, assessments out
-  - talk about routing and handoff
-  - talk about adversarial verification as a way to limit mistakes before manual proofing
-  - show the system spinning up to analyze our doc, talk about concurrency/parallelism
-:::
-
-# Bonus: Auditing {data-background="images/5.png"}
-
-- Follow and Document the Agent's Journey
-
-::: notes
 - Every action is logged: what was loaded, what was searched, what was evaluated, by whom
 - In regulated industries this is compliance. For everyone else, it's trust
 - Engineering parallel: this is your CI log — you can trace any finding back to the evidence
 - The audit trail is append-only. Agents can't cover their tracks
+
+see: [demo](demo/terminal.md)
 :::
 
-# TAKHOMASAK {data-background="images/6.png"}
+# Your Future (could be) Agentic {.r-fit-text data-background="images/8.png"}
 
-<https://github.com/sixfeetup/2026_AllThingsAI_OrchestrateAgenticAI>
-![Talk Slides QR Code](images/talk-slides-qr.png)
+![](images/collabtown.jpg){.r-stretch}
 
 ::: notes
 Talk about repo and playbook, how to install with claude code or cowork.
@@ -283,26 +227,9 @@ Talk about how these tools are cheap and easy to make with LLMs. Built for purpo
 
 Increasing determinism is the key, by constraint, good inputs, and
 deploying the brownian ratchet of iterative critique and improvement.  These process apply to full software development as well. Testing, CI/CD, specification building, PR workflows, etc are just more formalized ways to create more determinism.
-:::
 
-
-# Your Future (could be) Agentic {.r-fit-text data-background="images/8.png"}
-
-![](images/collabtown.jpg){.r-stretch}
-
-::: notes
 We've talked about how you can easily get started with agents, but in the greater world, agentic orchestration is being used to emulate whole software orgs (ala gastown) or opensource ecosystems (ala wasteland) or communities of agents like moltbook.  Understanding how to use agents locally will help you deal with the every growing landscape of agent-driven compute we are increasingly living in.
-:::
 
-# Talk To Me {.r-fit-text data-background="images/9.png"}
-
-📩 <calvin@sixfeetup.com>  
-🤝 <https://linkedin.com/in/calvinhp>  
-✖️ [@calvinhp](https://x.com/calvinhp)  
-🐘 [@calvinhp@fosstodon.org](https://fosstodon.org/@calvinhp)  
-🦋 [@calvinhp.com](https://bsky.app/profile/calvinhp.com)
-
-::: notes
 Closing remarks --
 - thank you for coming on this speedy ride through building an agent workflow
 - reinforce takeaways

@@ -34,6 +34,7 @@ $active-color: $blue;
   $main-color: $base1,
   $heading-color: $base2,
   $heading-text-shadow: none,
+  $heading-text-transform: none,
 
   $heading1-size: 2.3em,
   $heading2-size: 1.7em,
@@ -77,6 +78,7 @@ html * {
   line-height: 1.5em;
 }
 
+/*
 body:after {
   content: url(../../images/logo_reversed.png);
   transform: scale(.3);
@@ -84,3 +86,4 @@ body:after {
   bottom: -9em;
   left: -7em;
 }
+*/

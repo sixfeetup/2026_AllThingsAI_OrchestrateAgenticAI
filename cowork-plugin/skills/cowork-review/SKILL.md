@@ -22,7 +22,7 @@ uv run --with 'pymupdf,python-docx,openpyxl,chromadb,sentence-transformers' \
     "${CLAUDE_PLUGIN_ROOT}/skills/cowork-review/document-pipeline.py" "$ARGUMENTS"
 ```
 
-Default archive: `assets/1-RFP 20-020 - Original Documents.zip`
+Default archive: `assets/
 Default criteria: `ip-and-ownership.md` + `general-red-flags.md`
 
 If data is already loaded, add `--skip-load` to skip the load stage.
